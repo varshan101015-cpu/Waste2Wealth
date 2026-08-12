@@ -151,6 +151,14 @@
 
     .val-input { width:86px; border:1.5px solid rgba(5,150,105,0.22); border-radius:10px; padding:6px 8px; font-size:0.85rem; font-weight:700; text-align:center; outline:none; background:rgba(255,255,255,0.75); color:#0F172A; }
     body.dark .val-input { background:rgba(26,21,48,0.85); border-color:rgba(52,211,153,0.3); color:#E2E8F0; }
+
+    .dash-ring { position:relative; width:132px; height:132px; border-radius:50%; margin:0 auto; display:flex; align-items:center; justify-content:center; transition:background 0.8s cubic-bezier(0.16,1,0.3,1); }
+    .dash-ring-inner { position:absolute; width:96px; height:96px; border-radius:50%; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#FAFAFA; box-shadow:inset 0 0 0 1px rgba(226,232,240,0.4); }
+    body.dark .dash-ring-inner { background:#0C0A1D; box-shadow:inset 0 0 0 1px rgba(45,37,80,0.4); }
+    .trend-row { display:flex; align-items:center; gap:8px; }
+    .trend-row:hover .bin-bar-fill { filter:brightness(1.1); }
+    .dash-pill { display:inline-flex; align-items:center; gap:5px; padding:5px 12px; border-radius:100px; font-size:0.72rem; font-weight:700; color:#065F46; background:rgba(5,150,105,0.06); border:1px solid rgba(5,150,105,0.14); }
+    body.dark .dash-pill { color:#34D399; background:rgba(52,211,153,0.06); border-color:rgba(52,211,153,0.18); }
   </style>
 </head>
 <body>
@@ -512,6 +520,48 @@
     </div>
   </div>
 
+  <!-- ===== SUSTAINABILITY DASHBOARD (New) ===== -->
+  <div id="screen-sustain" class="screen" style="min-height:100dvh;padding:20px 20px 85px;">
+    <div style="max-width:380px;margin:0 auto;width:100%;position:relative;z-index:2;">
+      <div style="display:flex;align-items:center;margin-bottom:10px;">
+        <button onclick="goToScreen('home')" style="background:none;border:none;cursor:pointer;padding:4px;margin-right:8px;color:#059669;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        </button>
+        <h2 id="ui-sustain-title" style="font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:700;">Sustainability Dashboard</h2>
+        <button class="btn-outline ripple-btn" onclick="loadDashExample()" style="margin-left:auto;font-size:0.65rem;padding:4px 10px;flex-shrink:0;"><span id="ui-sustain-example">Load example</span></button>
+      </div>
+      <div class="stagger" style="display:flex;flex-direction:column;gap:8px;">
+        <div class="glass" style="padding:18px 16px;text-align:center;">
+          <p id="ui-sustain-proj-label" style="font-size:0.62rem;font-weight:600;color:#94A3B8;letter-spacing:1.2px;margin-bottom:10px;">PROJECT SUSTAINABILITY</p>
+          <div class="dash-ring" id="dash-ring">
+            <div class="dash-ring-inner">
+              <p id="dash-rate" style="font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:800;background:linear-gradient(135deg,#059669,#0D9488);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">0%</p>
+              <p id="ui-sustain-rate-label" style="font-size:0.55rem;color:#94A3B8;font-weight:600;">RECOVERY RATE</p>
+            </div>
+          </div>
+        </div>
+        <div class="stat-card"><p id="ui-sustain-gen-label" style="font-size:0.65rem;color:#94A3B8;font-weight:500;">Waste Generated</p><p style="font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:700;" class="gradient-text"><span id="dash-generated">0</span> <span id="ui-sustain-t">tonnes</span></p></div>
+        <div class="stat-card"><p id="ui-sustain-diverted-label" style="font-size:0.65rem;color:#94A3B8;font-weight:500;">Diverted from disposal</p><p style="font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:700;" class="gradient-text"><span id="dash-diverted">0</span> <span id="ui-sustain-t2">tonnes</span></p></div>
+        <div class="glass" style="padding:14px 16px;">
+          <p id="ui-sustain-mats-label" style="font-size:0.62rem;color:#94A3B8;font-weight:600;letter-spacing:1.2px;margin-bottom:8px;">RECYCLED MATERIALS</p>
+          <div id="dash-materials" style="display:flex;flex-wrap:wrap;gap:6px;"><p style="font-size:0.72rem;color:#94A3B8;">—</p></div>
+        </div>
+        <div class="glass" style="padding:14px 16px;">
+          <p id="ui-sustain-impact-label" style="font-size:0.62rem;color:#94A3B8;font-weight:600;letter-spacing:1.2px;margin-bottom:6px;">ESTIMATED ENVIRONMENTAL IMPACT</p>
+          <p id="dash-impact" style="font-size:0.82rem;color:#065F46;font-weight:600;line-height:1.5;">Set your project's waste below to see impact.</p>
+        </div>
+        <div class="glass" style="padding:14px 16px;">
+          <p id="ui-sustain-trend-label" style="font-size:0.62rem;color:#94A3B8;font-weight:600;letter-spacing:1.2px;margin-bottom:10px;">MONTHLY TREND</p>
+          <div id="dash-trend" style="display:flex;flex-direction:column;gap:9px;"><p style="font-size:0.72rem;color:#94A3B8;">—</p></div>
+        </div>
+        <div class="glass" style="padding:14px 16px;">
+          <p id="ui-sustain-input-label" style="font-size:0.78rem;font-weight:700;margin-bottom:8px;">Project waste (tonnes)</p>
+          <div id="dash-inputs" style="display:flex;flex-direction:column;gap:8px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ===== VALUE (New) ===== -->
   <div id="screen-value" class="screen" style="min-height:100dvh;padding:20px 20px 85px;">
     <div style="max-width:380px;margin:0 auto;width:100%;position:relative;z-index:2;">
@@ -612,6 +662,10 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
       <span id="nav-impact-label">Impact</span>
     </button>
+    <button class="nav-item" id="nav-sustain" onclick="stopAll();goToScreen('sustain');updateDash()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14v4"/><path d="M12 9v9"/><path d="M17 6v12"/></svg>
+      <span id="nav-sustain-label">Sustain</span>
+    </button>
   </nav>
 
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.21.0/dist/tf.min.js"></script>
@@ -637,7 +691,8 @@
         'nav-home-label':'Home','nav-speak-label':'Speak','nav-scan-label':'Scan','nav-type-label':'Type','nav-guide-label':'Guide','nav-impact-label':'Impact',
         'ui-ai-label':'AI Waste Summary','ui-sum-detected':'Detected','ui-sum-action':'Recommended action','ui-sum-dest':'Potential destination','ui-sum-recyclable':'Estimated recyclable quantity','ui-sep-action':'Separate these materials before recycling','ui-steps-primary':'Sorting steps for the main material below',
         'nav-value-label':'Value','ui-value-title':'Waste-to-Value Calculator','ui-value-project-label':'Project size (optional)','ui-value-material-label':'Waste by material (tonnes)','ui-value-example':'Load example','ui-value-calc':'Calculate Value','ui-value-total-label':'Total waste','ui-value-recyclable':'Recyclable tonnes','ui-value-of':'of','ui-value-total-waste':'tonnes total','ui-value-mat-value':'Est. material resale value','ui-value-savings':'Landfill fees saved','ui-value-co2':'CO\u2082 saved','ui-value-breakdown':'Per-material breakdown','ui-value-empty':'Enter at least one material above.','ui-qr-title':'Batch QR','ui-qr-sub':'Scan to track this batch through the waste-to-wealth pipeline','ui-qr-fields-label':'Batch details','ui-qr-batchid':'Batch ID','ui-qr-download':'Download QR',
-        'qr-source-label':'📍 Source','qr-material-label':'🧱 Material','qr-qty-label':'⚖️ Quantity','qr-collected-label':'🚛 Collected','qr-recycler-label':'♻️ Recycler','qr-processed-label':'✅ Processed','qr-outcome-label':'🌱 Recovery outcome','qr-tons':'tonnes'}
+        'qr-source-label':'📍 Source','qr-material-label':'🧱 Material','qr-qty-label':'⚖️ Quantity','qr-collected-label':'🚛 Collected','qr-recycler-label':'♻️ Recycler','qr-processed-label':'✅ Processed','qr-outcome-label':'🌱 Recovery outcome','qr-tons':'tonnes',
+        'nav-sustain-label':'Sustain','ui-sustain-title':'Sustainability Dashboard','ui-sustain-example':'Load example','ui-sustain-proj-label':'PROJECT SUSTAINABILITY','ui-sustain-rate-label':'RECOVERY RATE','ui-sustain-gen-label':'Waste Generated','ui-sustain-diverted-label':'Diverted from disposal','ui-sustain-t':'tonnes','ui-sustain-t2':'tonnes','ui-sustain-mats-label':'RECYCLED MATERIALS','ui-sustain-impact-label':'ESTIMATED ENVIRONMENTAL IMPACT','ui-sustain-trend-label':'MONTHLY TREND','ui-sustain-input-label':'Project waste (tonnes)'}
       ,
       hi: {
         'ui-home-title':'आपके पास किस तरह का<br>कचरा है?','ui-home-sub':'स्कैन करें, बोलें, या टाइप करें — तुरंत निर्देश प्राप्त करें।',
@@ -657,7 +712,8 @@
         'nav-home-label':'होम','nav-speak-label':'बोलें','nav-scan-label':'स्कैन','nav-type-label':'टाइप','nav-guide-label':'गाइड','nav-impact-label':'प्रभाव',
         'ui-ai-label':'AI अपशिष्ट सारांश','ui-sum-detected':'पहचाना गया','ui-sum-action':'अनुशंसित कार्रवाई','ui-sum-dest':'संभावित गंतव्य','ui-sum-recyclable':'अनुमानित रीसायकल मात्रा','ui-sep-action':'रीसाइक्लिंग से पहले इन सामग्रियों को अलग करें','ui-steps-primary':'नीचे मुख्य सामग्री के लिए छंटाई के चरण',
         'nav-value-label':'मूल्य','ui-value-title':'अपशिष्ट-से-मूल्य कैलकुलेटर','ui-value-project-label':'परियोजना का आकार (वैकल्पिक)','ui-value-material-label':'सामग्री के अनुसार कचरा (टन)','ui-value-example':'उदाहरण लोड करें','ui-value-calc':'मूल्य की गणना करें','ui-value-total-label':'कुल कचरा','ui-value-recyclable':'रीसायकल योग्य टन','ui-value-of':'में से','ui-value-total-waste':'टन कुल','ui-value-mat-value':'अनुमानित सामग्री पुनर्विक्रय मूल्य','ui-value-savings':'बचाई गई लैंडफिल फीस','ui-value-co2':'बचाया गया CO\u2082','ui-value-breakdown':'सामग्री-वार विवरण','ui-value-empty':'ऊपर कम से कम एक सामग्री दर्ज करें।','ui-qr-title':'बैच QR','ui-qr-sub':'इस बैच को वेस्ट-टू-वेल्थ पाइपलाइन में ट्रैक करने के लिए स्कैन करें','ui-qr-fields-label':'बैच विवरण','ui-qr-batchid':'बैच आईडी','ui-qr-download':'QR डाउनलोड करें',
-        'qr-source-label':'📍 स्रोत','qr-material-label':'🧱 सामग्री','qr-qty-label':'⚖️ मात्रा','qr-collected-label':'🚛 संग्रहित','qr-recycler-label':'♻️ रीसाइक्लर','qr-processed-label':'✅ प्रोसेस्ड','qr-outcome-label':'🌱 रिकवरी परिणाम','qr-tons':'टन'}
+        'qr-source-label':'📍 स्रोत','qr-material-label':'🧱 सामग्री','qr-qty-label':'⚖️ मात्रा','qr-collected-label':'🚛 संग्रहित','qr-recycler-label':'♻️ रीसाइक्लर','qr-processed-label':'✅ प्रोसेस्ड','qr-outcome-label':'🌱 रिकवरी परिणाम','qr-tons':'टन',
+        'nav-sustain-label':'सस्टेन','ui-sustain-title':'सस्टेनेबिलिटी डैशबोर्ड','ui-sustain-example':'उदाहरण लोड करें','ui-sustain-proj-label':'परियोजना सस्टेनेबिलिटी','ui-sustain-rate-label':'रिकवरी दर','ui-sustain-gen-label':'उत्पन्न कचरा','ui-sustain-diverted-label':'निपटान से बचाया गया','ui-sustain-t':'टन','ui-sustain-t2':'टन','ui-sustain-mats-label':'रीसाइकिल की गई सामग्री','ui-sustain-impact-label':'अनुमानित पर्यावरणीय प्रभाव','ui-sustain-trend-label':'मासिक रुझान','ui-sustain-input-label':'परियोजना कचरा (टन)'}
       ,
       es: {
         'ui-home-title':'¿Qué tipo de residuo<br>tienes?','ui-home-sub':'Escanea, di o escribe — instrucciones al instante.',
@@ -677,7 +733,8 @@
         'nav-home-label':'Inicio','nav-speak-label':'Decir','nav-scan-label':'Escanear','nav-type-label':'Escribir','nav-guide-label':'Guía','nav-impact-label':'Impacto',
         'ui-ai-label':'Resumen IA del residuo','ui-sum-detected':'Detectado','ui-sum-action':'Acción recomendada','ui-sum-dest':'Destino potencial','ui-sum-recyclable':'Cantidad reciclable estimada','ui-sep-action':'Separa estos materiales antes de reciclar','ui-steps-primary':'Pasos de clasificación del material principal abajo',
         'nav-value-label':'Valor','ui-value-title':'Calculadora Residuo-a-Valor','ui-value-project-label':'Tamaño del proyecto (opcional)','ui-value-material-label':'Residuos por material (toneladas)','ui-value-example':'Cargar ejemplo','ui-value-calc':'Calcular Valor','ui-value-total-label':'Residuos totales','ui-value-recyclable':'Toneladas reciclables','ui-value-of':'de','ui-value-total-waste':'toneladas totales','ui-value-mat-value':'Valor de reventa estimado','ui-value-savings':'Tarifas de vertedero ahorradas','ui-value-co2':'CO\u2082 ahorrado','ui-value-breakdown':'Desglose por material','ui-value-empty':'Ingresa al menos un material arriba.','ui-qr-title':'QR del Lote','ui-qr-sub':'Escanea para rastrear este lote en el proceso residuo-a-valor','ui-qr-fields-label':'Detalles del lote','ui-qr-batchid':'ID del Lote','ui-qr-download':'Descargar QR',
-        'qr-source-label':'📍 Fuente','qr-material-label':'🧱 Material','qr-qty-label':'⚖️ Cantidad','qr-collected-label':'🚛 Recogido','qr-recycler-label':'♻️ Reciclador','qr-processed-label':'✅ Procesado','qr-outcome-label':'🌱 Resultado de recuperación','qr-tons':'toneladas'}
+        'qr-source-label':'📍 Fuente','qr-material-label':'🧱 Material','qr-qty-label':'⚖️ Cantidad','qr-collected-label':'🚛 Recogido','qr-recycler-label':'♻️ Reciclador','qr-processed-label':'✅ Procesado','qr-outcome-label':'🌱 Resultado de recuperación','qr-tons':'toneladas',
+        'nav-sustain-label':'Sostén','ui-sustain-title':'Panel de Sostenibilidad','ui-sustain-example':'Cargar ejemplo','ui-sustain-proj-label':'SOSTENIBILIDAD DEL PROYECTO','ui-sustain-rate-label':'TASA DE RECUPERACIÓN','ui-sustain-gen-label':'Residuos generados','ui-sustain-diverted-label':'Desviados de vertedero','ui-sustain-t':'toneladas','ui-sustain-t2':'toneladas','ui-sustain-mats-label':'MATERIALES RECICLADOS','ui-sustain-impact-label':'IMPACTO AMBIENTAL ESTIMADO','ui-sustain-trend-label':'TENDENCIA MENSUAL','ui-sustain-input-label':'Residuos del proyecto (toneladas)'}
     };
 
     let L = 'en';
@@ -989,6 +1046,8 @@
       document.getElementById('value-matval').textContent=fmtMoney(matval);
       document.getElementById('value-savings').textContent=fmtMoney(savings);
       document.getElementById('value-co2').textContent=Math.round(co2).toLocaleString();
+      syncDashFromValue(totalW,recyclable);
+      recordDashTrend();
       const bd=document.getElementById('value-breakdown');bd.innerHTML='';
       parts.sort((a,b)=>b.val-a.val);
       const maxVal=Math.max(matval,1);
@@ -1009,7 +1068,97 @@
       updateWasteTotal();
     }
 
-    window.addEventListener('load',function(){setTimeout(ensureModel,1500);buildValueInputs();});
+    // ===== SUSTAINABILITY DASHBOARD =====
+    let dashVals = JSON.parse(localStorage.getItem('w2w-dash')||'null') || {};
+    function saveDashVals(){localStorage.setItem('w2w-dash',JSON.stringify(dashVals));}
+    const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+    function monthName(d){return MONTHS[d.getMonth()];}
+    function buildDashInputs(){
+      const c=document.getElementById('dash-inputs');c.innerHTML='';
+      DB.forEach((m,i)=>{
+        const row=document.createElement('div');row.style.display='flex';row.style.alignItems='center';row.style.gap='8px';
+        row.innerHTML='<span class="bin-dot" style="background:'+BIN_COLORS[i]+';"></span><div style="flex:1;min-width:0;"><p style="font-size:0.78rem;font-weight:600;">'+m.type+'</p><p style="font-size:0.62rem;color:#94A3B8;">'+m.rec+'% recyclable</p></div><input class="val-input" type="number" min="0" step="1" data-id="'+i+'" value="'+(dashVals[i]||0)+'" aria-label="'+m.type+' tonnes">';
+        row.querySelector('input').addEventListener('input',function(e){dashVals[this.getAttribute('data-id')]=parseFloat(this.value)||0;saveDashVals();updateDash();});
+        c.appendChild(row);
+      });
+    }
+    function dashStats(){
+      let generated=0,diverted=0;const mats=[];
+      document.querySelectorAll('#dash-inputs input').forEach(inp=>{
+        const id=+inp.getAttribute('data-id'),w=parseFloat(inp.value)||0;
+        if(w<=0)return;
+        generated+=w;
+        const rw=w*(DB[id].rec/100);
+        diverted+=rw;mats.push({item:DB[id],w:Math.round(rw*10)/10});
+      });
+      const rate=generated>0?Math.round((diverted/generated)*1000)/10:0;
+      return {generated,diverted,rate,mats};
+    }
+    function renderDashTrend(){
+      const c=document.getElementById('dash-trend');c.innerHTML='';
+      let trend=JSON.parse(localStorage.getItem('w2w-trend')||'[]');
+      if(!trend.length){trend=[];for(let i=2;i>=0;i--){const d=new Date();d.setMonth(d.getMonth()-i);trend.push({m:monthName(d),rate:0});}}
+      const max=100;
+      trend.forEach(t=>{
+        const el=document.createElement('div');el.className='trend-row';
+        const lbl=document.createElement('span');lbl.textContent=t.m;lbl.style.cssText='width:74px;font-size:0.7rem;font-weight:600;color:#64748B;flex-shrink:0;text-align:left;';
+        const bar=document.createElement('div');bar.className='bin-bar';
+        const fill=document.createElement('div');fill.className='bin-bar-fill';fill.style.background='linear-gradient(90deg,#059669,#0D9488)';fill.style.width='0%';
+        bar.appendChild(fill);
+        const val=document.createElement('span');val.textContent=Math.round(t.rate)+'%';val.style.cssText='width:38px;text-align:right;font-size:0.72rem;font-weight:700;color:#059669;flex-shrink:0;';
+        el.appendChild(lbl);el.appendChild(bar);el.appendChild(val);
+        c.appendChild(el);
+        setTimeout(()=>{fill.style.width=Math.max(3,Math.min(100,(t.rate/max)*100))+'%';},120);
+      });
+    }
+    function updateDash(){
+      const s=dashStats();
+      const gen=Math.round(s.generated*10)/10,div=Math.round(s.diverted*10)/10;
+      document.getElementById('dash-rate').textContent=s.rate+'%';
+      document.getElementById('dash-generated').textContent=gen.toLocaleString();
+      document.getElementById('dash-diverted').textContent=div.toLocaleString();
+      const ring=document.getElementById('dash-ring');
+      const dark=document.body.classList.contains('dark');
+      const track=dark?'rgba(45,37,80,0.35)':'rgba(226,232,240,0.45)';
+      ring.style.background='conic-gradient(#059669 0% '+s.rate+'%, '+track+' '+s.rate+'% 100%)';
+      const ml=document.getElementById('dash-materials');
+      if(s.mats.length){
+        ml.innerHTML=s.mats.map(m=>'<span class="dash-pill"><span style="width:7px;height:7px;border-radius:50%;background:'+BIN_COLORS[m.item.id]+';flex-shrink:0;"></span>'+m.item.type+'</span>').join('');
+      }else{ml.innerHTML='<p style="font-size:0.72rem;color:#94A3B8;">—</p>';}
+      const mi=document.getElementById('dash-impact');
+      if(div>0){
+        const txt=(L==='hi')?'आपकी परियोजना ने '+div.toLocaleString()+' टन को निपटान से बचाया।':(L==='es')?'Su proyecto desvió '+div.toLocaleString()+' toneladas de la eliminación.':'Your project diverted '+div.toLocaleString()+' tonnes from disposal.';
+        mi.textContent=txt;
+      }else{mi.textContent=(L==='hi')?'अपना कचरा नीचे दर्ज करें।':(L==='es')?'Introduce tus residuos abajo.':'Enter your project waste below to see impact.';}
+      renderDashTrend();
+    }
+    function loadDashExample(){
+      dashVals={0:60,1:30,5:20};
+      saveDashVals();
+      document.querySelectorAll('#dash-inputs input').forEach(i=>{i.value=dashVals[i.getAttribute('data-id')]||0;});
+      const now=new Date();
+      const trend=[];
+      for(let i=2;i>=0;i--){const d=new Date();d.setMonth(d.getMonth()-i);trend.push({m:monthName(d),rate:[42,58,75][2-i]});}
+      localStorage.setItem('w2w-trend',JSON.stringify(trend));
+      updateDash();
+      goToScreen('sustain');
+    }
+    function recordDashTrend(){
+      const s=dashStats();if(s.generated<=0)return;
+      const d=new Date();const label=monthName(d);
+      let trend=JSON.parse(localStorage.getItem('w2w-trend')||'[]');
+      const idx=trend.findIndex(t=>t.m===label);
+      if(idx>=0){trend[idx].rate=Math.round(s.rate);}else{trend.push({m:label,rate:Math.round(s.rate)});}
+      if(trend.length>6)trend=trend.slice(-6);
+      localStorage.setItem('w2w-trend',JSON.stringify(trend));
+    }
+    function syncDashFromValue(totalW,recyclable){
+      const vals={};
+      document.querySelectorAll('#value-materials input').forEach(i=>{const id=i.getAttribute('data-id'),w=parseFloat(i.value)||0;if(w>0)vals[id]=w;});
+      if(Object.keys(vals).length){dashVals=vals;saveDashVals();document.querySelectorAll('#dash-inputs input').forEach(i=>{i.value=dashVals[i.getAttribute('data-id')]||0;});}
+    }
+
+    window.addEventListener('load',function(){setTimeout(ensureModel,1500);buildValueInputs();buildDashInputs();});
   </script>
 </body>
 </html>
