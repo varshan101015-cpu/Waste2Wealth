@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Waste2Wealth</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = { darkMode:'class', theme:{ extend:{ fontFamily:{ display:['Space Grotesk','sans-serif'], body:['Inter','sans-serif'] }, colors:{ emerald:{DEFAULT:'#059669',50:'#ECFDF5',100:'#D1FAE5',200:'#A7F3D0',300:'#6EE7B7',400:'#34D399',500:'#10B981',600:'#059669',700:'#047857',800:'#065F46',900:'#064E3B'}, teal:{DEFAULT:'#0D9488',50:'#F0FDFA',100:'#CCFBF1',200:'#99F6E4',300:'#5EEAD4',400:'#2DD4BF',500:'#14B8A6',600:'#0D9488',700:'#0F766E',800:'#115E59',900:'#134E4A'}, amber:{DEFAULT:'#D97706'}, violet:{DEFAULT:'#7C3AED'}, darkbg:'#0C0A1D', darkcard:'#1A1530', darkborder:'#2D2550' } } } }
+  </script>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Inter',sans-serif; background:#FAFAFA; color:#0F172A; min-height:100dvh; overflow-x:hidden; transition:background 0.6s cubic-bezier(0.16,1,0.3,1),color 0.6s cubic-bezier(0.16,1,0.3,1); }
+    body.dark { background:#0C0A1D; color:#E2E8F0; }
+
+    .screen { display:none; }
+    .screen.active { display:flex; flex-direction:column; animation:slideUp 0.5s cubic-bezier(0.16,1,0.3,1) forwards; }
+    @keyframes slideUp { from { opacity:0; transform:translateY(30px) scale(0.96); } to { opacity:1; transform:translateY(0) scale(1); } }
+
+    .orb { position:fixed; border-radius:50%; pointer-events:none; filter:blur(100px); z-index:0; }
+    .orb-1 { width:450px;height:450px;background:radial-gradient(circle,rgba(5,150,105,0.1),transparent 70%);top:-120px;right:-80px;animation:float 14s ease-in-out infinite; }
+    .orb-2 { width:380px;height:380px;background:radial-gradient(circle,rgba(124,58,237,0.07),transparent 70%);bottom:-100px;left:-60px;animation:float 18s ease-in-out infinite reverse; }
+    body.dark .orb-1 { background:radial-gradient(circle,rgba(5,150,105,0.18),transparent 70%); }
+    body.dark .orb-2 { background:radial-gradient(circle,rgba(124,58,237,0.12),transparent 70%); }
+    @keyframes float { 0%,100%{transform:translate(0,0) rotate(0deg);} 33%{transform:translate(40px,-30px) rotate(3deg);} 66%{transform:translate(-30px,40px) rotate(-3deg);} }
+
+    .stagger>* { opacity:0; transform:translateY(16px); animation:staggerIn 0.5s cubic-bezier(0.16,1,0.3,1) forwards; }
+    .stagger>*:nth-child(1){animation-delay:0.04s} .stagger>*:nth-child(2){animation-delay:0.1s} .stagger>*:nth-child(3){animation-delay:0.16s} .stagger>*:nth-child(4){animation-delay:0.22s} .stagger>*:nth-child(5){animation-delay:0.28s} .stagger>*:nth-child(6){animation-delay:0.34s} .stagger>*:nth-child(7){animation-delay:0.4s} .stagger>*:nth-child(8){animation-delay:0.46s}
+    @keyframes staggerIn { to{opacity:1;transform:translateY(0)} }
+
+    .glass { background:rgba(255,255,255,0.7); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border:1px solid rgba(255,255,255,0.3); border-radius:24px; transition:all 0.4s cubic-bezier(0.16,1,0.3,1); }
+    .glass:hover { box-shadow:0 12px 48px rgba(0,0,0,0.06); transform:translateY(-2px); }
+    body.dark .glass { background:rgba(26,21,48,0.7); backdrop-filter:blur(16px); border-color:rgba(45,37,80,0.3); }
+    body.dark .glass:hover { box-shadow:0 12px 48px rgba(0,0,0,0.2); }
+
+    .btn-primary { background:linear-gradient(135deg,#059669,#0D9488); color:white; border:none; border-radius:100px; padding:14px 28px; font-size:0.9rem; font-weight:600; cursor:pointer; transition:all 0.3s cubic-bezier(0.16,1,0.3,1); }
+    .btn-primary:hover { transform:translateY(-2px); box-shadow:0 12px 40px rgba(5,150,105,0.3); }
+    .btn-primary:active { transform:scale(0.97); }
+
+    .btn-outline { background:transparent; color:#059669; border:1.5px solid rgba(5,150,105,0.3); border-radius:100px; padding:10px 22px; font-size:0.85rem; font-weight:600; cursor:pointer; transition:all 0.3s cubic-bezier(0.16,1,0.3,1); }
+    .btn-outline:hover { background:rgba(5,150,105,0.06); border-color:#059669; transform:translateY(-1px); }
+    body.dark .btn-outline { color:#34D399; border-color:rgba(52,211,153,0.3); }
+    body.dark .btn-outline:hover { background:rgba(52,211,153,0.06); border-color:#34D399; }
+
+    .btn-circle { width:64px;height:64px;border-radius:50%;color:white;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.3s cubic-bezier(0.16,1,0.3,1);position:relative;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.08); }
+    .btn-circle:hover { transform:scale(1.08); }
+    .btn-circle:active { transform:scale(0.92); }
+    .btn-circle.mic { background:linear-gradient(135deg,#D97706,#F59E0B); }
+    .btn-circle.type { background:linear-gradient(135deg,#059669,#0D9488); }
+    .btn-circle.scan { background:linear-gradient(135deg,#7C3AED,#8B5CF6); }
+
+    .bottom-nav { position:fixed; bottom:0; left:0; right:0; background:rgba(255,255,255,0.75); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); border-top:1px solid rgba(226,232,240,0.4); padding:4px 0; padding-bottom:max(4px,env(safe-area-inset-bottom)); display:flex; justify-content:space-around; align-items:center; z-index:50; }
+    body.dark .bottom-nav { background:rgba(12,10,29,0.75); border-top-color:rgba(45,37,80,0.4); }
+    .nav-item { display:flex; flex-direction:column; align-items:center; gap:1px; font-size:0.55rem; color:#94A3B8; cursor:pointer; transition:all 0.3s; background:none; border:none; padding:3px 8px; position:relative; letter-spacing:0.3px; }
+    .nav-item.active { color:#059669; font-weight:600; }
+    .nav-item.active::before { content:''; position:absolute; top:-4px; width:20px; height:2.5px; border-radius:3px; background:linear-gradient(90deg,#059669,#0D9488); animation:barIn 0.4s cubic-bezier(0.16,1,0.3,1) forwards; }
+    @keyframes barIn { from{width:0;opacity:0} to{width:20px;opacity:1} }
+    body.dark .nav-item.active { color:#34D399; }
+    body.dark .nav-item.active::before { background:linear-gradient(90deg,#34D399,#14B8A6); }
+    .nav-item svg { width:20px;height:20px;transition:transform 0.3s; }
+    .nav-item:hover svg { transform:translateY(-2px); }
+
+    textarea { resize:none; border-radius:16px; border:1.5px solid #E2E8F0; padding:18px; font-size:0.9rem; font-family:'Inter',sans-serif; background:rgba(255,255,255,0.8); backdrop-filter:blur(8px); transition:all 0.3s; width:100%; outline:none; }
+    textarea:focus { border-color:#059669; box-shadow:0 0 0 4px rgba(5,150,105,0.08); }
+    body.dark textarea { background:rgba(26,21,48,0.8); border-color:#2D2550; color:#E2E8F0; }
+    body.dark textarea:focus { border-color:#34D399; box-shadow:0 0 0 4px rgba(52,211,153,0.08); }
+
+    .chip { display:inline-block; padding:5px 12px; border-radius:100px; font-size:0.72rem; font-weight:500; cursor:pointer; transition:all 0.3s cubic-bezier(0.16,1,0.3,1); background:rgba(5,150,105,0.04); color:#059669; border:1px solid rgba(5,150,105,0.1); }
+    .chip:hover { background:rgba(5,150,105,0.1); transform:translateY(-2px); box-shadow:0 4px 12px rgba(5,150,105,0.06); }
+    .chip.selected { background:linear-gradient(135deg,#059669,#0D9488); color:white; border-color:transparent; box-shadow:0 4px 16px rgba(5,150,105,0.2); transform:translateY(-2px); }
+    body.dark .chip { background:rgba(52,211,153,0.04); color:#34D399; border-color:rgba(52,211,153,0.1); }
+    body.dark .chip:hover { background:rgba(52,211,153,0.1); }
+    body.dark .chip.selected { background:linear-gradient(135deg,#059669,#0D9488); color:white; }
+
+    .top-btn { width:36px;height:36px;border-radius:10px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.3s;background:transparent;color:#94A3B8; }
+    .top-btn:hover { background:rgba(5,150,105,0.06); color:#059669; transform:translateY(-1px); }
+    body.dark .top-btn:hover { background:rgba(52,211,153,0.06); color:#34D399; }
+
+    .lang-pill { padding:2px 8px; border-radius:6px; font-size:0.65rem; font-weight:600; cursor:pointer; transition:all 0.3s; border:1px solid #E2E8F0; background:transparent; color:#94A3B8; letter-spacing:0.3px; }
+    .lang-pill:hover { border-color:#059669; color:#059669; }
+    .lang-pill.active { background:linear-gradient(135deg,#059669,#0D9488); color:white; border-color:transparent; box-shadow:0 2px 8px rgba(5,150,105,0.15); }
+    body.dark .lang-pill { border-color:#2D2550; }
+    body.dark .lang-pill:hover { border-color:#34D399; color:#34D399; }
+    body.dark .lang-pill.active { background:linear-gradient(135deg,#059669,#0D9488); color:white; }
+
+    .spinner { width:24px;height:24px;border:2.5px solid rgba(5,150,105,0.1); border-top-color:#059669; border-radius:50%; animation:spin 0.6s cubic-bezier(0.6,0,0.4,1) infinite; }
+    body.dark .spinner { border-color:rgba(52,211,153,0.1); border-top-color:#34D399; }
+    @keyframes spin { to{transform:rotate(360deg)} }
+
+    .mic-bar { width:3px; border-radius:3px; background:linear-gradient(to top,#D97706,#F59E0B); animation:wave 0.6s ease-in-out infinite; }
+    .mic-bar:nth-child(1){animation-delay:0s;height:14px} .mic-bar:nth-child(2){animation-delay:0.08s;height:24px} .mic-bar:nth-child(3){animation-delay:0.16s;height:36px} .mic-bar:nth-child(4){animation-delay:0.24s;height:28px} .mic-bar:nth-child(5){animation-delay:0.12s;height:18px}
+    @keyframes wave { 0%,100%{transform:scaleY(1)} 50%{transform:scaleY(1.8)} }
+
+    .pulse-glow { animation:pulseG 2.5s ease-in-out infinite; }
+    @keyframes pulseG { 0%{box-shadow:0 0 0 0 rgba(5,150,105,0.15)} 50%{box-shadow:0 0 0 12px rgba(5,150,105,0)} 100%{box-shadow:0 0 0 0 rgba(5,150,105,0)} }
+
+    .step-num { width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#059669,#0D9488);color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0; }
+
+    .gradient-text { background:linear-gradient(135deg,#059669,#0D9488,#7C3AED); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+
+    .scan-frame { border:2px dashed rgba(5,150,105,0.15); border-radius:20px; background:linear-gradient(135deg,rgba(5,150,105,0.02),rgba(124,58,237,0.02)); }
+
+    .stat-card { background:rgba(255,255,255,0.5); backdrop-filter:blur(12px); border:1px solid rgba(226,232,240,0.3); border-radius:20px; padding:16px; text-align:center; transition:all 0.3s; }
+    body.dark .stat-card { background:rgba(26,21,48,0.5); border-color:rgba(45,37,80,0.3); }
+    .stat-card:hover { transform:translateY(-3px); box-shadow:0 8px 32px rgba(0,0,0,0.04); }
+
+    .material-card { padding:14px 16px; border-radius:16px; cursor:pointer; transition:all 0.3s; border:1px solid rgba(226,232,240,0.4); background:rgba(255,255,255,0.4); }
+    body.dark .material-card { border-color:rgba(45,37,80,0.4); background:rgba(26,21,48,0.4); }
+    .material-card:hover { background:rgba(5,150,105,0.04); border-color:rgba(5,150,105,0.2); transform:translateY(-2px); }
+    body.dark .material-card:hover { background:rgba(52,211,153,0.04); border-color:rgba(52,211,153,0.2); }
+
+    .ripple-btn { position:relative; overflow:hidden; }
+    .ripple-btn .ripple { position:absolute; border-radius:50%; background:rgba(255,255,255,0.35); transform:scale(0); animation:rippleAnim 0.5s ease-out forwards; pointer-events:none; }
+    @keyframes rippleAnim { to{transform:scale(4);opacity:0} }
+
+    .bin-card { padding:12px 14px; border-radius:14px; border:1px solid rgba(226,232,240,0.5); background:rgba(255,255,255,0.5); display:flex; align-items:center; gap:10px; transition:all 0.4s cubic-bezier(0.16,1,0.3,1); opacity:0; transform:translateY(12px); }
+    .bin-card.visible { opacity:1; transform:translateY(0); }
+    body.dark .bin-card { border-color:rgba(45,37,80,0.5); background:rgba(26,21,48,0.5); }
+    .bin-dot { width:12px; height:12px; border-radius:4px; flex-shrink:0; }
+    .bin-bar { flex:1; height:6px; border-radius:3px; background:rgba(148,163,184,0.15); overflow:hidden; }
+    .bin-bar-fill { height:100%; border-radius:3px; transition:width 1s cubic-bezier(0.16,1,0.3,1); width:0; }
+
+    .pipeline-step { display:flex; align-items:center; gap:10px; padding:10px 14px; border-radius:14px; border:1px solid rgba(226,232,240,0.4); background:rgba(255,255,255,0.4); opacity:0.35; transition:all 0.5s cubic-bezier(0.16,1,0.3,1); }
+    .pipeline-step.active { opacity:1; border-color:rgba(5,150,105,0.3); background:rgba(5,150,105,0.04); box-shadow:0 4px 20px rgba(5,150,105,0.08); }
+    .pipeline-step.done { opacity:0.7; border-color:rgba(5,150,105,0.15); }
+    body.dark .pipeline-step { border-color:rgba(45,37,80,0.4); background:rgba(26,21,48,0.4); }
+    body.dark .pipeline-step.active { border-color:rgba(52,211,153,0.3); background:rgba(52,211,153,0.04); }
+    .pipeline-icon { width:32px; height:32px; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:0.75rem; font-weight:700; color:white; }
+    .pipeline-progress { height:4px; border-radius:2px; background:rgba(148,163,184,0.15); overflow:hidden; margin-top:12px; }
+    .pipeline-progress-fill { height:100%; background:linear-gradient(90deg,#059669,#0D9488,#7C3AED); border-radius:2px; transition:width 0.6s cubic-bezier(0.16,1,0.3,1); width:0; }
+
+    .clean-output { padding:12px 14px; border-radius:14px; border:1px solid rgba(5,150,105,0.15); background:linear-gradient(135deg,rgba(5,150,105,0.04),rgba(13,148,136,0.04)); opacity:0; transform:scale(0.95); animation:staggerIn 0.5s cubic-bezier(0.16,1,0.3,1) forwards; }
+    body.dark .clean-output { border-color:rgba(52,211,153,0.15); background:linear-gradient(135deg,rgba(5,150,105,0.08),rgba(13,148,136,0.08)); }
+
+    @keyframes pulseConnect { 0%,100%{opacity:0.6} 50%{opacity:1} }
+    .model-connecting { animation:pulseConnect 1.5s ease-in-out infinite; }
+
+    .ai-row { margin-top:9px; }
+    .ai-lab { font-size:0.62rem; color:#94A3B8; font-weight:600; margin-bottom:2px; }
+    .ai-val { font-size:0.8rem; font-weight:600; color:#0F172A; line-height:1.45; }
+    body.dark .ai-val { color:#E2E8F0; }
+
+    .ai-chip { display:inline-flex; align-items:center; gap:5px; padding:4px 10px; border-radius:100px; font-size:0.72rem; font-weight:700; color:#065F46; background:rgba(5,150,105,0.06); border:1px solid rgba(5,150,105,0.14); }
+    body.dark .ai-chip { color:#34D399; background:rgba(52,211,153,0.06); border-color:rgba(52,211,153,0.18); }
+
+    .ai-num { width:82px; border:1.5px solid rgba(124,58,237,0.25); border-radius:10px; padding:6px 8px; font-size:0.82rem; font-weight:700; text-align:center; outline:none; background:rgba(255,255,255,0.75); color:#0F172A; }
+    body.dark .ai-num { background:rgba(26,21,48,0.85); border-color:rgba(139,92,246,0.4); color:#E2E8F0; }
+
+    .val-input { width:86px; border:1.5px solid rgba(5,150,105,0.22); border-radius:10px; padding:6px 8px; font-size:0.85rem; font-weight:700; text-align:center; outline:none; background:rgba(255,255,255,0.75); color:#0F172A; }
+    body.dark .val-input { background:rgba(26,21,48,0.85); border-color:rgba(52,211,153,0.3); color:#E2E8F0; }
+  </style>
+</head>
+<body>
+
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <!-- ===== HOME ===== -->
+  <div id="screen-home" class="screen active" style="min-height:100dvh;padding:16px 20px 85px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;position:relative;z-index:2;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#059669,#0D9488,#7C3AED);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(5,150,105,0.2);">
+          <svg width="16" height="16" viewBox="0 0 32 32" fill="none">
+            <path d="M16 2L28 10V22L16 30L4 22V10L16 2Z" stroke="white" stroke-width="2" fill="none"/>
+            <path d="M16 8L22 12V18L16 22L10 18V12L16 8Z" fill="white" opacity="0.6"/>
+          </svg>
+        </div>
+        <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.95rem;background:linear-gradient(135deg,#059669,#0D9488,#7C3AED);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Waste2Wealth</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:3px;">
+        <button id="lang-en" class="lang-pill active" onclick="setUILang('en')">EN</button>
+        <button id="lang-hi" class="lang-pill" onclick="setUILang('hi')">HI</button>
+        <button class="top-btn" onclick="toggleDark()" id="dark-toggle">
+          <svg id="sun-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <svg id="moon-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;max-width:380px;margin:0 auto;width:100%;position:relative;z-index:2;">
+      <div style="width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,rgba(5,150,105,0.08),rgba(124,58,237,0.08));display:flex;align-items:center;justify-content:center;margin-bottom:12px;" class="pulse-glow">
+        <svg width="26" height="26" viewBox="0 0 32 32" fill="none">
+          <path d="M16 2L28 10V22L16 30L4 22V10L16 2Z" stroke="#059669" stroke-width="1.8" fill="none"/>
+          <path d="M16 8L22 12V18L16 22L10 18V12L16 8Z" fill="#059669" opacity="0.3"/>
+        </svg>
+      </div>
+      <h1 id="ui-home-title" style="font-family:'Space Grotesk',sans-serif;font-size:1.35rem;font-weight:700;margin-bottom:2px;line-height:1.3;"><span class="gradient-text">What kind of waste</span><br>do you have?</h1>
+      <p id="ui-home-sub" style="font-size:0.78rem;color:#94A3B8;margin-bottom:16px;">Scan, speak, or type — get instant sorting instructions.</p>
+      <div class="stagger" style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-bottom:22px;">
+        <span class="chip" onclick="quickSelect(this)">Concrete + rebar</span>
+        <span class="chip" onclick="quickSelect(this)">Brick & mortar</span>
+        <span class="chip" onclick="quickSelect(this)">Broken tiles</span>
+        <span class="chip" onclick="quickSelect(this)">Mixed rubble</span>
+        <span class="chip" onclick="quickSelect(this)">Wood timber</span>
+        <span class="chip" onclick="quickSelect(this)">Metal scraps</span>
+      </div>
+    </div>
+
+    <div style="display:flex;justify-content:center;gap:22px;padding-bottom:4px;position:relative;z-index:2;">
+      <div style="text-align:center;">
+        <button class="btn-circle mic ripple-btn" onclick="startVoiceInput()">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        </button>
+        <p id="ui-say" style="font-size:0.6rem;font-weight:600;color:#D97706;margin-top:5px;">Say it</p>
+      </div>
+      <div style="text-align:center;">
+        <button class="btn-circle type ripple-btn" onclick="goToScreen('input')">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M12 11v4"/><path d="M10 13h4"/></svg>
+        </button>
+        <p id="ui-type" style="font-size:0.6rem;font-weight:600;color:#059669;margin-top:5px;">Type it</p>
+      </div>
+      <div style="text-align:center;">
+        <button class="btn-circle scan ripple-btn" onclick="startScan()">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+        <p id="ui-scan" style="font-size:0.6rem;font-weight:600;color:#7C3AED;margin-top:5px;">Scan it</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== VOICE ===== -->
+  <div id="screen-voice" class="screen" style="min-height:100dvh;padding:24px 20px 90px;">
+    <div style="max-width:380px;margin:0 auto;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;min-height:calc(100dvh - 114px);position:relative;z-index:2;">
+      <button onclick="stopVoice();goToScreen('home')" style="position:absolute;top:0;left:0;background:none;border:none;cursor:pointer;padding:6px;color:#059669;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+      </button>
+      <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,rgba(217,119,6,0.08),rgba(245,158,11,0.08));display:flex;align-items:center;justify-content:center;margin-bottom:16px;animation:pulseG 2s ease-in-out infinite;">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      </div>
+      <div style="display:flex;align-items:flex-end;gap:3px;height:38px;margin-bottom:14px;"><div class="mic-bar"></div><div class="mic-bar"></div><div class="mic-bar"></div><div class="mic-bar"></div><div class="mic-bar"></div></div>
+      <p id="ui-voice-listening" style="font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:600;color:#D97706;margin-bottom:2px;">Listening...</p>
+      <p id="ui-voice-hint" style="font-size:0.75rem;color:#94A3B8;margin-bottom:16px;text-align:center;">Say what waste you have</p>
+      <div id="voice-transcript" class="glass" style="width:100%;text-align:center;display:none;padding:14px;font-size:0.85rem;"></div>
+      <button id="voice-cancel-btn" class="btn-outline" onclick="stopVoice();goToScreen('home')" style="font-size:0.75rem;padding:6px 16px;margin-top:12px;"><span id="ui-voice-cancel">Cancel</span></button>
+    </div>
+  </div>
+
+  <!-- ===== INPUT ===== -->
+  <div id="screen-input" class="screen" style="min-height:100dvh;padding:20px 20px 85px;">
+    <div style="max-width:380px;margin:0 auto;width:100%;display:flex;flex-direction:column;min-height:calc(100dvh - 105px);position:relative;z-index:2;">
+      <div style="display:flex;align-items:center;margin-bottom:12px;">
+        <button onclick="goToScreen('home')" style="background:none;border:none;cursor:pointer;padding:4px;margin-right:8px;color:#059669;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        </button>
+        <h2 id="ui-input-title" style="font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:700;">Describe waste</h2>
+        <button class="top-btn" onclick="startVoiceInput()" style="margin-left:auto;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        </button>
+      </div>
+      <div class="glass" style="flex:1;display:flex;flex-direction:column;padding:20px;">
+        <label for="waste-input" id="ui-input-label" style="font-size:0.78rem;font-weight:600;color:#059669;margin-bottom:8px;">What does your waste look like?</label>
+        <textarea id="waste-input" rows="5" placeholder="e.g. broken concrete with steel bars" style="flex:1;min-height:80px;font-size:0.85rem;"></textarea>
+        <p id="ui-input-tip" style="font-size:0.65rem;color:#94A3B8;margin-top:6px;">Mention material, size, and anything mixed in</p>
+      </div>
+      <div style="display:flex;justify-content:center;padding:12px 0 4px;">
+        <button class="btn-primary ripple-btn" onclick="getInstructions()" style="width:100%;max-width:240px;padding:12px 22px;font-size:0.85rem;">
+          <span style="display:flex;align-items:center;justify-content:center;gap:6px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <span id="ui-get-instr">Get Instructions</span>
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SCAN ===== -->
+  <div id="screen-scan" class="screen" style="min-height:100dvh;padding:20px 20px 85px;">
+    <div style="max-width:380px;margin:0 auto;width:100%;display:flex;flex-direction:column;min-height:calc(100dvh - 105px);position:relative;z-index:2;">
+      <div style="display:flex;align-items:center;margin-bottom:10px;">
+        <button onclick="stopCamera();goToScreen('home')" style="background:none;border:none;cursor:pointer;padding:4px;margin-right:8px;color:#059669;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        </button>
+        <h2 id="ui-scan-title" style="font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:700;">Scan waste</h2>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;">
+        <div style="position:relative;width:100%;max-width:320px;">
+          <video id="camera-feed" autoplay playsinline muted style="display:none;border-radius:20px;width:100%;aspect-ratio:4/3;object-fit:cover;background:#E2E8F0;"></video>
+          <canvas id="camera-canvas" style="display:none;width:100%;border-radius:20px;aspect-ratio:4/3;object-fit:cover;background:#E2E8F0;"></canvas>
+          <div id="scan-placeholder" class="scan-frame" style="width:100%;aspect-ratio:4/3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <p id="ui-scan-hint" style="font-size:0.75rem;color:#059669;font-weight:500;text-align:center;">Point camera at waste<br>or upload a photo</p>
+          </div>
+          <div style="position:absolute;inset:0;border:2px dashed rgba(76,175,80,0.25);border-radius:20px;pointer-events:none;"></div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button id="btn-capture" class="btn-circle scan" onclick="capturePhoto()" style="display:none;width:48px;height:48px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+          </button>
+          <label for="photo-upload" style="cursor:pointer;">
+            <span class="btn-outline" style="display:flex;align-items:center;gap:4px;font-size:0.75rem;padding:6px 12px;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <span id="ui-upload">Upload</span>
+            </span>
+          </label>
+          <input id="photo-upload" type="file" accept="image/*" capture="environment" style="display:none;" onchange="handleUpload(event)">
+        </div>
+        <div id="scan-status" style="display:none;align-items:center;gap:6px;padding:6px 14px;background:rgba(5,150,105,0.04);border-radius:100px;">
+          <div class="spinner"></div>
+          <span id="scan-status-text" style="font-size:0.75rem;color:#059669;font-weight:500;">Analyzing...</span>
+        </div>
+        <p id="ui-scan-privacy" style="font-size:0.6rem;color:#94A3B8;">AI runs on your device — no uploads</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== RESULT ===== -->
+  <div id="screen-result" class="screen" style="min-height:100dvh;padding:20px 20px 85px;">
+    <div style="max-width:380px;margin:0 auto;width:100%;position:relative;z-index:2;">
+      <div style="display:flex;align-items:center;margin-bottom:8px;">
+        <button onclick="goToScreen('home')" style="background:none;border:none;cursor:pointer;padding:4px;margin-right:8px;color:#059669;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        </button>
+        <h2 id="ui-result-title" style="font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:700;">Instructions</h2>
+        <button id="tts-btn" class="top-btn" onclick="toggleTTS()" style="margin-left:auto;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        </button>
+      </div>
+      <div id="result-content">
+        <div id="result-photo-box" style="display:none;margin-bottom:8px;border-radius:16px;overflow:hidden;">
+          <img id="result-photo" style="width:100%;display:block;aspect-ratio:4/3;object-fit:cover;">
+        </div>
+        <div id="result-unrelated" style="display:none;">
+          <div class="glass" style="text-align:center;padding:24px 16px;">
+            <div style="width:44px;height:44px;border-radius:50%;background:rgba(217,119,6,0.06);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+            </div>
+            <h3 id="ui-unrelated-title" style="font-family:'Space Grotesk',sans-serif;font-size:0.9rem;font-weight:700;margin-bottom:2px;">Not construction waste</h3>
+            <p id="ui-unrelated-desc" style="font-size:0.75rem;color:#94A3B8;margin-bottom:12px;">Try again with concrete, brick, wood, or metal.</p>
+            <button class="btn-primary ripple-btn" onclick="goToScreen('scan');setTimeout(startScan,100)" style="font-size:0.8rem;padding:7px 18px;"><span id="ui-try-again">Try Again</span></button>
+          </div>
+        </div>
+        <div id="result-found" style="display:none;">
+          <div class="glass" style="margin-bottom:6px;padding:14px 16px;border-color:rgba(124,58,237,0.2);background:linear-gradient(135deg,rgba(124,58,237,0.05),rgba(5,150,105,0.04));">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px;">
+              <div style="width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,rgba(124,58,237,0.14),rgba(5,150,105,0.14));display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M12 8V4"/><circle cx="12" cy="4" r="2"/><path d="M7 14h.01"/><path d="M17 14h.01"/><path d="M9 18h6"/></svg>
+              </div>
+              <p id="ui-ai-label" style="font-family:'Space Grotesk',sans-serif;font-size:0.85rem;font-weight:700;">AI Waste Summary</p>
+              <p id="result-confidence" style="font-size:0.62rem;color:#94A3B8;margin-left:auto;display:none;"></p>
+            </div>
+            <div class="ai-row">
+              <p id="ui-sum-detected" class="ai-lab">Detected</p>
+              <div id="result-detected-list" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+            </div>
+            <div class="ai-row"><p id="ui-sum-action" class="ai-lab">Recommended action</p><p id="result-action" class="ai-val"></p></div>
+            <div class="ai-row"><p id="ui-sum-dest" class="ai-lab">Potential destination</p><p id="result-dest" class="ai-val"></p></div>
+            <div class="ai-row">
+              <p id="ui-sum-recyclable" class="ai-lab">Estimated recyclable quantity</p>
+              <div style="display:flex;align-items:center;gap:6px;margin-top:4px;flex-wrap:wrap;">
+                <input id="result-weight" type="number" min="0" step="50" value="500" oninput="renderRecyclable()" class="ai-num" aria-label="Estimated total weight">
+                <span style="font-size:0.72rem;color:#94A3B8;">kg</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                <span id="result-recyclable" style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:800;color:#059669;">0</span>
+                <span style="font-size:0.72rem;color:#94A3B8;">kg</span>
+              </div>
+            </div>
+          </div>
+          <div id="result-steps" class="stagger"></div>
+          <div class="glass" style="background:linear-gradient(135deg,rgba(5,150,105,0.03),rgba(13,148,136,0.03));border-color:rgba(5,150,105,0.08);margin-top:6px;padding:12px 16px;">
+            <div style="display:flex;gap:6px;align-items:flex-start;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#059669" style="margin-top:1px;flex-shrink:0;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+              <div><p id="ui-tip-label" style="font-size:0.7rem;font-weight:600;color:#059669;margin-bottom:1px;">Tip</p><p id="result-tip" style="font-size:0.75rem;color:#065F46;"></p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="result-buttons" style="display:flex;justify-content:center;gap:8px;padding:12px 0 4px;flex-wrap:wrap;">
+        <button class="btn-outline ripple-btn" onclick="goToScreen('input')" style="font-size:0.75rem;padding:7px 16px;"><span id="ui-type-another">Type Another</span></button>
+        <button class="btn-primary ripple-btn" onclick="goToScreen('home')" style="font-size:0.75rem;padding:7px 16px;"><span id="ui-start-over">Start Over</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== AUTO-SEGREGATE ===== -->
+  <div id="screen-segregate" class="screen" style="min-height:100dvh;padding:20px 20px 85px;">
+    <div style="max-width:380px;margin:0 auto;width:100%;position:relative;z-index:2;">
+      <div style="display:flex;align-items:center;margin-bottom:8px;">
+        <button onclick="goToScreen('home')" style="background:none;border:none;cursor:pointer;padding:4px;margin-right:8px;color:#059669;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        </button>
+        <h2 id="ui-seg-title" style="font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:700;">Auto-Segregated</h2>
+      </div>
+      <div id="seg-photo-box" style="display:none;margin-bottom:8px;border-radius:16px;overflow:hidden;">
+        <img id="seg-photo" style="width:100%;display:block;aspect-ratio:4/3;object-fit:cover;">
+      </div>
+      <div class="glass" style="padding:14px 16px;margin-bottom:8px;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+          <div style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#059669,#0D9488);display:flex;align-items:center;justify-content:center;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M16 3h5v5"/><path d="M8 3H3v5"/><path d="M12 22v-8.3a4 4 0 0 0 1.172-2.872L21 3"/><path d="m3 3 7.07 7.07"/></svg>
+          </div>
+          <div>
+            <p id="ui-seg-status" style="font-size:0.72rem;color:#059669;font-weight:600;">AI is sorting your waste...</p>
+            <p id="ui-seg-sub" style="font-size:0.65rem;color:#94A3B8;">No manual sorting needed — bins assigned automatically</p>
+          </div>
+        </div>
+      </div>
+      <div id="seg-bins" style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px;"></div>
+      <div id="seg-model-banner" class="glass model-connecting" style="padding:12px 16px;margin-bottom:8px;display:none;border-color:rgba(124,58,237,0.2);">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#7C3AED,#059669);display:flex;align-items:center;justify-content:center;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/></svg>
+          </div>
+          <p id="ui-seg-connecting" style="font-size:0.72rem;font-weight:600;color:#7C3AED;">Connecting to W2W Clean Model...</p>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;align-items:center;">
+        <button id="btn-send-model" class="btn-primary ripple-btn" onclick="startW2WModel()" style="width:100%;max-width:280px;padding:12px 22px;font-size:0.85rem;display:none;">
+          <span id="ui-send-model">Send to W2W Clean Model</span>
+        </button>
+        <button id="btn-view-steps" class="btn-outline ripple-btn" onclick="viewInstructionsFromSeg()" style="font-size:0.72rem;padding:6px 14px;display:none;">
+          <span id="ui-view-steps">View sorting steps</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== W2W MODEL ===== -->
+  <div id="screen-model" class="screen" style="min-height:100dvh;padding:20px 20px 85px;">
+    <div style="max-width:380px;margin:0 auto;width:100%;position:relative;z-index:2;">
+      <div style="display:flex;align-items:center;margin-bottom:12px;">
+        <button onclick="goToScreen('segregate')" style="background:none;border:none;cursor:pointer;padding:4px;margin-right:8px;color:#059669;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        </button>
+        <h2 id="ui-model-title" style="font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:700;">W2W Clean Model</h2>
+      </div>
+      <div class="glass" style="padding:16px;margin-bottom:10px;text-align:center;">
+        <div style="width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#7C3AED,#059669);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 12h.01M10 12h.01M14 12h.01M18 12h.01"/></svg>
+        </div>
+        <p id="ui-model-sub" style="font-size:0.75rem;color:#94A3B8;">Our on-site model crushes, cleans, and recycles every stream</p>
+        <div class="pipeline-progress"><div id="model-progress-bar" class="pipeline-progress-fill"></div></div>
+        <p id="model-stage-label" style="font-size:0.7rem;color:#059669;font-weight:600;margin-top:8px;">Starting...</p>
+      </div>
+      <div id="model-pipeline" style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px;">
+        <div class="pipeline-step" id="pipe-1"><div class="pipeline-icon" style="background:#64748B;">1</div><div><p id="ui-pipe-1-title" style="font-size:0.78rem;font-weight:600;">Receive mixed waste</p><p id="ui-pipe-1-desc" style="font-size:0.65rem;color:#94A3B8;">Waste pile enters the system</p></div></div>
+        <div class="pipeline-step" id="pipe-2"><div class="pipeline-icon" style="background:#059669;">2</div><div><p id="ui-pipe-2-title" style="font-size:0.78rem;font-weight:600;">Auto-segregate</p><p id="ui-pipe-2-desc" style="font-size:0.65rem;color:#94A3B8;">AI sorts into material bins</p></div></div>
+        <div class="pipeline-step" id="pipe-3"><div class="pipeline-icon" style="background:#7C3AED;">3</div><div><p id="ui-pipe-3-title" style="font-size:0.78rem;font-weight:600;">W2W Clean Model</p><p id="ui-pipe-3-desc" style="font-size:0.65rem;color:#94A3B8;">Crush, wash, and decontaminate each stream</p></div></div>
+        <div class="pipeline-step" id="pipe-4"><div class="pipeline-icon" style="background:#0D9488;">4</div><div><p id="ui-pipe-4-title" style="font-size:0.78rem;font-weight:600;">Clean output ready</p><p id="ui-pipe-4-desc" style="font-size:0.65rem;color:#94A3B8;">Recycled material ready for reuse or sale</p></div></div>
+      </div>
+      <div id="model-output" style="display:none;">
+        <p id="ui-model-output-label" style="font-size:0.72rem;font-weight:600;color:#059669;margin-bottom:6px;">Clean recycled output</p>
+        <div id="model-output-list" style="display:flex;flex-direction:column;gap:6px;"></div>
+      </div>
+      <div id="model-done-buttons" style="display:none;flex-direction:column;gap:6px;align-items:center;margin-top:10px;">
+        <button class="btn-primary ripple-btn" onclick="goToScreen('home')" style="width:100%;max-width:280px;padding:12px 22px;font-size:0.85rem;"><span id="ui-model-done">Process More Waste</span></button>
+        <button class="btn-primary ripple-btn" onclick="viewBatchQR()" style="width:100%;max-width:280px;padding:12px 22px;font-size:0.85rem;background:linear-gradient(135deg,#D97706,#F59E0B);"><span id="ui-model-qr">View Batch QR</span></button>
+        <button class="btn-outline ripple-btn" onclick="goToScreen('impact');updateImpact()" style="font-size:0.72rem;padding:6px 14px;"><span id="ui-model-impact">View Impact</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== BATCH QR (New) ===== -->
+  <div id="screen-qr" class="screen" style="min-height:100dvh;padding:20px 20px 85px;">
+    <div style="max-width:380px;margin:0 auto;width:100%;position:relative;z-index:2;">
+      <div style="display:flex;align-items:center;margin-bottom:10px;">
+        <button onclick="goToScreen('model')" style="background:none;border:none;cursor:pointer;padding:4px;margin-right:8px;color:#059669;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        </button>
+        <h2 id="ui-qr-title" style="font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:700;">Batch QR</h2>
+        <button class="top-btn" onclick="downloadBatchQR()" style="margin-left:auto;" title="Download QR">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </button>
+      </div>
+      <div class="glass" style="padding:16px;text-align:center;margin-bottom:8px;border-color:rgba(217,119,6,0.2);">
+        <div id="qr-container" style="background:white;border-radius:16px;padding:10px;display:inline-block;margin-bottom:8px;"></div>
+        <p id="ui-qr-sub" style="font-size:0.7rem;color:#94A3B8;">Scan to track this batch through the waste-to-wealth pipeline</p>
+      </div>
+      <div class="glass" style="padding:16px;margin-bottom:8px;">
+        <p id="ui-qr-fields-label" style="font-size:0.78rem;font-weight:700;margin-bottom:8px;">Batch details</p>
+        <div id="qr-batch-id" style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:12px;margin-bottom:8px;background:rgba(217,119,6,0.06);border:1px solid rgba(217,119,6,0.15);">
+          <span style="font-size:0.72rem;color:#94A3B8;" id="ui-qr-batchid">Batch ID</span>
+          <span id="qr-batch-id-val" style="font-size:0.78rem;font-weight:700;color:#D97706;"></span>
+        </div>
+        <div id="qr-fields" style="display:flex;flex-direction:column;gap:7px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== GUIDE (New) ===== -->
+  <div id="screen-guide" class="screen" style="min-height:100dvh;padding:20px 20px 85px;">
+    <div style="max-width:380px;margin:0 auto;width:100%;position:relative;z-index:2;">
+      <div style="display:flex;align-items:center;margin-bottom:12px;">
+        <button onclick="goToScreen('home')" style="background:none;border:none;cursor:pointer;padding:4px;margin-right:8px;color:#059669;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        </button>
+        <h2 id="ui-guide-title" style="font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:700;">Waste Guide</h2>
+      </div>
+      <div style="flex:1;overflow-y:auto;max-height:calc(100dvh - 140px);padding-right:4px;">
+        <div id="guide-list" class="stagger" style="display:flex;flex-direction:column;gap:6px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== IMPACT (New) ===== -->
+  <div id="screen-impact" class="screen" style="min-height:100dvh;padding:20px 20px 85px;">
+    <div style="max-width:380px;margin:0 auto;width:100%;position:relative;z-index:2;">
+      <div style="display:flex;align-items:center;margin-bottom:12px;">
+        <button onclick="goToScreen('home')" style="background:none;border:none;cursor:pointer;padding:4px;margin-right:8px;color:#059669;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        </button>
+        <h2 id="ui-impact-title" style="font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:700;">Impact</h2>
+      </div>
+      <div class="stagger" style="display:flex;flex-direction:column;gap:8px;">
+        <div class="stat-card"><p id="ui-impact-co2-label" style="font-size:0.65rem;color:#94A3B8;font-weight:500;">CO₂ saved by recycling</p><p style="font-family:'Space Grotesk',sans-serif;font-size:1.6rem;font-weight:700;" class="gradient-text"><span id="impact-co2">0</span> kg</p><p style="font-size:0.6rem;color:#94A3B8;">equivalent to <span id="impact-trees">0</span> trees planted</p></div>
+        <div class="stat-card"><p id="ui-impact-landfill-label" style="font-size:0.65rem;color:#94A3B8;font-weight:500;">Landfill waste diverted</p><p style="font-family:'Space Grotesk',sans-serif;font-size:1.6rem;font-weight:700;" class="gradient-text"><span id="impact-tons">0</span> tons</p><p style="font-size:0.6rem;color:#94A3B8;"><span id="ui-impact-saved">that's </span><span id="impact-trucks">0</span><span id="ui-impact-trucks"> truckloads saved</span></p></div>
+        <div class="stat-card"><p id="ui-impact-energy-label" style="font-size:0.65rem;color:#94A3B8;font-weight:500;">Energy conserved</p><p style="font-family:'Space Grotesk',sans-serif;font-size:1.6rem;font-weight:700;" class="gradient-text"><span id="impact-energy">0</span> kWh</p><p style="font-size:0.6rem;color:#94A3B8;"><span id="ui-impact-homes">enough to power a home for </span><span id="impact-days">0</span><span id="ui-impact-days"> days</span></p></div>
+        <div style="text-align:center;margin-top:4px;"><p id="ui-impact-desc" style="font-size:0.7rem;color:#94A3B8;">Every ton of recycled material counts. These stats update as you sort.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== VALUE (New) ===== -->
+  <div id="screen-value" class="screen" style="min-height:100dvh;padding:20px 20px 85px;">
+    <div style="max-width:380px;margin:0 auto;width:100%;position:relative;z-index:2;">
+      <div style="display:flex;align-items:center;margin-bottom:10px;">
+        <button onclick="goToScreen('home')" style="background:none;border:none;cursor:pointer;padding:4px;margin-right:8px;color:#059669;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        </button>
+        <h2 id="ui-value-title" style="font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:700;">Waste-to-Value Calculator</h2>
+        <div style="margin-left:auto;display:flex;gap:3px;">
+          <button id="cur-inr" class="lang-pill active" onclick="setCur('inr')" style="font-size:0.7rem;">₹</button>
+          <button id="cur-usd" class="lang-pill" onclick="setCur('usd')" style="font-size:0.7rem;">$</button>
+        </div>
+      </div>
+      <div class="glass" style="padding:14px 16px;margin-bottom:8px;">
+        <p id="ui-value-project-label" class="ai-lab">Project size (optional)</p>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+          <input id="value-area" type="number" min="0" class="ai-num" style="width:120px;" placeholder="0">
+          <span style="font-size:0.72rem;color:#94A3B8;">sq ft</span>
+        </div>
+      </div>
+      <div class="glass" style="padding:14px 16px;margin-bottom:8px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:6px;">
+          <p id="ui-value-material-label" style="font-size:0.78rem;font-weight:700;">Waste by material (tonnes)</p>
+          <button class="btn-outline ripple-btn" onclick="loadExample()" style="font-size:0.65rem;padding:4px 10px;flex-shrink:0;"><span id="ui-value-example">Load example</span></button>
+        </div>
+        <div id="value-materials" style="display:flex;flex-direction:column;gap:8px;"></div>
+        <p style="font-size:0.72rem;color:#94A3B8;margin-top:8px;text-align:right;"><span id="ui-value-total-label">Total waste</span>: <strong id="value-total" style="color:#059669;">0</strong> t</p>
+      </div>
+      <div style="display:flex;justify-content:center;padding:4px 0 8px;">
+        <button class="btn-primary ripple-btn" onclick="calcValue()" style="width:100%;max-width:260px;padding:12px 22px;font-size:0.85rem;"><span id="ui-value-calc">Calculate Value</span></button>
+      </div>
+      <div id="value-results" style="display:none;">
+        <div class="stagger" style="display:flex;flex-direction:column;gap:8px;">
+          <div class="stat-card"><p id="ui-value-recyclable" style="font-size:0.65rem;color:#94A3B8;font-weight:500;">Recyclable tonnes</p><p style="font-family:'Space Grotesk',sans-serif;font-size:1.6rem;font-weight:700;" class="gradient-text"><span id="value-recyclable">0</span> t</p><p style="font-size:0.6rem;color:#94A3B8;"><span id="ui-value-of">of</span> <span id="value-waste-total">0</span> <span id="ui-value-total-waste">tonnes total</span></p></div>
+          <div class="stat-card"><p id="ui-value-mat-value" style="font-size:0.65rem;color:#94A3B8;font-weight:500;">Est. material resale value</p><p style="font-family:'Space Grotesk',sans-serif;font-size:1.6rem;font-weight:700;" class="gradient-text"><span id="value-matval">₹0</span></p></div>
+          <div class="stat-card"><p id="ui-value-savings" style="font-size:0.65rem;color:#94A3B8;font-weight:500;">Landfill fees saved</p><p style="font-family:'Space Grotesk',sans-serif;font-size:1.6rem;font-weight:700;" class="gradient-text"><span id="value-savings">₹0</span></p></div>
+          <div class="stat-card"><p id="ui-value-co2" style="font-size:0.65rem;color:#94A3B8;font-weight:500;">CO₂ saved</p><p style="font-family:'Space Grotesk',sans-serif;font-size:1.6rem;font-weight:700;" class="gradient-text"><span id="value-co2">0</span> kg</p></div>
+          <div class="glass" style="padding:14px 16px;">
+            <p id="ui-value-breakdown" style="font-size:0.78rem;font-weight:700;margin-bottom:8px;">Per-material breakdown</p>
+            <div id="value-breakdown" style="display:flex;flex-direction:column;gap:8px;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ABOUT ===== -->
+  <div id="screen-about" class="screen" style="min-height:100dvh;padding:20px 20px 85px;">
+    <div style="max-width:380px;margin:0 auto;width:100%;position:relative;z-index:2;">
+      <div style="display:flex;align-items:center;margin-bottom:12px;">
+        <button onclick="goToScreen('home')" style="background:none;border:none;cursor:pointer;padding:4px;margin-right:8px;color:#059669;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        </button>
+        <h2 id="ui-about-title" style="font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:700;">About</h2>
+      </div>
+      <div class="glass" style="margin-bottom:8px;padding:18px;">
+        <h3 id="ui-about-why" style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:#059669;margin-bottom:4px;font-size:0.85rem;">Why this app?</h3>
+        <p id="ui-about-desc" style="font-size:0.78rem;color:#64748B;line-height:1.5;">Construction waste fills landfills worldwide. Waste2Wealth gives small contractors free, instant sorting instructions via their phone.</p>
+      </div>
+      <div class="glass" style="margin-bottom:8px;padding:18px;">
+        <h3 id="ui-about-tips" style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:#059669;margin-bottom:6px;font-size:0.85rem;">Quick Tips</h3>
+        <ul style="font-size:0.78rem;color:#64748B;line-height:1.7;padding-left:14px;"><li><strong>Concrete:</strong> Remove rebar first, then crush</li><li><strong>Bricks:</strong> Clean off mortar for better reuse</li><li><strong>Wood:</strong> Keep treated and untreated separate</li><li><strong>Metal:</strong> Magnets separate steel from aluminum</li></ul>
+      </div>
+      <div class="glass" style="padding:18px;">
+        <h3 id="ui-about-how" style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:#059669;margin-bottom:4px;font-size:0.85rem;">How it works</h3>
+        <p id="ui-about-how-desc" style="font-size:0.78rem;color:#64748B;line-height:1.5;">Say it, Type it, or Scan it. Get step-by-step recycling instructions. No accounts, no ads.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== NAV ===== -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" id="nav-home" onclick="stopAll();goToScreen('home')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span id="nav-home-label">Home</span>
+    </button>
+    <button class="nav-item" id="nav-voice" onclick="stopAll();startVoiceInput()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      <span id="nav-speak-label">Speak</span>
+    </button>
+    <button class="nav-item" id="nav-scan" onclick="stopAll();startScan()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      <span id="nav-scan-label">Scan</span>
+    </button>
+    <button class="nav-item" id="nav-input" onclick="stopAll();goToScreen('input')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <span id="nav-type-label">Type</span>
+    </button>
+    <button class="nav-item" id="nav-guide" onclick="stopAll();goToScreen('guide');buildGuide()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      <span id="nav-guide-label">Guide</span>
+    </button>
+    <button class="nav-item" id="nav-value" onclick="stopAll();goToScreen('value')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5"/><path d="M11 19h8.203a1.83 1.83 0 0 0 1.556-.89 1.784 1.784 0 0 0 0-1.775l-1.226-2.12"/><path d="m14 16-3 3 3 3"/><path d="M8.293 13.596 7.196 9.5 3.1 10.598"/><path d="m9.344 5.811 1.093-1.892A1.83 1.83 0 0 1 11.985 3a1.784 1.784 0 0 1 1.546.888l3.943 6.843"/><path d="m13.378 9.633 4.096 1.098 1.097-4.096"/></svg>
+      <span id="nav-value-label">Value</span>
+    </button>
+    <button class="nav-item" id="nav-impact" onclick="stopAll();goToScreen('impact');updateImpact()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+      <span id="nav-impact-label">Impact</span>
+    </button>
+  </nav>
+
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.21.0/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.1/dist/mobilenet.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script>
+    const U = {
+      en: {
+        'ui-home-title':'What kind of waste<br>do you have?','ui-home-sub':'Scan, speak, or type — get instant sorting instructions.',
+        'ui-say':'Say it','ui-type':'Type it','ui-scan':'Scan it',
+        'ui-voice-listening':'Listening...','ui-voice-hint':'Say what waste you have','ui-voice-cancel':'Cancel',
+        'ui-input-title':'Describe waste','ui-input-label':'What does your waste look like?','ui-input-tip':'Mention material, size, and anything mixed in','ui-get-instr':'Get Instructions',
+        'ui-scan-title':'Scan waste','ui-scan-hint':'Point camera at waste<br>or upload a photo','ui-upload':'Upload','ui-scan-privacy':'AI runs on your device — no uploads',
+        'ui-result-title':'Instructions','ui-detected':'Detected waste','ui-tip-label':'Tip',
+        'ui-unrelated-title':'Not construction waste','ui-unrelated-desc':'Try again with concrete, brick, wood, or metal.','ui-try-again':'Try Again',
+        'ui-type-another':'Type Another','ui-start-over':'Start Over',
+        'ui-seg-title':'Auto-Segregated','ui-seg-status':'AI is sorting your waste...','ui-seg-sub':'No manual sorting needed — bins assigned automatically','ui-seg-connecting':'Connecting to W2W Clean Model...','ui-send-model':'Send to W2W Clean Model','ui-view-steps':'View sorting steps',
+        'ui-model-title':'W2W Clean Model','ui-model-sub':'Our on-site model crushes, cleans, and recycles every stream','ui-pipe-1-title':'Receive mixed waste','ui-pipe-1-desc':'Waste pile enters the system','ui-pipe-2-title':'Auto-segregate','ui-pipe-2-desc':'AI sorts into material bins','ui-pipe-3-title':'W2W Clean Model','ui-pipe-3-desc':'Crush, wash, and decontaminate each stream','ui-pipe-4-title':'Clean output ready','ui-pipe-4-desc':'Recycled material ready for reuse or sale','ui-model-output-label':'Clean recycled output','ui-model-done':'Process More Waste','ui-model-impact':'View Impact','ui-model-qr':'View Batch QR',
+        'ui-guide-title':'Waste Guide','ui-guide-sub':'Tap a material for sorting tips',
+        'ui-impact-title':'Impact','ui-impact-co2-label':'CO\u2082 saved by recycling','ui-impact-landfill-label':'Landfill waste diverted','ui-impact-energy-label':'Energy conserved','ui-impact-desc':'Every ton of recycled material counts. These stats update as you sort.','ui-impact-saved':'that\'s ','ui-impact-trucks':' truckloads saved','ui-impact-homes':'enough to power a home for ','ui-impact-days':' days',
+        'ui-about-title':'About','ui-about-why':'Why this app?','ui-about-desc':'Construction waste fills landfills worldwide. Waste2Wealth gives small contractors free, instant sorting instructions via their phone.',
+        'ui-about-tips':'Quick Tips','ui-about-how':'How it works','ui-about-how-desc':'Say it, Type it, or Scan it. Get step-by-step recycling instructions. No accounts, no ads.',
+        'nav-home-label':'Home','nav-speak-label':'Speak','nav-scan-label':'Scan','nav-type-label':'Type','nav-guide-label':'Guide','nav-impact-label':'Impact',
+        'ui-ai-label':'AI Waste Summary','ui-sum-detected':'Detected','ui-sum-action':'Recommended action','ui-sum-dest':'Potential destination','ui-sum-recyclable':'Estimated recyclable quantity','ui-sep-action':'Separate these materials before recycling','ui-steps-primary':'Sorting steps for the main material below',
+        'nav-value-label':'Value','ui-value-title':'Waste-to-Value Calculator','ui-value-project-label':'Project size (optional)','ui-value-material-label':'Waste by material (tonnes)','ui-value-example':'Load example','ui-value-calc':'Calculate Value','ui-value-total-label':'Total waste','ui-value-recyclable':'Recyclable tonnes','ui-value-of':'of','ui-value-total-waste':'tonnes total','ui-value-mat-value':'Est. material resale value','ui-value-savings':'Landfill fees saved','ui-value-co2':'CO\u2082 saved','ui-value-breakdown':'Per-material breakdown','ui-value-empty':'Enter at least one material above.','ui-qr-title':'Batch QR','ui-qr-sub':'Scan to track this batch through the waste-to-wealth pipeline','ui-qr-fields-label':'Batch details','ui-qr-batchid':'Batch ID','ui-qr-download':'Download QR',
+        'qr-source-label':'📍 Source','qr-material-label':'🧱 Material','qr-qty-label':'⚖️ Quantity','qr-collected-label':'🚛 Collected','qr-recycler-label':'♻️ Recycler','qr-processed-label':'✅ Processed','qr-outcome-label':'🌱 Recovery outcome','qr-tons':'tonnes'}
+      ,
+      hi: {
+        'ui-home-title':'आपके पास किस तरह का<br>कचरा है?','ui-home-sub':'स्कैन करें, बोलें, या टाइप करें — तुरंत निर्देश प्राप्त करें।',
+        'ui-say':'बोलें','ui-type':'टाइप करें','ui-scan':'स्कैन करें',
+        'ui-voice-listening':'सुन रहा है...','ui-voice-hint':'बताएं कि आपके पास क्या कचरा है','ui-voice-cancel':'रद्द करें',
+        'ui-input-title':'कचरे का वर्णन करें','ui-input-label':'आपका कचरा कैसा दिखता है?','ui-input-tip':'सामग्री, आकार और मिश्रित चीजें बताएं','ui-get-instr':'निर्देश प्राप्त करें',
+        'ui-scan-title':'कचरा स्कैन करें','ui-scan-hint':'कैमरे को कचरे की ओर करें<br>या फोटो अपलोड करें','ui-upload':'अपलोड','ui-scan-privacy':'AI आपके डिवाइस पर चलता है — कोई अपलोड नहीं',
+        'ui-result-title':'निर्देश','ui-detected':'पहचाना गया कचरा','ui-tip-label':'सुझाव',
+        'ui-unrelated-title':'निर्माण कचरा नहीं','ui-unrelated-desc':'कंक्रीट, ईंट, लकड़ी या धातु के साथ पुनः प्रयास करें।','ui-try-again':'पुनः प्रयास करें',
+        'ui-type-another':'दूसरा टाइप करें','ui-start-over':'शुरू से करें',
+        'ui-seg-title':'ऑटो-वर्गीकृत','ui-seg-status':'AI आपके कचरे को छांट रहा है...','ui-seg-sub':'कोई मैनुअल छंटाई नहीं — बिन स्वचालित रूप से असाइन','ui-seg-connecting':'W2W क्लीन मॉडल से कनेक्ट हो रहा है...','ui-send-model':'W2W क्लीन मॉडल को भेजें','ui-view-steps':'छंटाई के चरण देखें',
+        'ui-model-title':'W2W क्लीन मॉडल','ui-model-sub':'हमारा ऑन-साइट मॉडल हर स्ट्रीम को कुचलता, साफ करता और रीसायकल करता है','ui-pipe-1-title':'मिश्रित कचरा प्राप्त','ui-pipe-1-desc':'कचरे का ढेर सिस्टम में प्रवेश करता है','ui-pipe-2-title':'ऑटो-सेग्रिगेट','ui-pipe-2-desc':'AI सामग्री बिन में छांटता है','ui-pipe-3-title':'W2W क्लीन मॉडल','ui-pipe-3-desc':'प्रत्येक स्ट्रीम को कुचलें, धोएं और डीकंटैमिनेट करें','ui-pipe-4-title':'साफ आउटपुट तैयार','ui-pipe-4-desc':'रीसाइक्लिंग सामग्री पुन: उपयोग के लिए तैयार','ui-model-output-label':'साफ रीसाइक्लिंग आउटपुट','ui-model-done':'और कचरा प्रोसेस करें','ui-model-impact':'प्रभाव देखें','ui-model-qr':'बैच QR देखें',
+        'ui-guide-title':'अपशिष्ट गाइड',
+        'ui-impact-title':'प्रभाव','ui-impact-co2-label':'रीसाइक्लिंग से बचाया गया CO\u2082','ui-impact-landfill-label':'लैंडफिल से बचाया गया','ui-impact-energy-label':'संरक्षित ऊर्जा','ui-impact-saved':'यानी ','ui-impact-trucks':' ट्रक लोड बचे','ui-impact-homes':'एक घर को ','ui-impact-days':' दिन बिजली दे सकते हैं',
+        'ui-about-title':'बारे में','ui-about-why':'यह ऐप क्यों?','ui-about-desc':'निर्माण कचरा दुनिया भर में लैंडफिल भरता है। Waste2Wealth छोटे ठेकेदारों को मुफ्त छंटाई निर्देश देता है।',
+        'ui-about-tips':'त्वरित सुझाव','ui-about-how':'यह कैसे काम करता है','ui-about-how-desc':'बोलें, टाइप करें या स्कैन करें। तुरंत रीसाइक्लिंग निर्देश। कोई खाता नहीं।',
+        'nav-home-label':'होम','nav-speak-label':'बोलें','nav-scan-label':'स्कैन','nav-type-label':'टाइप','nav-guide-label':'गाइड','nav-impact-label':'प्रभाव',
+        'ui-ai-label':'AI अपशिष्ट सारांश','ui-sum-detected':'पहचाना गया','ui-sum-action':'अनुशंसित कार्रवाई','ui-sum-dest':'संभावित गंतव्य','ui-sum-recyclable':'अनुमानित रीसायकल मात्रा','ui-sep-action':'रीसाइक्लिंग से पहले इन सामग्रियों को अलग करें','ui-steps-primary':'नीचे मुख्य सामग्री के लिए छंटाई के चरण',
+        'nav-value-label':'मूल्य','ui-value-title':'अपशिष्ट-से-मूल्य कैलकुलेटर','ui-value-project-label':'परियोजना का आकार (वैकल्पिक)','ui-value-material-label':'सामग्री के अनुसार कचरा (टन)','ui-value-example':'उदाहरण लोड करें','ui-value-calc':'मूल्य की गणना करें','ui-value-total-label':'कुल कचरा','ui-value-recyclable':'रीसायकल योग्य टन','ui-value-of':'में से','ui-value-total-waste':'टन कुल','ui-value-mat-value':'अनुमानित सामग्री पुनर्विक्रय मूल्य','ui-value-savings':'बचाई गई लैंडफिल फीस','ui-value-co2':'बचाया गया CO\u2082','ui-value-breakdown':'सामग्री-वार विवरण','ui-value-empty':'ऊपर कम से कम एक सामग्री दर्ज करें।','ui-qr-title':'बैच QR','ui-qr-sub':'इस बैच को वेस्ट-टू-वेल्थ पाइपलाइन में ट्रैक करने के लिए स्कैन करें','ui-qr-fields-label':'बैच विवरण','ui-qr-batchid':'बैच आईडी','ui-qr-download':'QR डाउनलोड करें',
+        'qr-source-label':'📍 स्रोत','qr-material-label':'🧱 सामग्री','qr-qty-label':'⚖️ मात्रा','qr-collected-label':'🚛 संग्रहित','qr-recycler-label':'♻️ रीसाइक्लर','qr-processed-label':'✅ प्रोसेस्ड','qr-outcome-label':'🌱 रिकवरी परिणाम','qr-tons':'टन'}
+      ,
+      es: {
+        'ui-home-title':'¿Qué tipo de residuo<br>tienes?','ui-home-sub':'Escanea, di o escribe — instrucciones al instante.',
+        'ui-say':'Decir','ui-type':'Escribir','ui-scan':'Escanear',
+        'ui-voice-listening':'Escuchando...','ui-voice-hint':'Di qué residuo tienes','ui-voice-cancel':'Cancelar',
+        'ui-input-title':'Describe residuo','ui-input-label':'¿Cómo se ve tu residuo?','ui-input-tip':'Menciona material, tamaño y mezclas','ui-get-instr':'Obtener Instrucciones',
+        'ui-scan-title':'Escanear residuo','ui-scan-hint':'Apunta la cámara al residuo<br>o sube una foto','ui-upload':'Subir','ui-scan-privacy':'IA en tu dispositivo — sin subir fotos',
+        'ui-result-title':'Instrucciones','ui-detected':'Residuo detectado','ui-tip-label':'Consejo',
+        'ui-unrelated-title':'No es residuo de construcción','ui-unrelated-desc':'Intenta con hormigón, ladrillo, madera o metal.','ui-try-again':'Intentar de nuevo',
+        'ui-type-another':'Escribir otro','ui-start-over':'Empezar de nuevo',
+        'ui-seg-title':'Auto-Segregado','ui-seg-status':'La IA está clasificando tu residuo...','ui-seg-sub':'Sin clasificación manual — contenedores asignados automáticamente','ui-seg-connecting':'Conectando al Modelo Limpio W2W...','ui-send-model':'Enviar al Modelo Limpio W2W','ui-view-steps':'Ver pasos de clasificación',
+        'ui-model-title':'Modelo Limpio W2W','ui-model-sub':'Nuestro modelo in situ tritura, limpia y recicla cada flujo','ui-pipe-1-title':'Recibir residuos mixtos','ui-pipe-1-desc':'El montón de residuos entra al sistema','ui-pipe-2-title':'Auto-segregar','ui-pipe-2-desc':'La IA clasifica en contenedores de material','ui-pipe-3-title':'Modelo Limpio W2W','ui-pipe-3-desc':'Triturar, lavar y descontaminar cada flujo','ui-pipe-4-title':'Salida limpia lista','ui-pipe-4-desc':'Material reciclado listo para reutilizar o vender','ui-model-output-label':'Salida reciclada limpia','ui-model-done':'Procesar más residuos','ui-model-impact':'Ver impacto','ui-model-qr':'Ver QR del Lote',
+        'ui-guide-title':'Guía de Residuos',
+        'ui-impact-title':'Impacto','ui-impact-co2-label':'CO\u2082 ahorrado reciclando','ui-impact-landfill-label':'Residuos desviados','ui-impact-energy-label':'Energía conservada','ui-impact-saved':'','ui-impact-trucks':' camiones ahorrados','ui-impact-homes':'energía para un hogar ','ui-impact-days':' días',
+        'ui-about-title':'Acerca de','ui-about-why':'¿Por qué esta app?','ui-about-desc':'Los residuos de construcción llenan vertederos. Waste2Wealth ofrece instrucciones gratuitas.',
+        'ui-about-tips':'Consejos rápidos','ui-about-how':'Cómo funciona','ui-about-how-desc':'Di, escribe o escanea. Instrucciones de reciclaje al instante. Sin cuentas.',
+        'nav-home-label':'Inicio','nav-speak-label':'Decir','nav-scan-label':'Escanear','nav-type-label':'Escribir','nav-guide-label':'Guía','nav-impact-label':'Impacto',
+        'ui-ai-label':'Resumen IA del residuo','ui-sum-detected':'Detectado','ui-sum-action':'Acción recomendada','ui-sum-dest':'Destino potencial','ui-sum-recyclable':'Cantidad reciclable estimada','ui-sep-action':'Separa estos materiales antes de reciclar','ui-steps-primary':'Pasos de clasificación del material principal abajo',
+        'nav-value-label':'Valor','ui-value-title':'Calculadora Residuo-a-Valor','ui-value-project-label':'Tamaño del proyecto (opcional)','ui-value-material-label':'Residuos por material (toneladas)','ui-value-example':'Cargar ejemplo','ui-value-calc':'Calcular Valor','ui-value-total-label':'Residuos totales','ui-value-recyclable':'Toneladas reciclables','ui-value-of':'de','ui-value-total-waste':'toneladas totales','ui-value-mat-value':'Valor de reventa estimado','ui-value-savings':'Tarifas de vertedero ahorradas','ui-value-co2':'CO\u2082 ahorrado','ui-value-breakdown':'Desglose por material','ui-value-empty':'Ingresa al menos un material arriba.','ui-qr-title':'QR del Lote','ui-qr-sub':'Escanea para rastrear este lote en el proceso residuo-a-valor','ui-qr-fields-label':'Detalles del lote','ui-qr-batchid':'ID del Lote','ui-qr-download':'Descargar QR',
+        'qr-source-label':'📍 Fuente','qr-material-label':'🧱 Material','qr-qty-label':'⚖️ Cantidad','qr-collected-label':'🚛 Recogido','qr-recycler-label':'♻️ Reciclador','qr-processed-label':'✅ Procesado','qr-outcome-label':'🌱 Resultado de recuperación','qr-tons':'toneladas'}
+    };
+
+    let L = 'en';
+    function setUILang(l) { L=l; const d=U[l]||U.en; document.querySelectorAll('[id]').forEach(e=>{ const k=e.id; if(d[k]!==undefined){ if(e.tagName==='INPUT'||e.tagName==='TEXTAREA') e.placeholder=d[k]; else e.innerHTML=d[k]; } }); document.querySelectorAll('.lang-pill').forEach(b=>b.classList.remove('active')); document.getElementById('lang-'+l).classList.add('active'); }
+
+    function toggleDark() { document.body.classList.toggle('dark'); const d=document.body.classList.contains('dark'); localStorage.setItem('w2w-dark',d?'1':'0'); document.getElementById('sun-icon').style.display=d?'none':'block'; document.getElementById('moon-icon').style.display=d?'block':'none'; }
+    if(localStorage.getItem('w2w-dark')==='1'){document.body.classList.add('dark'); document.getElementById('sun-icon').style.display='none'; document.getElementById('moon-icon').style.display='block';}
+
+    function goToScreen(id) { document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); const s=document.getElementById('screen-'+id); if(s) s.classList.add('active'); document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active')); const nb=document.getElementById('nav-'+id); if(nb) nb.classList.add('active'); window.scrollTo({top:0,behavior:'smooth'}); }
+    function stopAll(){stopCamera();stopVoice();}
+
+    document.addEventListener('click',function(e){const b=e.target.closest('.ripple-btn');if(!b)return;const r=b.getBoundingClientRect();const p=document.createElement('span');p.className='ripple';const s=Math.max(r.width,r.height);p.style.width=p.style.height=s+'px';p.style.left=(e.clientX-r.left-s/2)+'px';p.style.top=(e.clientY-r.top-s/2)+'px';b.appendChild(p);setTimeout(()=>p.remove(),500);});
+
+    const BIN_COLORS = ['#059669','#D97706','#7C3AED','#64748B','#92400E','#94A3B8','#0EA5E9','#F5F5DC'];
+    const DB = [
+      {id:0,kw:['concrete','cement','rebar','steel bar','reinforced','slab','foundation'],type:'Reinforced Concrete',clean:'Clean crushed aggregate (20–40mm)',action:'Remove rebar and separate from other materials',dest:'C&D recycling facility',rec:95,st:['Separate rebar & metal — use a magnetic separator or pry bar','Break concrete into pieces smaller than 400mm using a jaw crusher or hammer','Remove any wood, plastic, or paper contaminants by hand sorting','Crush to 20\u201340mm aggregate using a mobile crusher','Use as road base, backfill, or new concrete aggregate'],tp:'Recycling 1 ton of concrete saves ~900 kg of CO2.',guide:'Concrete is the most recycled construction material. Remove all metal first, then crush to the right size for your project. Crushed concrete works great as road base.'},
+      {id:1,kw:['brick','bricks','mortar','clay brick','masonry'],type:'Brick & Mortar Mix',clean:'Clean brick aggregate + reusable whole bricks',action:'Separate whole bricks from broken pieces',dest:'Brick recycler / C&D facility',rec:90,st:['Remove large pieces of mortar by chipping or hammering','Sort whole bricks from broken pieces \u2014 whole bricks can be reused directly','Crush brick fragments to 10\u201320mm for aggregate','Screen out fine dust \u2014 use as bedding material or in new mortar mix','Store clean bricks on pallets, covered from rain'],tp:'Clean whole bricks can sell for 30\u201350% of new brick price.',guide:'Whole bricks have the highest value. Clean off mortar carefully to avoid damaging them. Broken bricks make excellent aggregate for pathways.'},
+      {id:2,kw:['tile','tiles','ceramic','porcelain','roof tile'],type:'Tile Waste',clean:'Ground ceramic powder for terrazzo / pozzolan',action:'Separate ceramic from porcelain tiles',dest:'Ceramic / terrazzo recycler',rec:85,st:['Separate ceramic from porcelain tiles (porcelain is denser)','Remove adhesive or mortar backing by chipping','Crush ceramic tiles to 5\u201310mm for terrazzo flooring or new tiles','Porcelain tiles can be crushed finer for clay brick manufacturing','Keep dust down \u2014 wear a mask when crushing tiles'],tp:'Tile waste can be ground into pozzolan, a cement substitute.',guide:'Ceramic and porcelain tiles recycle differently. Porcelain is denser and can be crushed for brick manufacturing. Ceramic works well in terrazzo.'},
+      {id:3,kw:['rubble','mixed','debris','demolition','waste','general','trash','garbage'],type:'Mixed C&D Rubble',clean:'Type 1 sub-base aggregate (clean, graded)',action:'Screen and hand-sort contaminants at each stage',dest:'C&D recycling facility',rec:90,st:['Do a rough sort \u2014 separate metal, wood, and plastic by hand or excavator','Screen at 50mm \u2014 material bigger than 50mm goes to a crusher','Run crushed material over a magnetic separator to catch remaining metal','Hand-pick any remaining wood, plastic, or gypsum from the belt','Final crushed material can be used as Type 1 sub-base for roads'],tp:'Well-sorted mixed rubble can achieve 90%+ recycling rate.',guide:'Mixed rubble needs more sorting but can still achieve high recycling rates. The key is removing contaminants at each stage.'},
+      {id:4,kw:['wood','timber','plywood','treated','untreated','lumber','log','plank'],type:'Wood & Timber Waste',clean:'Mulch chips or biomass fuel (untreated only)',action:'Separate treated from untreated wood first',dest:'Biomass / chipping facility',rec:80,st:['Separate treated timber (greenish tint, CCA/ACQ stamp) from untreated','Remove nails, screws, and fittings with a nail puller or magnet','Untreated wood: chip for mulch, animal bedding, or particleboard','Treated wood: must go to licensed facility \u2014 do NOT burn or mulch','Plywood and MDF can be chipped for biomass fuel'],tp:'Treated timber must never be burned \u2014 it releases toxic chemicals.',guide:'Treated wood has a greenish tint and must be handled separately. Never burn it. Untreated wood can be chipped for mulch or animal bedding.'},
+      {id:5,kw:['metal','steel','iron','aluminum','copper','scrap','rebar scrap','chain','pipe'],type:'Metal Scrap',clean:'Sorted ferrous / non-ferrous scrap (sale-ready)',action:'Magnetically separate ferrous from non-ferrous',dest:'Scrap metal yard',rec:100,st:['Use a magnet to separate ferrous (steel/iron) from non-ferrous (aluminum, copper)','Ferrous metals: bundle or compact for scrap dealer \u2014 highest value','Non-ferrous: separate by type \u2014 aluminum, copper, brass, stainless steel','Copper wire: strip insulation for better price','Store in dry area \u2014 clean metal gets better rates'],tp:'Scrap metal is 100% recyclable without losing quality.',guide:'Metals are the most valuable recyclable material. A simple magnet test separates steel (magnetic) from aluminum and copper (non-magnetic).'},
+      {id:6,kw:['glass','window','broken glass','bottle','pane'],type:'Glass Waste',clean:'Glass cullet (sorted by color)',action:'Remove fittings and sort glass by color',dest:'Glass recycling plant',rec:100,st:['Remove frames, seals, and fittings from windows first','Separate by color if possible (clear, green, brown)','Crush to cullet (small fragments) \u2014 avoid mixing with other materials','Glass cullet can be used in new glass, fiberglass, or as aggregate substitute','Safety: wear cut-resistant gloves and eye protection'],tp:'Crushed glass melts at lower temperature than raw materials, saving energy.',guide:'Glass is 100% recyclable and can be recycled forever without losing quality. Color sorting increases its value. Clear glass is most valuable.'},
+      {id:7,kw:['gypsum','drywall','plasterboard','sheetrock','plaster'],type:'Gypsum / Drywall Waste',clean:'Gypsum powder for new drywall or soil amendment',action:'Remove paper backing and keep gypsum dry',dest:'Gypsum recycler',rec:90,st:['Remove paper backing and any screws or nails','Separate gypsum core from paper (paper can be recycled separately)','Crush gypsum to powder \u2014 can be used in new drywall or as soil amendment','Do NOT mix gypsum with concrete waste (causes chemical issues)','Keep dry \u2014 gypsum absorbs moisture and becomes unusable'],tp:'Recycled gypsum is used by farmers as a soil conditioner.',guide:'Gypsum must stay dry. Mixing it with concrete creates chemical problems. The powder form is valuable for both construction and agriculture.'}
+    ];
+
+    let segMaterials = [], segPhotoUrl = null, segPrimary = null, modelTimer = null, segTracked = false;
+    let currentMats = [];
+
+    function normalizeMats(arr) {
+      const base = (arr && arr.length) ? arr.slice(0, 4) : [{ item: DB[3], pct: 100, conf: 0 }];
+      const total = base.length;
+      const each = Math.round(100 / total);
+      return base.map((m, i) => ({
+        item: m.item,
+        pct: (m.pct != null) ? m.pct : (i === total - 1 ? 100 - each * (total - 1) : each),
+        conf: m.conf || 0
+      }));
+    }
+
+    function findWaste(t) { const all = findAllWaste(t); return all[0] || DB[3]; }
+    function findAllWaste(t) {
+      const l = t.toLowerCase();
+      const matches = [];
+      for (const item of DB) { let s = 0; for (const kw of item.kw) { if (l.includes(kw)) s++; } if (s > 0) matches.push({ item, score: s }); }
+      if (matches.length === 0) return [DB[3]];
+      matches.sort((a, b) => b.score - a.score);
+      if (matches.length === 1 && (l.includes('mixed') || l.includes('and') || l.includes('+'))) {
+        const extras = DB.filter(d => d.id !== matches[0].item.id && d.kw.some(k => l.includes(k)));
+        if (extras.length) return [matches[0].item, ...extras.slice(0, 2)];
+      }
+      return matches.slice(0, 4).map(m => m.item);
+    }
+    function pctFromScores(items, scores) {
+      const total = scores.reduce((a, b) => a + b, 0) || items.length;
+      return items.map((item, i) => ({ item, pct: Math.max(8, Math.round((scores[i] / total) * 100)), conf: scores[i] }));
+    }
+    function getInstructions() { const i = document.getElementById('waste-input').value.trim(); if (!i) { alert('Please describe your waste first.'); return; } runAutoSegregate(findAllWaste(i), null); }
+    function quickSelect(el) { document.querySelectorAll('.chip').forEach(c => c.classList.remove('selected')); el.classList.add('selected'); document.getElementById('waste-input').value = el.textContent; runAutoSegregate(findAllWaste(el.textContent), null); }
+    document.getElementById('waste-input').addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();getInstructions();}});
+
+    function runAutoSegregate(materials,photoUrl){
+      segMaterials=normalizeMats(materials);
+      segPrimary=segMaterials[0].item; segPhotoUrl=photoUrl; segTracked=false;
+      goToScreen('segregate');
+      const pb=document.getElementById('seg-photo-box'),pe=document.getElementById('seg-photo');
+      if(photoUrl){pe.src=photoUrl;pb.style.display='block';}else{pb.style.display='none';}
+      document.getElementById('btn-send-model').style.display='none';
+      document.getElementById('btn-view-steps').style.display='none';
+      document.getElementById('seg-model-banner').style.display='none';
+      document.getElementById('ui-seg-status').textContent=U[L]['ui-seg-status']||'AI is sorting your waste...';
+      const bins=document.getElementById('seg-bins');bins.innerHTML='';
+      segMaterials.forEach((m,i)=>{
+        const el=document.createElement('div');el.className='bin-card';
+        el.innerHTML='<span class="bin-dot" style="background:'+BIN_COLORS[m.item.id]+';"></span><div style="flex:1;"><p style="font-size:0.78rem;font-weight:600;">'+m.item.type+'</p><div class="bin-bar"><div class="bin-bar-fill" data-pct="'+m.pct+'" style="background:'+BIN_COLORS[m.item.id]+';"></div></div></div><span style="font-size:0.75rem;font-weight:700;color:#059669;">'+m.pct+'%</span>';
+        bins.appendChild(el);
+      });
+      requestAnimationFrame(()=>{
+        segMaterials.forEach((m,i)=>{
+          const card=bins.children[i];if(!card)return;
+          const fill=card.querySelector('.bin-bar-fill');
+          setTimeout(()=>{card.classList.add('visible');},i*160);
+          setTimeout(()=>{fill.style.width=m.pct+'%';},320+i*160);
+        });
+      });
+      setTimeout(()=>{
+        document.getElementById('ui-seg-status').textContent=segMaterials.map(m=>m.item.type).join(' + ');
+        document.getElementById('btn-send-model').style.display='block';
+        document.getElementById('btn-view-steps').style.display='block';
+      },1100+segMaterials.length*160);
+      setTimeout(()=>{document.getElementById('seg-model-banner').style.display='block';},3300);
+    }
+    function viewInstructionsFromSeg(){showResult(segMaterials,segPhotoUrl);}
+    function startW2WModel(){
+      goToScreen('model');
+      const steps=['pipe-1','pipe-2','pipe-3','pipe-4'];
+      let idx=0;
+      const bar=document.getElementById('model-progress-bar');
+      const lbl=document.getElementById('model-stage-label');
+      const out=document.getElementById('model-output'),ol=document.getElementById('model-output-list'),db=document.getElementById('model-done-buttons');
+      out.style.display='none';db.style.display='none';bar.style.width='0%';
+      steps.forEach(s=>{const e=document.getElementById(s);e.classList.remove('done','active');});
+      function tick(){
+        if(idx<steps.length){
+          const cur=document.getElementById(steps[idx]);
+          cur.classList.add('active');
+          const p=cur.querySelector('p');if(p)lbl.textContent=p.textContent;
+          bar.style.width=Math.round((idx+1)/steps.length*100)+'%';
+          idx++;
+          setTimeout(()=>{cur.classList.remove('active');cur.classList.add('done');tick();},1300);
+        }else{
+          bar.style.width='100%';
+          lbl.textContent=U[L]['ui-model-output-label']||'Clean recycled output';
+          ol.innerHTML='';
+          segMaterials.forEach((m,i)=>{
+            const el=document.createElement('div');el.className='clean-output';el.style.animationDelay=(i*0.1)+'s';
+            el.innerHTML='<div style="display:flex;align-items:center;gap:8px;"><span class="bin-dot" style="background:'+BIN_COLORS[m.item.id]+';"></span><div style="flex:1;"><p style="font-size:0.8rem;font-weight:700;">'+m.item.clean+'</p><p style="font-size:0.65rem;color:#94A3B8;">'+m.pct+'% of pile · '+m.item.type+'</p></div></div>';
+            ol.appendChild(el);
+          });
+          out.style.display='block';db.style.display='flex';
+          if(!segTracked){segMaterials.forEach(m=>trackSort(m.item.type));segTracked=true;}
+        }
+      }
+      tick();
+    }
+
+    // ===== BATCH QR =====
+    let qrObj=null, currentBatch=null;
+    function fmtQRDate(d){const m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return d.getDate()+' '+m[d.getMonth()];}
+    function viewBatchQR(){
+      if(!segMaterials.length){alert('Process a batch first.');return;}
+      const top=segMaterials[0].item;
+      const now=new Date();
+      const qkg=parseFloat(document.getElementById('result-weight')?document.getElementById('result-weight').value:'500')||500;
+      currentBatch={
+        id:'W2W-'+Math.floor(1000+Math.random()*9000)+'-'+top.type.split(' ').map(w=>w[0]).join('').toUpperCase(),
+        source:'Project A',
+        material:top.type,
+        qty:(qkg/1000).toFixed(2),
+        collected:fmtQRDate(now),
+        recycler:(top.dest.split(' ')[0]||'Recycler')+' Recycling',
+        processed:fmtQRDate(now),
+        outcome:top.clean
+      };
+      renderBatchQR();goToScreen('qr');
+    }
+    function renderBatchQR(){
+      if(!currentBatch)return;
+      document.getElementById('qr-batch-id-val').textContent=currentBatch.id;
+      const rows=[
+        ['qr-source-label',currentBatch.source],
+        ['qr-material-label',currentBatch.material],
+        ['qr-qty-label',currentBatch.qty+' '+(U[L]['qr-tons']||'tonnes')],
+        ['qr-collected-label',currentBatch.collected],
+        ['qr-recycler-label',currentBatch.recycler],
+        ['qr-processed-label',currentBatch.processed],
+        ['qr-outcome-label',currentBatch.outcome]
+      ];
+      const c=document.getElementById('qr-fields');c.innerHTML='';
+      rows.forEach(r=>{
+        const el=document.createElement('div');el.className='bin-card visible';
+        el.style.opacity='1';el.style.transform='none';
+        el.innerHTML='<span class="bin-dot" style="background:#D97706;"></span><div style="flex:1;"><p style="font-size:0.7rem;color:#94A3B8;">'+(U[L][r[0]]||r[0])+'</p><p style="font-size:0.8rem;font-weight:700;">'+r[1]+'</p></div>';
+        c.appendChild(el);
+      });
+      const box=document.getElementById('qr-container');box.innerHTML='';
+      const text='W2W BATCH '+currentBatch.id+'\n📍 Source: '+currentBatch.source+'\n🧱 Material: '+currentBatch.material+'\n⚖️ Quantity: '+currentBatch.qty+' tonnes\n🚛 Collected: '+currentBatch.collected+'\n♻️ Recycler: '+currentBatch.recycler+'\n✅ Processed: '+currentBatch.processed+'\n🌱 Recovery outcome: '+currentBatch.outcome;
+      if(typeof QRCode!=='undefined'){
+        qrObj=new QRCode(box,{text:text,width:170,height:170,colorDark:'#0F172A',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.H});
+      } else {
+        box.innerHTML='<p style="font-size:0.7rem;color:#94A3B8;">QR library unavailable</p>';
+      }
+    }
+    function downloadBatchQR(){
+      if(!qrObj){alert('No QR to download yet.');return;}
+      const canvas=document.querySelector('#qr-container canvas');
+      if(!canvas)return;
+      const a=document.createElement('a');a.href=canvas.toDataURL('image/png');a.download=(currentBatch?currentBatch.id:'batch')+'.png';a.click();
+    }
+
+    // Voice
+    let rec=null;
+    function startVoiceInput() { if(!('webkitSpeechRecognition' in window)&&!('SpeechRecognition' in window)){alert('Voice needs Chrome or Edge.');return;} stopCamera(); const SR=window.SpeechRecognition||window.webkitSpeechRecognition; rec=new SR(); rec.continuous=false; rec.interimResults=true; rec.lang=L==='hi'?'hi-IN':L==='es'?'es-ES':'en-US'; const t=document.getElementById('voice-transcript'); t.style.display='none'; t.textContent=''; goToScreen('voice'); rec.onresult=function(e){let f='';for(let i=e.resultIndex;i<e.results.length;i++){if(e.results[i].isFinal)f+=e.results[i][0].transcript;} if(f){t.textContent=f;t.style.display='block';document.getElementById('ui-voice-listening').textContent='Got it!';setTimeout(()=>{stopVoice();document.getElementById('waste-input').value=f;runAutoSegregate(findAllWaste(f),null);},700);}else{t.textContent=e.results[e.results.length-1][0].transcript;t.style.display='block';}}; rec.onerror=function(){stopVoice();goToScreen('home');}; rec.start(); }
+    function stopVoice(){if(rec){try{rec.stop();}catch(e){}rec=null;}}
+
+    // Scan
+    let cam=null,model=null,modelLoading=false;
+    function startScan(){stopVoice();goToScreen('scan');const v=document.getElementById('camera-feed'),p=document.getElementById('scan-placeholder'),cap=document.getElementById('btn-capture'),ca=document.getElementById('camera-canvas');ca.style.display='none'; try{navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:1280},height:{ideal:960}}}).then(s=>{cam=s;v.srcObject=s;v.play();v.style.display='block';p.style.display='none';cap.style.display='flex';}).catch(()=>{v.style.display='none';p.style.display='flex';cap.style.display='none';});}catch(e){v.style.display='none';p.style.display='flex';cap.style.display='none';}}
+    function stopCamera(){if(cam){cam.getTracks().forEach(t=>t.stop());cam=null;}const v=document.getElementById('camera-feed');if(v)v.srcObject=null;}
+    function capturePhoto(){const v=document.getElementById('camera-feed'),ca=document.getElementById('camera-canvas');ca.width=v.videoWidth||1280;ca.height=v.videoHeight||960;ca.getContext('2d').drawImage(v,0,0,ca.width,ca.height);stopCamera();v.style.display='none';ca.style.display='block';document.getElementById('btn-capture').style.display='none';analyzeImage(ca);}
+    function handleUpload(e){const f=e.target.files[0];if(!f)return;const v=document.getElementById('camera-feed'),p=document.getElementById('scan-placeholder'),cap=document.getElementById('btn-capture');stopCamera();v.style.display='none';p.style.display='none';cap.style.display='none';const ca=document.getElementById('camera-canvas');const img=new Image();img.onload=function(){ca.width=img.naturalWidth;ca.height=img.naturalHeight;ca.getContext('2d').drawImage(img,0,0);ca.style.display='block';analyzeImage(ca);};img.src=URL.createObjectURL(f);}
+
+    const aM=[{w:0,kw:['breakwater','stone','cliff','rock','monument','pillar','cairn','pedestal','concrete','cemetery','wall','masonry','quarry']},{w:1,kw:['brick','palace','castle','chimney']},{w:2,kw:['ceramic','pottery','tile','porcelain','bathtub','sink','vase']},{w:3,kw:['trash','garbage','rubble','bin','dumpster','bag','debris']},{w:4,kw:['wood','log','timber','lumber','picket','stretcher','wooden']},{w:5,kw:['metal','iron','steel','chain','wrench','hammer','anvil','grille','cannon','rail','screw','nail']},{w:6,kw:['glass','window','bottle','crystal','lens','goblet','vial']},{w:7,kw:['plaster','chalk','whiteboard']}];
+    const uK=['dog','cat','bird','fish','horse','cow','sheep','flower','plant','tree','leaf','grass','person','man','woman','child','baby','car','truck','bus','bicycle','airplane','boat','food','pizza','burger','phone','laptop','computer','tv','shirt','shoe','hat','book','bed','chair','sofa','table','ocean','sea','lake','river','mountain','sky','cloud','ball','cup','plate','bowl','drink','coffee','tea'];
+    function isUnrelated(p){if(!p||!p.length)return false;let c=0,u=0;for(const r of p){const n=r.className.toLowerCase();for(const m of aM){for(const k of m.kw){if(n.includes(k))c+=r.probability;}}for(const k of uK){if(n.includes(k))u+=r.probability;}} return u>c;}
+    function clsByColor(ca){const ctx=ca.getContext('2d'),w=Math.min(ca.width,200),h=Math.min(ca.height,150),d=ctx.getImageData(0,0,w,h).data;let tR=0,tG=0,tB=0,ct=0,r2=0,g2=0,b2=0,gray=0,warm=0,bright=0,dark=0;for(let i=0;i<d.length;i+=4){const r=d[i],g=d[i+1],b=d[i+2];tR+=r;tG+=g;tB+=b;r2+=r*r;g2+=g*g;b2+=b*b;ct++;const mx=Math.max(r,g,b),mn=Math.min(r,g,b),sat=mx===0?0:(mx-mn)/mx,l=mx/255;if(sat<0.2)gray++;else if(r>g*1.3&&r>b*1.3)warm++;if(l>0.75)bright++;else if(l<0.3)dark++;}const aR=tR/ct,aG=tG/ct,aB=tB/ct,aS=(Math.max(aR,aG,aB)-Math.min(aR,aG,aB))/(Math.max(aR,aG,aB)||1),l=(aR+aG+aB)/(3*255),gr=gray/ct,wr=warm/ct,v=(r2/ct-aR*aR+g2/ct-aG*aG+b2/ct-aB*aB)/3;if(l>0.85&&aS<0.1&&gr>0.5)return DB[7];if(l>0.65&&aS<0.15&&gr>0.6)return DB[0];if(wr>0.3&&aR>140&&aG<110&&aB<90)return DB[1];if(aG>aR*1.2&&aG>aB*1.2&&aS<0.25&&dark/ct<0.3)return DB[4];if(dark/ct>0.4&&aS<0.2&&v>3000)return DB[5];if(bright/ct>0.5&&aS>0.2&&v<2000)return DB[2];if(v>4000)return DB[3];if(l>0.7&&aS<0.1)return DB[6];if(aR>150&&aG>130&&aB<100)return DB[4];if(aR>150&&aG>150&&aB>150&&gr>0.5)return DB[0];if(wr>0.2)return DB[1];return DB[3];}
+    async function ensureModel(){if(model)return model;if(modelLoading){while(modelLoading)await new Promise(r=>setTimeout(r,200));return model;}modelLoading=true;const s=document.getElementById('scan-status'),t=document.getElementById('scan-status-text');s.style.display='flex';t.textContent='Loading AI...';try{model=await mobilenet.load({version:2,alpha:1.0});}catch(e){model=null;}modelLoading=false;s.style.display='none';return model;}
+    async function analyzeImage(ca){const s=document.getElementById('scan-status'),t=document.getElementById('scan-status-text');s.style.display='flex';const pu=ca.toDataURL('image/jpeg',0.8);const ai=await ensureModel();if(ai){t.textContent='AI analyzing...';try{const p=await ai.classify(ca,10);if(p&&p.length>0){if(isUnrelated(p)){s.style.display='none';showResult(null,pu,true);return;}const scores={};const topProb=p[0]?p[0].probability:0;for(const pr of p){const n=pr.className.toLowerCase();for(const m of aM){let sc=0;for(const k of m.kw){if(n.includes(k))sc++;}if(sc>0)scores[m.w]=(scores[m.w]||0)+pr.probability*sc;}}const ranked=Object.keys(scores).map(k=>({id:+k,s:scores[k]})).sort((a,b)=>b.s-a.s);if(ranked.length){const total=ranked.reduce((a,b)=>a+b.s,0);const mats=ranked.slice(0,3).map((r,i)=>({item:DB[r.id],pct:Math.max(8,Math.round((r.s/total)*100)),conf:i===0?topProb:0.5}));s.style.display='none';showResult(mats,pu);return;}}}catch(e){}}t.textContent='Analyzing...';await new Promise(r=>setTimeout(r,300));const r=clsByColor(ca);const ctx=ca.getContext('2d'),w=Math.min(ca.width,200),h=Math.min(ca.height,150),d=ctx.getImageData(0,0,w,h).data;let g=0,bl=0,vb=0,tt=0;for(let i=0;i<d.length;i+=4){const r_=d[i],g_=d[i+1],b_=d[i+2];tt++;const mx=Math.max(r_,g_,b_),mn=Math.min(r_,g_,b_),sat=mx===0?0:(mx-mn)/mx;if(g_>r_*1.4&&g_>b_*1.4&&sat>0.15)g++;if(b_>r_*1.3&&b_>g_*1.3&&sat>0.15)bl++;if(sat>0.6)vb++;}if(g/tt>0.3||bl/tt>0.25||vb/tt>0.4){s.style.display='none';showResult(null,pu,true);return;}s.style.display='none';showResult([{item:r,pct:100,conf:0}],pu);}
+
+    function showResult(mats,photoUrl,unrelated) {
+      const pb=document.getElementById('result-photo-box'),pe=document.getElementById('result-photo'),ud=document.getElementById('result-unrelated'),fd=document.getElementById('result-found'),bd=document.getElementById('result-buttons'),tts=document.getElementById('tts-btn');
+      if(photoUrl){pe.src=photoUrl;pb.style.display='block';}else{pb.style.display='none';}
+      if(unrelated){ud.style.display='block';fd.style.display='none';bd.style.display='none';tts.style.display='none';goToScreen('result');return;}
+      ud.style.display='none';fd.style.display='block';bd.style.display='flex';tts.style.display='flex';
+      currentMats=normalizeMats(mats);
+      const top=currentMats[0];
+      const dl=document.getElementById('result-detected-list');
+      dl.innerHTML=currentMats.map(m=>'<span class="ai-chip"><span style="width:7px;height:7px;border-radius:50%;background:'+BIN_COLORS[m.item.id]+';flex-shrink:0;"></span>'+m.item.type+' '+m.pct+'%</span>').join('');
+      const ce=document.getElementById('result-confidence');
+      if(top.conf){ce.textContent='AI: '+Math.round(top.conf*100)+'% confidence';ce.style.display='block';}else{ce.style.display='none';}
+      document.getElementById('result-action').textContent=currentMats.length>1?(U[L]['ui-sep-action']||'Separate these materials before recycling'):top.item.action;
+      const dests=[...new Set(currentMats.map(m=>m.item.dest))];
+      document.getElementById('result-dest').textContent=dests.slice(0,2).join(' · ');
+      const st=document.getElementById('result-steps');st.innerHTML='';
+      if(currentMats.length>1){
+        const note=document.createElement('div');note.className='glass';note.style.marginBottom='4px';note.style.padding='10px 14px';
+        note.innerHTML='<p style="font-size:0.72rem;font-weight:700;color:#7C3AED;">'+top.item.type+'</p><p style="font-size:0.65rem;color:#94A3B8;">'+(U[L]['ui-steps-primary']||'Sorting steps for the main material below')+'</p>';
+        st.appendChild(note);
+      }
+      top.item.st.forEach((step,i)=>{const el=document.createElement('div');el.className='glass';el.style.marginBottom='4px';el.style.padding='10px 14px';el.style.display='flex';el.style.alignItems='flex-start';el.style.gap='8px';el.style.cursor='pointer';el.onclick=function(){this.style.opacity=this.style.opacity==='0.5'?'1':'0.5';};el.innerHTML='<div class="step-num">'+(i+1)+'</div><p style="font-size:0.82rem;color:#64748B;line-height:1.5;">'+step+'</p>';st.appendChild(el);});
+      document.getElementById('result-tip').textContent=top.item.tp;
+      currentTTS=currentMats.map(m=>m.item.type).join(' + ')+'. '+top.item.st.join('. '); isTTS=false;
+      renderRecyclable();
+      if(!segTracked){trackSort(top.item.type);segTracked=true;}
+      goToScreen('result');
+    }
+
+    function renderRecyclable(){
+      const w=Math.max(0,parseFloat(document.getElementById('result-weight').value)||0);
+      if(!currentMats.length)return;
+      const total=currentMats.reduce((a,m)=>a+m.pct,0)||100;
+      const recW=currentMats.reduce((a,m)=>a+(m.pct/total)*m.item.rec*w,0);
+      document.getElementById('result-recyclable').textContent=Math.round(recW).toLocaleString();
+    }
+
+    let currentTTS='',isTTS=false;
+    function toggleTTS(){if(!currentTTS)return;if(isTTS){window.speechSynthesis.cancel();isTTS=false;return;}const u=new SpeechSynthesisUtterance(currentTTS);u.lang=L==='hi'?'hi-IN':L==='es'?'es-ES':'en-US';u.rate=0.9;u.onend=function(){isTTS=false;};isTTS=true;window.speechSynthesis.speak(u);}
+
+    // ===== GUIDE =====
+    function buildGuide() {
+      const c=document.getElementById('guide-list');c.innerHTML='';
+      DB.forEach((m,i)=>{
+        const el=document.createElement('div');el.className='material-card stagger';
+        el.style.animationDelay=(i*0.06)+'s';
+        el.innerHTML='<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;"><div style="width:8px;height:8px;border-radius:50%;background:'+['#059669','#D97706','#7C3AED','#64748B','#92400E','#94A3B8','#0EA5E9','#F5F5DC'][i]+';flex-shrink:0;"></div><p style="font-family:\'Space Grotesk\',sans-serif;font-weight:600;font-size:0.85rem;">'+m.type+'</p></div><p style="font-size:0.72rem;color:#94A3B8;line-height:1.4;">'+m.guide+'</p><button class="btn-outline" onclick="document.getElementById(\'waste-input\').value=\''+m.type+'\';goToScreen(\'input\');" style="font-size:0.65rem;padding:3px 10px;margin-top:6px;">Sort this</button>';
+        c.appendChild(el);
+      });
+    }
+
+    // ===== IMPACT =====
+    let sortLog = JSON.parse(localStorage.getItem('w2w-log')||'[]');
+    function trackSort(type) {
+      sortLog.push({type:type,time:Date.now()});
+      if(sortLog.length>50) sortLog=sortLog.slice(-50);
+      localStorage.setItem('w2w-log',JSON.stringify(sortLog));
+    }
+    function updateImpact() {
+      const total=sortLog.length;
+      const co2=total*900; // kg CO2 saved per sort
+      const tons=(total*0.5).toFixed(1); // ~0.5 tons per sort
+      const trucks=Math.round(total*0.5/5); // 5 tons per truck
+      const energy=total*500; // kWh
+      const days=Math.round(energy/30); // avg home uses 30 kWh/day
+      document.getElementById('impact-co2').textContent=co2.toLocaleString();
+      document.getElementById('impact-trees').textContent=Math.round(co2/25);
+      document.getElementById('impact-tons').textContent=tons;
+      document.getElementById('impact-trucks').textContent=trucks;
+      document.getElementById('impact-energy').textContent=energy.toLocaleString();
+      document.getElementById('impact-days').textContent=days;
+    }
+
+    // ===== VALUE CALCULATOR =====
+    const VAL_RATES=[1500,2500,1000,800,1200,35000,3000,2000]; // INR per tonne, matches DB id order
+    const LANDFILL_FEE=2500; // INR per tonne avoided
+    let cur='inr';
+    function fmtMoney(v){const s=cur==='usd'?Math.round(v/85).toLocaleString():Math.round(v).toLocaleString();return (cur==='inr'?'₹':'$')+s;}
+    function buildValueInputs(){
+      const c=document.getElementById('value-materials');c.innerHTML='';
+      DB.forEach((m,i)=>{
+        const row=document.createElement('div');row.style.display='flex';row.style.alignItems='center';row.style.gap='8px';
+        row.innerHTML='<span class="bin-dot" style="background:'+BIN_COLORS[i]+';"></span><div style="flex:1;min-width:0;"><p style="font-size:0.78rem;font-weight:600;">'+m.type+'</p><p style="font-size:0.62rem;color:#94A3B8;">'+fmtMoney(VAL_RATES[i])+'/t · '+m.rec+'% rec.</p></div><input class="val-input" type="number" min="0" step="1" data-id="'+i+'" value="0" aria-label="'+m.type+' tonnes">';
+        row.querySelector('input').addEventListener('input',function(){updateWasteTotal();});
+        c.appendChild(row);
+      });
+    }
+    function updateWasteTotal(){
+      let t=0;document.querySelectorAll('#value-materials input').forEach(i=>{t+=parseFloat(i.value)||0;});
+      document.getElementById('value-total').textContent=Math.round(t*10)/10;
+      if(document.getElementById('value-results').style.display!=='none')calcValue();
+    }
+    function loadExample(){
+      const ex={0:25,1:15,5:5};
+      document.querySelectorAll('#value-materials input').forEach(i=>{i.value=ex[i.getAttribute('data-id')]||0;});
+      updateWasteTotal();calcValue();
+    }
+    function calcValue(){
+      let totalW=0,recyclable=0,matval=0,savings=0,co2=0;const parts=[];
+      document.querySelectorAll('#value-materials input').forEach(inp=>{
+        const id=+inp.getAttribute('data-id'),w=parseFloat(inp.value)||0;
+        if(w<=0)return;
+        totalW+=w;
+        const rw=w*(DB[id].rec/100);
+        recyclable+=rw;matval+=rw*VAL_RATES[id];savings+=rw*LANDFILL_FEE;co2+=rw*900;
+        parts.push({item:DB[id],w,rw,val:rw*VAL_RATES[id]});
+      });
+      const res=document.getElementById('value-results');res.style.display='block';
+      document.getElementById('value-total').textContent=Math.round(totalW*10)/10;
+      document.getElementById('value-recyclable').textContent=Math.round(recyclable*10)/10;
+      document.getElementById('value-waste-total').textContent=Math.round(totalW*10)/10;
+      document.getElementById('value-matval').textContent=fmtMoney(matval);
+      document.getElementById('value-savings').textContent=fmtMoney(savings);
+      document.getElementById('value-co2').textContent=Math.round(co2).toLocaleString();
+      const bd=document.getElementById('value-breakdown');bd.innerHTML='';
+      parts.sort((a,b)=>b.val-a.val);
+      const maxVal=Math.max(matval,1);
+      parts.forEach((p,i)=>{
+        const el=document.createElement('div');el.className='clean-output';el.style.animationDelay=(i*0.08)+'s';
+        el.innerHTML='<div style="display:flex;align-items:center;gap:8px;"><span class="bin-dot" style="background:'+BIN_COLORS[p.item.id]+';"></span><div style="flex:1;"><p style="font-size:0.8rem;font-weight:700;">'+p.item.type+'</p><div class="bin-bar"><div class="bin-bar-fill" style="width:'+Math.max(4,Math.round((p.val/maxVal)*100))+'%;background:'+BIN_COLORS[p.item.id]+';"></div></div></div><div style="text-align:right;flex-shrink:0;"><p style="font-size:0.8rem;font-weight:700;">'+fmtMoney(p.val)+'</p><p style="font-size:0.62rem;color:#94A3B8;">'+Math.round(p.rw*10)/10+' t</p></div></div>';
+        bd.appendChild(el);
+      });
+      if(!parts.length)bd.innerHTML='<p style="font-size:0.72rem;color:#94A3B8;">'+(U[L]['ui-value-empty']||'Enter at least one material above.')+'</p>';
+    }
+    function setCur(c){
+      cur=c;
+      document.getElementById('cur-inr').classList.toggle('active',c==='inr');
+      document.getElementById('cur-usd').classList.toggle('active',c==='usd');
+      const vals={};document.querySelectorAll('#value-materials input').forEach(i=>{vals[i.getAttribute('data-id')]=i.value;});
+      buildValueInputs();
+      Object.keys(vals).forEach(k=>{const el=document.querySelector('#value-materials input[data-id="'+k+'"]');if(el)el.value=vals[k];});
+      updateWasteTotal();
+    }
+
+    window.addEventListener('load',function(){setTimeout(ensureModel,1500);buildValueInputs();});
+  </script>
+</body>
+</html>

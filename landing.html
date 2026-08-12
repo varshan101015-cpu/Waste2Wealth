@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Waste2Wealth — Turn Construction Waste into Opportunity</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { heading: ['Playfair Display', 'serif'], body: ['Inter', 'sans-serif'] },
+          colors: {
+          green: { DEFAULT: '#1B6B4A', 50: '#E8F5EE', 100: '#C8E7D6', 200: '#95D1B0', 300: '#5DB586', 400: '#2D8F5E', 500: '#1B6B4A', 600: '#15583C', 700: '#0F442E', 800: '#0A3020', 900: '#051C13' },
+          navy: { DEFAULT: '#0F1E36', 50: '#E8ECF2', 100: '#C5CFE0', 200: '#8A9FBF', 300: '#506F9E', 400: '#2D4A7A', 500: '#0F1E36', 600: '#0C182B', 700: '#091220', 800: '#060C15', 900: '#03060A' },
+          charcoal: '#1A1A2E',
+          gold: { DEFAULT: '#C8A455', 50: '#F9F3E8', 100: '#F0E3C8', 200: '#E1C790', 300: '#D2AB5C', 400: '#C8A455', 500: '#A6883E', 600: '#856B30', 700: '#645022', 800: '#433515', 900: '#221B0A' },
+          teal: { DEFAULT: '#0D7377', 50: '#E6F2F2', 100: '#C0E0E0', 200: '#85C2C4', 300: '#4DA3A7', 400: '#1D858A', 500: '#0D7377', 600: '#0A5C5F', 700: '#084547', 800: '#052E30', 900: '#031717' },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: #F8F6F2; color: #1A1A2E; overflow-x: hidden; }
+    .font-heading { font-family: 'Playfair Display', serif; }
+
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #F0EDE6; }
+    ::-webkit-scrollbar-thumb { background: #1B6B4A; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #15583C; }
+
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-16px); } }
+    @keyframes pulseGlow { 0%, 100% { box-shadow: 0 0 20px rgba(200,164,85,0.3); } 50% { box-shadow: 0 0 40px rgba(200,164,85,0.6); } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+    @keyframes spinSlow { to { transform: rotate(360deg); } }
+    @keyframes drawLine { to { stroke-dashoffset: 0; } }
+    @keyframes scaleIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
+    @keyframes slideInRight { from { opacity: 0; transform: translateX(60px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes slideInLeft { from { opacity: 0; transform: translateX(-60px); } to { opacity: 1; transform: translateX(0); } }
+
+    .animate-float { animation: float 6s ease-in-out infinite; }
+    .animate-pulse-glow { animation: pulseGlow 3s ease-in-out infinite; }
+    .animate-shimmer { background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent); background-size: 200% 100%; animation: shimmer 3s infinite; }
+    .animate-spin-slow { animation: spinSlow 30s linear infinite; }
+
+    .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-left { opacity: 0; transform: translateX(-60px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+    .reveal-left.visible { opacity: 1; transform: translateX(0); }
+    .reveal-right { opacity: 0; transform: translateX(60px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+    .reveal-right.visible { opacity: 1; transform: translateX(0); }
+    .reveal-scale { opacity: 0; transform: scale(0.9); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+    .reveal-scale.visible { opacity: 1; transform: scale(1); }
+
+    .glass { background: rgba(255,255,255,0.08); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.12); }
+    .glass-dark { background: rgba(15,30,54,0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(200,164,85,0.15); }
+
+    .hero-glow { position: absolute; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(27,107,74,0.15) 0%, rgba(13,115,119,0.08) 40%, transparent 70%); filter: blur(60px); pointer-events: none; }
+    .hero-glow-2 { position: absolute; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(200,164,85,0.1) 0%, transparent 60%); filter: blur(50px); pointer-events: none; }
+
+    .stat-line { height: 3px; background: linear-gradient(90deg, #C8A455, transparent); border-radius: 2px; }
+
+    .card-hover { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+    .card-hover:hover { transform: translateY(-8px); box-shadow: 0 24px 60px rgba(27,107,74,0.15); }
+
+    .step-connector { position: absolute; top: 40px; left: calc(50% + 40px); width: calc(100% - 80px); height: 2px; background: linear-gradient(90deg, #1B6B4A, #C8A455); }
+    @media (max-width: 768px) { .step-connector { display: none; } }
+
+    .gold-gradient-text { background: linear-gradient(135deg, #C8A455, #A6883E, #C8A455); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+    .nav-blur { background: rgba(248,246,242,0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid rgba(200,164,85,0.1); }
+
+    .lang-btn { transition: all 0.3s; }
+    .lang-btn.active { background: #1B6B4A; color: white; border-color: #1B6B4A; }
+
+    .grid-pattern { background-image: radial-gradient(circle at 1px 1px, rgba(27,107,74,0.06) 1px, transparent 0); background-size: 40px 40px; }
+
+    .glow-border { position: relative; }
+    .glow-border::after { content: ''; position: absolute; inset: -1px; border-radius: inherit; background: linear-gradient(135deg, rgba(200,164,85,0.3), transparent, rgba(27,107,74,0.3)); z-index: -1; opacity: 0; transition: opacity 0.5s; }
+    .glow-border:hover::after { opacity: 1; }
+
+    @media (max-width: 640px) {
+      .hero-title { font-size: 2.2rem !important; }
+      .section-title { font-size: 1.75rem !important; }
+    }
+
+    .dropdown { transition: opacity 0.3s, transform 0.3s; }
+    .dropdown.open { opacity: 1; transform: translateY(0); pointer-events: auto; }
+
+    .parallax-shape { position: absolute; border-radius: 50%; pointer-events: none; opacity: 0.03; }
+  </style>
+</head>
+<body>
+
+  <!-- ===== NAVIGATION ===== -->
+  <nav id="navbar" class="nav-blur fixed top-0 left-0 right-0 z-50 transition-all duration-300" style="border-bottom: 1px solid rgba(200,164,85,0.1);">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8 flex items-center justify-between h-16">
+      <a href="#" class="flex items-center gap-2.5 no-underline">
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#1B6B4A,#0D7377);display:flex;align-items:center;justify-content:center;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+        </div>
+        <span class="font-heading text-xl font-semibold" style="color:#1B6B4A;">Waste2Wealth</span>
+      </a>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#problem" class="text-sm font-medium no-underline transition-colors" style="color:#4B5563;" onmouseover="this.style.color='#1B6B4A'" onmouseout="this.style.color='#4B5563'">Problem</a>
+        <a href="#how-it-works" class="text-sm font-medium no-underline transition-colors" style="color:#4B5563;" onmouseover="this.style.color='#1B6B4A'" onmouseout="this.style.color='#4B5563'">How It Works</a>
+        <a href="#features" class="text-sm font-medium no-underline transition-colors" style="color:#4B5563;" onmouseover="this.style.color='#1B6B4A'" onmouseout="this.style.color='#4B5563'">Features</a>
+        <a href="#marketplace" class="text-sm font-medium no-underline transition-colors" style="color:#4B5563;" onmouseover="this.style.color='#1B6B4A'" onmouseout="this.style.color='#4B5563'">Marketplace</a>
+        <a href="#benefits" class="text-sm font-medium no-underline transition-colors" style="color:#4B5563;" onmouseover="this.style.color='#1B6B4A'" onmouseout="this.style.color='#4B5563'">Benefits</a>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="relative" id="lang-wrap">
+          <button id="lang-btn" onclick="toggleLang()" class="lang-btn flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-all cursor-pointer" style="border-color:#D1D5DB;color:#4B5563;background:transparent;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            <span id="lang-label">EN</span>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div id="lang-dropdown" class="dropdown absolute right-0 mt-2 w-36 rounded-xl overflow-hidden shadow-xl border" style="background:white;border-color:#E5E0D6;opacity:0;transform:translateY(-8px);pointer-events:none;z-index:100;">
+            <button onclick="setLang('en')" class="lang-option w-full text-left px-4 py-2.5 text-sm font-medium transition-colors cursor-pointer" style="color:#1A1A2E;background:transparent;" onmouseover="this.style.background='#E8F5EE'" onmouseout="this.style.background='transparent'">English</button>
+            <button onclick="setLang('hi')" class="lang-option w-full text-left px-4 py-2.5 text-sm font-medium transition-colors cursor-pointer" style="color:#1A1A2E;background:transparent;" onmouseover="this.style.background='#E8F5EE'" onmouseout="this.style.background='transparent'">हिन्दी</button>
+            <button onclick="setLang('es')" class="lang-option w-full text-left px-4 py-2.5 text-sm font-medium transition-colors cursor-pointer" style="color:#1A1A2E;background:transparent;" onmouseover="this.style.background='#E8F5EE'" onmouseout="this.style.background='transparent'">Español</button>
+            <button onclick="setLang('ar')" class="lang-option w-full text-left px-4 py-2.5 text-sm font-medium transition-colors cursor-pointer" style="color:#1A1A2E;background:transparent;" onmouseover="this.style.background='#E8F5EE'" onmouseout="this.style.background='transparent'">العربية</button>
+          </div>
+        </div>
+        <a href="index.html" class="hidden sm:inline-flex items-center gap-1.5 px-5 py-2 rounded-full text-sm font-semibold no-underline transition-all" style="background:#1B6B4A;color:white;" onmouseover="this.style.background='#15583C'" onmouseout="this.style.background='#1B6B4A'">
+          Launch App
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+        <button id="mobile-menu-btn" class="md:hidden flex items-center justify-center w-9 h-9 rounded-lg border cursor-pointer" style="border-color:#E5E0D6;background:transparent;color:#1A1A2E;" onclick="toggleMobileMenu()">
+          <svg id="menu-icon-open" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          <svg id="menu-icon-close" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display:none;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+    <div id="mobile-menu" class="md:hidden overflow-hidden transition-all duration-300" style="max-height:0;opacity:0;">
+      <div class="px-5 pb-4 pt-2 flex flex-col gap-2" style="border-top:1px solid rgba(200,164,85,0.1);">
+        <a href="#problem" onclick="closeMobileMenu()" class="px-3 py-2 rounded-lg text-sm font-medium no-underline transition-colors" style="color:#4B5563;" onmouseover="this.style.background='#E8F5EE'" onmouseout="this.style.background='transparent'">Problem</a>
+        <a href="#how-it-works" onclick="closeMobileMenu()" class="px-3 py-2 rounded-lg text-sm font-medium no-underline transition-colors" style="color:#4B5563;" onmouseover="this.style.background='#E8F5EE'" onmouseout="this.style.background='transparent'">How It Works</a>
+        <a href="#features" onclick="closeMobileMenu()" class="px-3 py-2 rounded-lg text-sm font-medium no-underline transition-colors" style="color:#4B5563;" onmouseover="this.style.background='#E8F5EE'" onmouseout="this.style.background='transparent'">Features</a>
+        <a href="#marketplace" onclick="closeMobileMenu()" class="px-3 py-2 rounded-lg text-sm font-medium no-underline transition-colors" style="color:#4B5563;" onmouseover="this.style.background='#E8F5EE'" onmouseout="this.style.background='transparent'">Marketplace</a>
+        <a href="#benefits" onclick="closeMobileMenu()" class="px-3 py-2 rounded-lg text-sm font-medium no-underline transition-colors" style="color:#4B5563;" onmouseover="this.style.background='#E8F5EE'" onmouseout="this.style.background='transparent'">Benefits</a>
+        <a href="index.html" class="px-3 py-2 rounded-lg text-sm font-semibold no-underline text-center" style="background:#1B6B4A;color:white;margin-top:4px;">Launch App</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== HERO SECTION ===== -->
+  <section class="relative min-h-screen flex items-center overflow-hidden pt-16" style="background: linear-gradient(160deg, #F8F6F2 0%, #E8F5EE 35%, #F0EDE6 70%, #F8F6F2 100%);">
+    <div class="hero-glow" style="top:10%;left:-5%;"></div>
+    <div class="hero-glow-2" style="bottom:20%;right:0;"></div>
+    <div class="hero-glow" style="bottom:5%;left:40%;width:400px;height:400px;background:radial-gradient(circle,rgba(200,164,85,0.08) 0%,transparent 60%);"></div>
+
+    <!-- Decorative shapes -->
+    <div class="parallax-shape" style="width:400px;height:400px;top:-100px;right:-100px;background:radial-gradient(circle,#1B6B4A 0%,transparent 70%);opacity:0.04;"></div>
+    <div class="parallax-shape" style="width:300px;height:300px;bottom:10%;left:-50px;background:radial-gradient(circle,#C8A455 0%,transparent 70%);opacity:0.04;"></div>
+
+    <div class="max-w-6xl mx-auto px-5 sm:px-8 w-full relative z-10">
+      <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+        <div class="flex-1 text-center lg:text-left">
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold mb-6" style="background:rgba(27,107,74,0.1);color:#1B6B4A;border:1px solid rgba(27,107,74,0.2);">
+            <span style="width:6px;height:6px;border-radius:50%;background:#4CAF50;display:inline-block;animation:pulseGlow 2s ease-in-out infinite;"></span>
+            <span id="hero-badge">On-site C&D Waste Solution</span>
+          </div>
+          <h1 id="hero-title" class="font-heading text-5xl sm:text-6xl lg:text-7xl leading-tight font-bold mb-6" style="color:#0F1E36;">
+            <span id="hero-line1">Waste isn't the end.</span><br>
+            <span id="hero-line2" class="gold-gradient-text">It's the beginning.</span>
+          </h1>
+          <p id="hero-sub" class="text-lg sm:text-xl mb-8 max-w-xl mx-auto lg:mx-0" style="color:#4B5563;line-height:1.7;">
+            Turn construction & demolition waste into reusable material — on-site, on a budget, with one tap. Waste2Wealth gives small contractors a low-cost mobile system to sort, crush, and recycle.
+          </p>
+          <div class="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
+            <a href="index.html" class="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-base font-semibold no-underline transition-all animate-pulse-glow" style="background:#1B6B4A;color:white;" onmouseover="this.style.background='#15583C'" onmouseout="this.style.background='#1B6B4A'">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M12 11v4"/><path d="M10 13h4"/></svg>
+              <span id="hero-cta1">Try the App — It's Free</span>
+            </a>
+            <a href="#problem" class="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-base font-semibold no-underline transition-all" style="border:2px solid #1B6B4A;color:#1B6B4A;background:transparent;" onmouseover="this.style.background='#1B6B4A';this.style.color='white'" onmouseout="this.style.background='transparent';this.style.color='#1B6B4A'">
+              <span id="hero-cta2">See How It Works</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 13l5 5 5-5"/><path d="M7 6l5 5 5-5"/></svg>
+            </a>
+          </div>
+          <div class="flex items-center gap-6 mt-10 justify-center lg:justify-start">
+            <div class="flex -space-x-2">
+              <div class="w-8 h-8 rounded-full border-2 border-white bg-gradient-to-br from-green-200 to-green-400 flex items-center justify-center text-xs font-bold" style="color:#1B6B4A;">SC</div>
+              <div class="w-8 h-8 rounded-full border-2 border-white bg-gradient-to-br from-teal-200 to-teal-400 flex items-center justify-center text-xs font-bold" style="color:#0D7377;">DC</div>
+              <div class="w-8 h-8 rounded-full border-2 border-white bg-gradient-to-br from-gold-200 to-gold-400 flex items-center justify-center text-xs font-bold" style="color:#A6883E;">MH</div>
+              <div class="w-8 h-8 rounded-full border-2 border-white bg-gradient-to-br from-green-300 to-teal-300 flex items-center justify-center text-xs font-bold text-white">+2k</div>
+            </div>
+            <span class="text-sm" style="color:#6B7280;"><strong class="text-charcoal">2,400+</strong> <span id="hero-users">contractors already sorting smarter</span></span>
+          </div>
+        </div>
+        <div class="flex-1 flex justify-center lg:justify-end relative">
+          <div class="relative w-full max-w-md">
+            <div class="absolute inset-0 rounded-3xl opacity-10 animate-spin-slow" style="background:conic-gradient(from 0deg, #1B6B4A, #0D7377, #C8A455, #1B6B4A);"></div>
+            <div class="relative rounded-3xl overflow-hidden shadow-2xl" style="background:linear-gradient(145deg,#0F1E36,#1A2A3A);border:1px solid rgba(200,164,85,0.2);">
+              <div class="p-1">
+                <div class="rounded-2xl overflow-hidden" style="background:#0A1628;">
+                  <div class="flex items-center gap-1.5 px-4 pt-3 pb-2">
+                    <span style="width:10px;height:10px;border-radius:50%;background:#EF4444;"></span>
+                    <span style="width:10px;height:10px;border-radius:50%;background:#F59E0B;"></span>
+                    <span style="width:10px;height:10px;border-radius:50%;background:#10B981;"></span>
+                    <span class="text-xs ml-2 font-medium" style="color:#6B7280;">Waste2Wealth — Scan</span>
+                  </div>
+                  <div class="px-4 pb-4">
+                    <div class="rounded-xl overflow-hidden" style="background:linear-gradient(135deg,#1A2A3A,#0F1E36);border:1px solid rgba(200,164,85,0.1);">
+                      <div class="p-4">
+                        <div class="flex items-center gap-3 mb-3">
+                          <div style="width:32px;height:32px;border-radius:10px;background:rgba(27,107,74,0.3);display:flex;align-items:center;justify-content:center;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1B6B4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                          </div>
+                          <span class="text-sm font-medium" style="color:#E5E0D6;">Scan waste</span>
+                        </div>
+                        <div style="width:100%;aspect-ratio:4/3;border-radius:12px;background:linear-gradient(135deg,#1B6B4A,#0D7377);display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;">
+                          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+                          <div style="position:absolute;bottom:8px;left:8px;right:8px;display:flex;gap:4px;">
+                            <span style="flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,0.2);"></span>
+                            <span style="flex:2;height:4px;border-radius:2px;background:rgba(255,255,255,0.3);"></span>
+                            <span style="flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,0.2);"></span>
+                          </div>
+                        </div>
+                        <div class="flex items-center gap-2 mt-3">
+                          <div class="flex-1 h-2 rounded-full" style="background:rgba(255,255,255,0.06);">
+                            <div class="h-full rounded-full animate-shimmer" style="width:65%;background:linear-gradient(90deg,#1B6B4A,#4CAF50);"></div>
+                          </div>
+                          <span class="text-xs font-medium" style="color:#4CAF50;">Detecting...</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="flex items-center gap-2 mt-3">
+                      <span style="width:6px;height:6px;border-radius:50%;background:#4CAF50;"></span>
+                      <span class="text-xs" style="color:#6B7280;"><span id="hero-demo-status">AI-powered — no upload needed</span></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Floating stats -->
+            <div class="absolute -top-4 -right-4 w-20 h-20 rounded-2xl flex flex-col items-center justify-center glass-dark shadow-lg" style="border:1px solid rgba(200,164,85,0.2);">
+              <span class="text-lg font-bold" style="color:#C8A455;">92%</span>
+              <span class="text-xs" style="color:#9CA3AF;"><span id="hero-stat">recovery rate</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PROBLEM-SOLUTION ===== -->
+  <section id="problem" class="relative py-24 sm:py-32 overflow-hidden" style="background:#0F1E36;">
+    <div class="absolute inset-0 grid-pattern opacity-30"></div>
+    <div class="parallax-shape" style="width:500px;height:500px;top:-200px;right:-200px;background:radial-gradient(circle,#1B6B4A 0%,transparent 70%);opacity:0.06;"></div>
+    <div class="max-w-6xl mx-auto px-5 sm:px-8 relative z-10">
+      <div class="text-center mb-16">
+        <span class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-4" style="background:rgba(200,164,85,0.15);color:#C8A455;border:1px solid rgba(200,164,85,0.2);" id="problem-label">The Problem</span>
+        <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mb-5" style="color:white;">
+          <span id="problem-title">Construction waste is choking our planet</span>
+        </h2>
+        <p class="text-lg max-w-2xl mx-auto" style="color:#9CA3AF;line-height:1.7;" id="problem-desc">
+          Every year, billions of tons of concrete, brick, and metal end up in landfills — simply because small contractors can't afford the sorting technology big companies use.
+        </p>
+      </div>
+      <div class="grid md:grid-cols-2 gap-8 lg:gap-12 items-center">
+        <div class="reveal-left">
+          <div class="rounded-2xl p-8 relative overflow-hidden" style="background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.15);">
+            <div class="absolute top-0 left-0 w-1 h-full" style="background:linear-gradient(180deg,#EF4444,#FCA5A5);"></div>
+            <h3 class="text-lg font-bold mb-3 flex items-center gap-2" style="color:#FCA5A5;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+              <span id="prob-head1">The Old Way</span>
+            </h3>
+            <ul class="space-y-3">
+              <li class="flex items-start gap-3 text-sm" style="color:#D1D5DB;">
+                <span style="color:#EF4444;font-weight:700;flex-shrink:0;">✕</span>
+                <span id="prob-item1">Mixed waste hauled to landfills at high cost</span>
+              </li>
+              <li class="flex items-start gap-3 text-sm" style="color:#D1D5DB;">
+                <span style="color:#EF4444;font-weight:700;flex-shrink:0;">✕</span>
+                <span id="prob-item2">No on-site sorting — everything gets dumped together</span>
+              </li>
+              <li class="flex items-start gap-3 text-sm" style="color:#D1D5DB;">
+                <span style="color:#EF4444;font-weight:700;flex-shrink:0;">✕</span>
+                <span id="prob-item3">Expensive equipment out of reach for small crews</span>
+              </li>
+              <li class="flex items-start gap-3 text-sm" style="color:#D1D5DB;">
+                <span style="color:#EF4444;font-weight:700;flex-shrink:0;">✕</span>
+                <span id="prob-item4">Valuable materials lost to landfills forever</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="reveal-right">
+          <div class="rounded-2xl p-8 relative overflow-hidden" style="background:rgba(27,107,74,0.08);border:1px solid rgba(27,107,74,0.2);">
+            <div class="absolute top-0 left-0 w-1 h-full" style="background:linear-gradient(180deg,#1B6B4A,#4CAF50);"></div>
+            <h3 class="text-lg font-bold mb-3 flex items-center gap-2" style="color:#4CAF50;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4CAF50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <span id="sol-head1">With Waste2Wealth</span>
+            </h3>
+            <ul class="space-y-3">
+              <li class="flex items-start gap-3 text-sm" style="color:#D1D5DB;">
+                <span style="color:#4CAF50;font-weight:700;flex-shrink:0;">✓</span>
+                <span id="sol-item1">Sort on-site in minutes using your phone</span>
+              </li>
+              <li class="flex items-start gap-3 text-sm" style="color:#D1D5DB;">
+                <span style="color:#4CAF50;font-weight:700;flex-shrink:0;">✓</span>
+                <span id="sol-item2">AI camera instantly identifies material types</span>
+              </li>
+              <li class="flex items-start gap-3 text-sm" style="color:#D1D5DB;">
+                <span style="color:#4CAF50;font-weight:700;flex-shrink:0;">✓</span>
+                <span id="sol-item3">Zero equipment cost — works on any smartphone</span>
+              </li>
+              <li class="flex items-start gap-3 text-sm" style="color:#D1D5DB;">
+                <span style="color:#4CAF50;font-weight:700;flex-shrink:0;">✓</span>
+                <span id="sol-item4">Turn waste into revenue-grade recycled material</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="mt-12 text-center">
+        <div class="inline-flex items-center gap-6 sm:gap-12 rounded-2xl px-8 sm:px-16 py-6" style="background:rgba(255,255,255,0.03);border:1px solid rgba(200,164,85,0.1);">
+          <div class="text-center">
+            <div class="text-2xl sm:text-3xl font-bold" style="color:#C8A455;">2B+</div>
+            <div class="text-xs sm:text-sm mt-1" style="color:#6B7280;"><span id="stat1">tons C&D waste yearly</span></div>
+          </div>
+          <div style="width:1px;height:40px;background:rgba(200,164,85,0.2);"></div>
+          <div class="text-center">
+            <div class="text-2xl sm:text-3xl font-bold" style="color:#C8A455;">90%</div>
+            <div class="text-xs sm:text-sm mt-1" style="color:#6B7280;"><span id="stat2">recyclable with right sorting</span></div>
+          </div>
+          <div style="width:1px;height:40px;background:rgba(200,164,85,0.2);"></div>
+          <div class="text-center">
+            <div class="text-2xl sm:text-3xl font-bold" style="color:#C8A455;">$0</div>
+            <div class="text-xs sm:text-sm mt-1" style="color:#6B7280;"><span id="stat3">cost to start sorting today</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== HOW IT WORKS ===== -->
+  <section id="how-it-works" class="relative py-24 sm:py-32 overflow-hidden" style="background:#F8F6F2;">
+    <div class="parallax-shape" style="width:400px;height:400px;top:10%;left:-100px;background:radial-gradient(circle,#1B6B4A 0%,transparent 70%);opacity:0.03;"></div>
+    <div class="max-w-6xl mx-auto px-5 sm:px-8">
+      <div class="text-center mb-16">
+        <span class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-4" style="background:rgba(27,107,74,0.1);color:#1B6B4A;border:1px solid rgba(27,107,74,0.2);" id="how-label">Working Model</span>
+        <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mb-5" style="color:#0F1E36;">
+          <span id="how-title">Three taps. Zero waste to landfill.</span>
+        </h2>
+        <p class="text-lg max-w-2xl mx-auto" style="color:#6B7280;line-height:1.7;" id="how-desc">
+          No training, no equipment, no cost. Just your phone and a pile of waste.
+        </p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-8 lg:gap-6 relative">
+        <div class="step-connector"></div>
+        <div class="reveal text-center" style="transition-delay:0.1s;">
+          <div class="relative inline-flex mb-6">
+            <div style="width:80px;height:80px;border-radius:28px;background:linear-gradient(135deg,#E8F5EE,#C8E7D6);display:flex;align-items:center;justify-content:center;margin:0 auto;">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#1B6B4A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </div>
+            <div style="position:absolute;top:-8px;right:-8px;width:28px;height:28px;border-radius:50%;background:#1B6B4A;color:white;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;">1</div>
+          </div>
+          <h3 class="text-lg font-bold mb-2" style="color:#0F1E36;" id="step1-title">Scan or Describe</h3>
+          <p class="text-sm" style="color:#6B7280;line-height:1.6;" id="step1-desc">Point your camera at the waste pile or type what you have. The AI identifies concrete, brick, metal, wood, and more.</p>
+        </div>
+        <div class="reveal text-center" style="transition-delay:0.3s;">
+          <div class="relative inline-flex mb-6">
+            <div style="width:80px;height:80px;border-radius:28px;background:linear-gradient(135deg,#E8F5EE,#95D1B0);display:flex;align-items:center;justify-content:center;margin:0 auto;">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#1B6B4A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
+            </div>
+            <div style="position:absolute;top:-8px;right:-8px;width:28px;height:28px;border-radius:50%;background:#1B6B4A;color:white;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;">2</div>
+          </div>
+          <h3 class="text-lg font-bold mb-2" style="color:#0F1E36;" id="step2-title">Get Sorting Instructions</h3>
+          <p class="text-sm" style="color:#6B7280;line-height:1.6;" id="step2-desc">Step-by-step guidance on how to sort, crush, and prepare each material for reuse or sale.</p>
+        </div>
+        <div class="reveal text-center" style="transition-delay:0.5s;">
+          <div class="relative inline-flex mb-6">
+            <div style="width:80px;height:80px;border-radius:28px;background:linear-gradient(135deg,#1B6B4A,#0D7377);display:flex;align-items:center;justify-content:center;margin:0 auto;">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+            </div>
+            <div style="position:absolute;top:-8px;right:-8px;width:28px;height:28px;border-radius:50%;background:#C8A455;color:white;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;">3</div>
+          </div>
+          <h3 class="text-lg font-bold mb-2" style="color:#0F1E36;" id="step3-title">Recycle & Save</h3>
+          <p class="text-sm" style="color:#6B7280;line-height:1.6;" id="step3-desc">Follow the plan to recover materials, reduce landfill fees, and even sell recycled aggregate.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FEATURES ===== -->
+  <section id="features" class="relative py-24 sm:py-32 overflow-hidden" style="background:linear-gradient(180deg,#0F1E36,#0A1628);">
+    <div class="absolute inset-0 grid-pattern opacity-20"></div>
+    <div class="parallax-shape" style="width:500px;height:500px;bottom:-200px;left:-200px;background:radial-gradient(circle,#0D7377 0%,transparent 70%);opacity:0.05;"></div>
+    <div class="max-w-6xl mx-auto px-5 sm:px-8 relative z-10">
+      <div class="text-center mb-16">
+        <span class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-4" style="background:rgba(200,164,85,0.15);color:#C8A455;border:1px solid rgba(200,164,85,0.2);" id="features-label">Features</span>
+        <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mb-5" style="color:white;">
+          <span id="features-title">Three ways to identify waste</span>
+        </h2>
+        <p class="text-lg max-w-2xl mx-auto" style="color:#9CA3AF;line-height:1.7;" id="features-desc">Choose whatever's fastest for you — camera, voice, or text. Works in any language.</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-6 lg:gap-8">
+        <div class="card-hover rounded-2xl p-8 text-center relative overflow-hidden group" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);">
+          <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style="background:linear-gradient(180deg,transparent,rgba(27,107,74,0.08));"></div>
+          <div style="width:64px;height:64px;border-radius:20px;background:rgba(27,107,74,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;position:relative;z-index:1;">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#1B6B4A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <h3 class="text-lg font-bold mb-3 relative z-1" style="color:white;" id="feat1-title">AI Camera Scan</h3>
+          <p class="text-sm relative z-1" style="color:#9CA3AF;line-height:1.7;" id="feat1-desc">Point your phone at any pile of waste. Our AI identifies the material type instantly — no typing needed.</p>
+          <div class="mt-4 relative z-1">
+            <span class="inline-flex items-center gap-1 text-xs font-medium" style="color:#4CAF50;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span id="feat1-badge">Works offline-ready</span>
+            </span>
+          </div>
+        </div>
+        <div class="card-hover rounded-2xl p-8 text-center relative overflow-hidden group" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);">
+          <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style="background:linear-gradient(180deg,transparent,rgba(13,115,119,0.08));"></div>
+          <div style="width:64px;height:64px;border-radius:20px;background:rgba(13,115,119,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;position:relative;z-index:1;">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#0D7377" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          </div>
+          <h3 class="text-lg font-bold mb-3 relative z-1" style="color:white;" id="feat2-title">Voice & Text Input</h3>
+          <p class="text-sm relative z-1" style="color:#9CA3AF;line-height:1.7;" id="feat2-desc">Describe your waste in your own words and language. The smart matching engine finds the right instructions.</p>
+          <div class="mt-4 relative z-1">
+            <span class="inline-flex items-center gap-1 text-xs font-medium" style="color:#4CAF50;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span id="feat2-badge">12+ languages supported</span>
+            </span>
+          </div>
+        </div>
+        <div class="card-hover rounded-2xl p-8 text-center relative overflow-hidden group" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);">
+          <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style="background:linear-gradient(180deg,transparent,rgba(200,164,85,0.08));"></div>
+          <div style="width:64px;height:64px;border-radius:20px;background:rgba(200,164,85,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;position:relative;z-index:1;">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#C8A455" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          </div>
+          <h3 class="text-lg font-bold mb-3 relative z-1" style="color:white;" id="feat3-title">Smart Sorting Guide</h3>
+          <p class="text-sm relative z-1" style="color:#9CA3AF;line-height:1.7;" id="feat3-desc">Get detailed step-by-step instructions for sorting, crushing, and prepping each material type for reuse.</p>
+          <div class="mt-4 relative z-1">
+            <span class="inline-flex items-center gap-1 text-xs font-medium" style="color:#4CAF50;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span id="feat3-badge">8 material types covered</span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SMART RECYCLER / BUYER MARKETPLACE ===== -->
+  <section id="marketplace" class="relative py-24 sm:py-32 overflow-hidden" style="background:#F8F6F2;">
+    <div class="parallax-shape" style="width:420px;height:420px;top:12%;right:-120px;background:radial-gradient(circle,#0D7377 0%,transparent 70%);opacity:0.04;"></div>
+    <div class="max-w-6xl mx-auto px-5 sm:px-8">
+      <div class="text-center mb-16">
+        <span class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-4" style="background:rgba(200,164,85,0.1);color:#A6883E;border:1px solid rgba(200,164,85,0.2);" id="market-label">Smart Marketplace</span>
+        <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mb-5" style="color:#0F1E36;">
+          <span id="market-title">Recyclers &amp; buyers, matched automatically.</span>
+        </h2>
+        <p class="text-lg max-w-2xl mx-auto" style="color:#6B7280;line-height:1.7;" id="market-desc">
+          Waste2Wealth connects your sorted waste to verified recyclers and buyers nearby — from scheduled pickup to paid material recovery, in one seamless pipeline.
+        </p>
+      </div>
+
+      <!-- Flow: Pickup -> Transport -> Recycling -> Material Recovery -->
+      <div class="flex flex-col md:flex-row items-stretch md:items-start gap-2 md:gap-0 relative mb-14">
+        <div class="flex-1 reveal text-center md:px-3" style="transition-delay:0.05s;">
+          <div class="relative inline-flex mb-5">
+            <div style="width:76px;height:76px;border-radius:24px;background:linear-gradient(135deg,#E8F5EE,#C8E7D6);display:flex;align-items:center;justify-content:center;margin:0 auto;">
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#1B6B4A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            </div>
+            <div style="position:absolute;top:-8px;right:-8px;width:28px;height:28px;border-radius:50%;background:#1B6B4A;color:white;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;">1</div>
+          </div>
+          <h3 class="text-lg font-bold mb-2" style="color:#0F1E36;" id="mp-step1-title">Pickup</h3>
+          <p class="text-sm" style="color:#6B7280;line-height:1.6;" id="mp-step1-desc">Book a scheduled pickup for your sorted material right from the app.</p>
+        </div>
+        <div class="hidden md:flex items-center justify-center px-1 self-center" style="color:#C8A455;">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </div>
+        <div class="md:hidden flex justify-center my-1" style="color:#C8A455;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m5 12 7 7 7-7"/></svg>
+        </div>
+        <div class="flex-1 reveal text-center md:px-3" style="transition-delay:0.2s;">
+          <div class="relative inline-flex mb-5">
+            <div style="width:76px;height:76px;border-radius:24px;background:linear-gradient(135deg,#E8F5EE,#95D1B0);display:flex;align-items:center;justify-content:center;margin:0 auto;">
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#1B6B4A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg>
+            </div>
+            <div style="position:absolute;top:-8px;right:-8px;width:28px;height:28px;border-radius:50%;background:#1B6B4A;color:white;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;">2</div>
+          </div>
+          <h3 class="text-lg font-bold mb-2" style="color:#0F1E36;" id="mp-step2-title">Transport</h3>
+          <p class="text-sm" style="color:#6B7280;line-height:1.6;" id="mp-step2-desc">Track your load in real time to the nearest recycling facility.</p>
+        </div>
+        <div class="hidden md:flex items-center justify-center px-1 self-center" style="color:#C8A455;">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </div>
+        <div class="md:hidden flex justify-center my-1" style="color:#C8A455;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m5 12 7 7 7-7"/></svg>
+        </div>
+        <div class="flex-1 reveal text-center md:px-3" style="transition-delay:0.35s;">
+          <div class="relative inline-flex mb-5">
+            <div style="width:76px;height:76px;border-radius:24px;background:linear-gradient(135deg,#5DB586,#1B6B4A);display:flex;align-items:center;justify-content:center;margin:0 auto;">
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5"/><path d="M11 19h8.203a1.83 1.83 0 0 0 1.556-.89 1.784 1.784 0 0 0 0-1.775l-1.226-2.12"/><path d="m14 16-3 3 3 3"/><path d="M8.293 13.596 7.196 9.5 3.1 10.598"/><path d="m9.344 5.811 1.093-1.892A1.83 1.83 0 0 1 11.985 3a1.784 1.784 0 0 1 1.546.888l3.943 6.843"/><path d="m13.378 9.633 4.096 1.098 1.097-4.096"/></svg>
+            </div>
+            <div style="position:absolute;top:-8px;right:-8px;width:28px;height:28px;border-radius:50%;background:#C8A455;color:white;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;">3</div>
+          </div>
+          <h3 class="text-lg font-bold mb-2" style="color:#0F1E36;" id="mp-step3-title">Recycling</h3>
+          <p class="text-sm" style="color:#6B7280;line-height:1.6;" id="mp-step3-desc">Material is crushed, cleaned, and reprocessed at certified facilities.</p>
+        </div>
+        <div class="hidden md:flex items-center justify-center px-1 self-center" style="color:#C8A455;">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </div>
+        <div class="md:hidden flex justify-center my-1" style="color:#C8A455;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m5 12 7 7 7-7"/></svg>
+        </div>
+        <div class="flex-1 reveal text-center md:px-3" style="transition-delay:0.5s;">
+          <div class="relative inline-flex mb-5">
+            <div style="width:76px;height:76px;border-radius:24px;background:linear-gradient(135deg,#0D7377,#0A5C5F);display:flex;align-items:center;justify-content:center;margin:0 auto;">
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7l10-5 10 5-10 5-10-5z"/><path d="M2 7v10l10 5 10-5V7"/><path d="M12 22V12"/></svg>
+            </div>
+            <div style="position:absolute;top:-8px;right:-8px;width:28px;height:28px;border-radius:50%;background:#C8A455;color:white;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;">4</div>
+          </div>
+          <h3 class="text-lg font-bold mb-2" style="color:#0F1E36;" id="mp-step4-title">Material Recovery</h3>
+          <p class="text-sm" style="color:#6B7280;line-height:1.6;" id="mp-step4-desc">Get paid for recovered aggregate, metal, and reusable materials.</p>
+        </div>
+      </div>
+
+      <!-- Live buyer demand -->
+      <div class="reveal rounded-3xl p-6 sm:p-10 relative overflow-hidden" style="background:linear-gradient(135deg,#0F1E36,#1A2A3A);border:1px solid rgba(200,164,85,0.15);box-shadow:0 24px 80px rgba(15,30,54,0.25);">
+        <div class="absolute inset-0 grid-pattern opacity-20"></div>
+        <div class="relative z-10">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+            <div>
+              <span class="inline-flex items-center gap-2 text-xs font-semibold mb-2" style="color:#C8A455;">
+                <span style="width:7px;height:7px;border-radius:50%;background:#4CAF50;display:inline-block;animation:pulseGlow 2s ease-in-out infinite;"></span>
+                <span id="market-live">Live demand near you</span>
+              </span>
+              <h3 class="font-heading text-2xl sm:text-3xl font-bold" style="color:white;" id="market-buyers-title">Recyclers ready to buy</h3>
+            </div>
+            <a href="index.html" class="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold no-underline transition-all" style="background:linear-gradient(135deg,#C8A455,#A6883E);color:#0F1E36;align-self:flex-start;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+              <span id="market-cta">List Your Material</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </a>
+          </div>
+          <div class="grid sm:grid-cols-3 gap-4">
+            <div class="rounded-2xl p-5 card-hover" style="background:rgba(255,255,255,0.04);border:1px solid rgba(200,164,85,0.12);">
+              <div class="flex items-center gap-3 mb-3">
+                <div style="width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#1B6B4A,#0D7377);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                </div>
+                <div style="min-width:0;">
+                  <p class="text-sm font-bold truncate" style="color:white;" id="market-b1-name">City Recyclers</p>
+                  <p class="text-xs" style="color:#9CA3AF;" id="market-b1-dist">12 km away</p>
+                </div>
+              </div>
+              <div class="flex items-center justify-between gap-2 text-xs pt-3" style="border-top:1px solid rgba(200,164,85,0.1);">
+                <span style="color:#9CA3AF;" id="market-b1-item">Concrete aggregate</span>
+                <span class="font-bold whitespace-nowrap" style="color:#4CAF50;" id="market-b1-rate">₹450/t</span>
+              </div>
+            </div>
+            <div class="rounded-2xl p-5 card-hover" style="background:rgba(255,255,255,0.04);border:1px solid rgba(200,164,85,0.12);">
+              <div class="flex items-center gap-3 mb-3">
+                <div style="width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#C8A455,#A6883E);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5"/><path d="M11 19h8.203a1.83 1.83 0 0 0 1.556-.89 1.784 1.784 0 0 0 0-1.775l-1.226-2.12"/><path d="m14 16-3 3 3 3"/><path d="M8.293 13.596 7.196 9.5 3.1 10.598"/><path d="m9.344 5.811 1.093-1.892A1.83 1.83 0 0 1 11.985 3a1.784 1.784 0 0 1 1.546.888l3.943 6.843"/><path d="m13.378 9.633 4.096 1.098 1.097-4.096"/></svg>
+                </div>
+                <div style="min-width:0;">
+                  <p class="text-sm font-bold truncate" style="color:white;" id="market-b2-name">GreenBuild Materials</p>
+                  <p class="text-xs" style="color:#9CA3AF;" id="market-b2-dist">18 km away</p>
+                </div>
+              </div>
+              <div class="flex items-center justify-between gap-2 text-xs pt-3" style="border-top:1px solid rgba(200,164,85,0.1);">
+                <span style="color:#9CA3AF;" id="market-b2-item">Metal scrap</span>
+                <span class="font-bold whitespace-nowrap" style="color:#4CAF50;" id="market-b2-rate">₹32,000/t</span>
+              </div>
+            </div>
+            <div class="rounded-2xl p-5 card-hover" style="background:rgba(255,255,255,0.04);border:1px solid rgba(200,164,85,0.12);">
+              <div class="flex items-center gap-3 mb-3">
+                <div style="width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#0D7377,#0A5C5F);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="12" rx="2"/><path d="M3 12h18"/><path d="M7 8h.01M12 8h.01M17 8h.01"/></svg>
+                </div>
+                <div style="min-width:0;">
+                  <p class="text-sm font-bold truncate" style="color:white;" id="market-b3-name">EcoMason Works</p>
+                  <p class="text-xs" style="color:#9CA3AF;" id="market-b3-dist">7 km away</p>
+                </div>
+              </div>
+              <div class="flex items-center justify-between gap-2 text-xs pt-3" style="border-top:1px solid rgba(200,164,85,0.1);">
+                <span style="color:#9CA3AF;" id="market-b3-item">Whole bricks</span>
+                <span class="font-bold whitespace-nowrap" style="color:#4CAF50;" id="market-b3-rate">₹3,500/t</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== BENEFITS ===== -->
+  <section id="benefits" class="relative py-24 sm:py-32 overflow-hidden" style="background:#F8F6F2;">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8">
+      <div class="text-center mb-16">
+        <span class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-4" style="background:rgba(200,164,85,0.1);color:#A6883E;border:1px solid rgba(200,164,85,0.2);" id="benefits-label">Who Benefits</span>
+        <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mb-5" style="color:#0F1E36;">
+          <span id="benefits-title">Built for contractors. Backed by investors.</span>
+        </h2>
+      </div>
+      <div class="grid md:grid-cols-2 gap-8 lg:gap-10">
+        <!-- For Contractors -->
+        <div class="reveal-left rounded-2xl overflow-hidden card-hover" style="background:white;border:1px solid #E5E0D6;box-shadow:0 4px 24px rgba(0,0,0,0.04);">
+          <div style="height:6px;background:linear-gradient(90deg,#1B6B4A,#4CAF50);"></div>
+          <div class="p-8 sm:p-10">
+            <div style="width:56px;height:56px;border-radius:16px;background:#E8F5EE;display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1B6B4A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <h3 class="text-xl font-bold mb-4" style="color:#0F1E36;" id="benefit-contractor-title">For Small Contractors</h3>
+            <ul class="space-y-4">
+              <li class="flex items-start gap-3 text-sm" style="color:#4B5563;">
+                <span style="color:#1B6B4A;font-weight:700;flex-shrink:0;width:20px;height:20px;border-radius:50%;background:#E8F5EE;display:flex;align-items:center;justify-content:center;font-size:0.7rem;">✓</span>
+                <span id="benefit-c1">Zero-cost on-site sorting — no machinery needed</span>
+              </li>
+              <li class="flex items-start gap-3 text-sm" style="color:#4B5563;">
+                <span style="color:#1B6B4A;font-weight:700;flex-shrink:0;width:20px;height:20px;border-radius:50%;background:#E8F5EE;display:flex;align-items:center;justify-content:center;font-size:0.7rem;">✓</span>
+                <span id="benefit-c2">Reduce landfill fees by up to 60%</span>
+              </li>
+              <li class="flex items-start gap-3 text-sm" style="color:#4B5563;">
+                <span style="color:#1B6B4A;font-weight:700;flex-shrink:0;width:20px;height:20px;border-radius:50%;background:#E8F5EE;display:flex;align-items:center;justify-content:center;font-size:0.7rem;">✓</span>
+                <span id="benefit-c3">Create sellable recycled aggregate from waste</span>
+              </li>
+              <li class="flex items-start gap-3 text-sm" style="color:#4B5563;">
+                <span style="color:#1B6B4A;font-weight:700;flex-shrink:0;width:20px;height:20px;border-radius:50%;background:#E8F5EE;display:flex;align-items:center;justify-content:center;font-size:0.7rem;">✓</span>
+                <span id="benefit-c4">No training required — works on any smartphone</span>
+              </li>
+              <li class="flex items-start gap-3 text-sm" style="color:#4B5563;">
+                <span style="color:#1B6B4A;font-weight:700;flex-shrink:0;width:20px;height:20px;border-radius:50%;background:#E8F5EE;display:flex;align-items:center;justify-content:center;font-size:0.7rem;">✓</span>
+                <span id="benefit-c5">Supports multiple languages and local terminology</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- For Investors -->
+        <div class="reveal-right rounded-2xl overflow-hidden card-hover" style="background:white;border:1px solid #E5E0D6;box-shadow:0 4px 24px rgba(0,0,0,0.04);">
+          <div style="height:6px;background:linear-gradient(90deg,#C8A455,#A6883E);"></div>
+          <div class="p-8 sm:p-10">
+            <div style="width:56px;height:56px;border-radius:16px;background:#F9F3E8;display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C8A455" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <h3 class="text-xl font-bold mb-4" style="color:#0F1E36;" id="benefit-investor-title">For Investors</h3>
+            <ul class="space-y-4">
+              <li class="flex items-start gap-3 text-sm" style="color:#4B5563;">
+                <span style="color:#C8A455;font-weight:700;flex-shrink:0;width:20px;height:20px;border-radius:50%;background:#F9F3E8;display:flex;align-items:center;justify-content:center;font-size:0.7rem;">✓</span>
+                <span id="benefit-i1">Massive market: $200B+ global C&D waste industry</span>
+              </li>
+              <li class="flex items-start gap-3 text-sm" style="color:#4B5563;">
+                <span style="color:#C8A455;font-weight:700;flex-shrink:0;width:20px;height:20px;border-radius:50%;background:#F9F3E8;display:flex;align-items:center;justify-content:center;font-size:0.7rem;">✓</span>
+                <span id="benefit-i2">Tiered monetization: freemium, premium, enterprise</span>
+              </li>
+              <li class="flex items-start gap-3 text-sm" style="color:#4B5563;">
+                <span style="color:#C8A455;font-weight:700;flex-shrink:0;width:20px;height:20px;border-radius:50%;background:#F9F3E8;display:flex;align-items:center;justify-content:center;font-size:0.7rem;">✓</span>
+                <span id="benefit-i3">Sustainability regulations driving mandatory adoption</span>
+              </li>
+              <li class="flex items-start gap-3 text-sm" style="color:#4B5563;">
+                <span style="color:#C8A455;font-weight:700;flex-shrink:0;width:20px;height:20px;border-radius:50%;background:#F9F3E8;display:flex;align-items:center;justify-content:center;font-size:0.7rem;">✓</span>
+                <span id="benefit-i4">Low burn — browser-based, no app store friction</span>
+              </li>
+              <li class="flex items-start gap-3 text-sm" style="color:#4B5563;">
+                <span style="color:#C8A455;font-weight:700;flex-shrink:0;width:20px;height:20px;border-radius:50%;background:#F9F3E8;display:flex;align-items:center;justify-content:center;font-size:0.7rem;">✓</span>
+                <span id="benefit-i5">First-mover in underserved small-contractor segment</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FINAL CTA ===== -->
+  <section class="relative py-24 sm:py-32 overflow-hidden" style="background:linear-gradient(160deg,#0F1E36,#1A2A3A,#0F1E36);">
+    <div class="absolute inset-0 grid-pattern opacity-20"></div>
+    <div class="hero-glow" style="top:50%;left:50%;transform:translate(-50%,-50%);width:700px;height:700px;background:radial-gradient(circle,rgba(27,107,74,0.12) 0%,rgba(200,164,85,0.05) 40%,transparent 70%);"></div>
+    <div class="max-w-4xl mx-auto px-5 sm:px-8 text-center relative z-10">
+      <span class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-6" style="background:rgba(200,164,85,0.15);color:#C8A455;border:1px solid rgba(200,164,85,0.2);" id="cta-label">Start Today</span>
+      <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mb-6" style="color:white;">
+        <span id="cta-title">Turn your waste pile into<br>a revenue pile.</span>
+      </h2>
+      <p class="text-lg max-w-xl mx-auto mb-10" style="color:#9CA3AF;line-height:1.7;" id="cta-desc">
+        No credit card. No download. No equipment. Just open the app and start sorting smarter.
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="index.html" class="inline-flex items-center gap-2 px-10 py-4 rounded-full text-base font-bold no-underline transition-all animate-pulse-glow" style="background:linear-gradient(135deg,#1B6B4A,#0D7377);color:white;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <span id="cta-btn1">Launch the App Free</span>
+        </a>
+        <a href="#benefits" class="inline-flex items-center gap-2 px-10 py-4 rounded-full text-base font-semibold no-underline transition-all" style="border:2px solid rgba(200,164,85,0.3);color:#C8A455;" onmouseover="this.style.borderColor='#C8A455';this.style.background='rgba(200,164,85,0.1)'" onmouseout="this.style.borderColor='rgba(200,164,85,0.3)';this.style.background='transparent'">
+          <span id="cta-btn2">Investor Deck</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 21 3"/></svg>
+        </a>
+      </div>
+      <div class="mt-10 flex items-center justify-center gap-4 text-sm" style="color:#6B7280;">
+        <span class="flex items-center gap-1.5">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4CAF50" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span id="cta-check1">No account needed</span>
+        </span>
+        <span class="flex items-center gap-1.5">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4CAF50" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span id="cta-check2">Works on any phone</span>
+        </span>
+        <span class="flex items-center gap-1.5">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4CAF50" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span id="cta-check3">100% free</span>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer style="background:#0A1628;border-top:1px solid rgba(200,164,85,0.08);">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8 py-12">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="flex items-center gap-2.5">
+          <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#1B6B4A,#0D7377);display:flex;align-items:center;justify-content:center;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+          </div>
+          <span class="font-heading text-lg font-semibold" style="color:#C8A455;">Waste2Wealth</span>
+        </div>
+        <div class="flex items-center gap-6 text-sm" style="color:#6B7280;">
+          <span id="footer-tag">Built for small contractors who want to build smarter</span>
+        </div>
+        <div class="text-xs" style="color:#4B5563;">
+          &copy; 2026 Waste2Wealth
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ===== LANGUAGE TRANSLATIONS =====
+    const langData = {
+      en: {
+        'hero-badge': 'On-site C&D Waste Solution',
+        'hero-line1': "Waste isn't the end.",
+        'hero-line2': "It's the beginning.",
+        'hero-sub': 'Turn construction & demolition waste into reusable material — on-site, on a budget, with one tap. Waste2Wealth gives small contractors a low-cost mobile system to sort, crush, and recycle.',
+        'hero-cta1': "Try the App — It's Free",
+        'hero-cta2': 'See How It Works',
+        'hero-users': 'contractors already sorting smarter',
+        'hero-demo-status': 'AI-powered — no upload needed',
+        'hero-stat': 'recovery rate',
+        'problem-label': 'The Problem',
+        'problem-title': 'Construction waste is choking our planet',
+        'problem-desc': "Every year, billions of tons of concrete, brick, and metal end up in landfills — simply because small contractors can't afford the sorting technology big companies use.",
+        'prob-head1': 'The Old Way',
+        'prob-item1': 'Mixed waste hauled to landfills at high cost',
+        'prob-item2': 'No on-site sorting — everything gets dumped together',
+        'prob-item3': 'Expensive equipment out of reach for small crews',
+        'prob-item4': 'Valuable materials lost to landfills forever',
+        'sol-head1': 'With Waste2Wealth',
+        'sol-item1': 'Sort on-site in minutes using your phone',
+        'sol-item2': 'AI camera instantly identifies material types',
+        'sol-item3': 'Zero equipment cost — works on any smartphone',
+        'sol-item4': 'Turn waste into revenue-grade recycled material',
+        'stat1': 'tons C&D waste yearly',
+        'stat2': 'recyclable with right sorting',
+        'stat3': 'cost to start sorting today',
+        'how-label': 'Working Model',
+        'how-title': 'Three taps. Zero waste to landfill.',
+        'how-desc': 'No training, no equipment, no cost. Just your phone and a pile of waste.',
+        'step1-title': 'Scan or Describe',
+        'step1-desc': 'Point your camera at the waste pile or type what you have. The AI identifies concrete, brick, metal, wood, and more.',
+        'step2-title': 'Get Sorting Instructions',
+        'step2-desc': 'Step-by-step guidance on how to sort, crush, and prepare each material for reuse or sale.',
+        'step3-title': 'Recycle & Save',
+        'step3-desc': 'Follow the plan to recover materials, reduce landfill fees, and even sell recycled aggregate.',
+        'market-label': 'Smart Marketplace',
+        'market-title': 'Recyclers & buyers, matched automatically.',
+        'market-desc': 'Waste2Wealth connects your sorted waste to verified recyclers and buyers nearby — from scheduled pickup to paid material recovery, in one seamless pipeline.',
+        'mp-step1-title': 'Pickup',
+        'mp-step1-desc': 'Book a scheduled pickup for your sorted material right from the app.',
+        'mp-step2-title': 'Transport',
+        'mp-step2-desc': 'Track your load in real time to the nearest recycling facility.',
+        'mp-step3-title': 'Recycling',
+        'mp-step3-desc': 'Material is crushed, cleaned, and reprocessed at certified facilities.',
+        'mp-step4-title': 'Material Recovery',
+        'mp-step4-desc': 'Get paid for recovered aggregate, metal, and reusable materials.',
+        'market-live': 'Live demand near you',
+        'market-buyers-title': 'Recyclers ready to buy',
+        'market-cta': 'List Your Material',
+        'market-b1-name': 'City Recyclers',
+        'market-b1-dist': '12 km away',
+        'market-b1-item': 'Concrete aggregate',
+        'market-b1-rate': '₹450/t',
+        'market-b2-name': 'GreenBuild Materials',
+        'market-b2-dist': '18 km away',
+        'market-b2-item': 'Metal scrap',
+        'market-b2-rate': '₹32,000/t',
+        'market-b3-name': 'EcoMason Works',
+        'market-b3-dist': '7 km away',
+        'market-b3-item': 'Whole bricks',
+        'market-b3-rate': '₹3,500/t',
+        'features-label': 'Features',
+        'features-title': 'Three ways to identify waste',
+        'features-desc': "Choose whatever's fastest for you — camera, voice, or text. Works in any language.",
+        'feat1-title': 'AI Camera Scan',
+        'feat1-desc': 'Point your phone at any pile of waste. Our AI identifies the material type instantly — no typing needed.',
+        'feat1-badge': 'Works offline-ready',
+        'feat2-title': 'Voice & Text Input',
+        'feat2-desc': 'Describe your waste in your own words and language. The smart matching engine finds the right instructions.',
+        'feat2-badge': '12+ languages supported',
+        'feat3-title': 'Smart Sorting Guide',
+        'feat3-desc': 'Get detailed step-by-step instructions for sorting, crushing, and prepping each material type for reuse.',
+        'feat3-badge': '8 material types covered',
+        'benefits-label': 'Who Benefits',
+        'benefits-title': 'Built for contractors. Backed by investors.',
+        'benefit-contractor-title': 'For Small Contractors',
+        'benefit-c1': 'Zero-cost on-site sorting — no machinery needed',
+        'benefit-c2': 'Reduce landfill fees by up to 60%',
+        'benefit-c3': 'Create sellable recycled aggregate from waste',
+        'benefit-c4': 'No training required — works on any smartphone',
+        'benefit-c5': 'Supports multiple languages and local terminology',
+        'benefit-investor-title': 'For Investors',
+        'benefit-i1': 'Massive market: $200B+ global C&D waste industry',
+        'benefit-i2': 'Tiered monetization: freemium, premium, enterprise',
+        'benefit-i3': 'Sustainability regulations driving mandatory adoption',
+        'benefit-i4': 'Low burn — browser-based, no app store friction',
+        'benefit-i5': 'First-mover in underserved small-contractor segment',
+        'cta-label': 'Start Today',
+        'cta-title': 'Turn your waste pile into\na revenue pile.',
+        'cta-desc': 'No credit card. No download. No equipment. Just open the app and start sorting smarter.',
+        'cta-btn1': 'Launch the App Free',
+        'cta-btn2': 'Investor Deck',
+        'cta-check1': 'No account needed',
+        'cta-check2': 'Works on any phone',
+        'cta-check3': '100% free',
+        'footer-tag': 'Built for small contractors who want to build smarter'
+      },
+      hi: {
+        'hero-badge': 'ऑन-साइट C&D अपशिष्ट समाधान',
+        'hero-line1': 'कचरा अंत नहीं है।',
+        'hero-line2': 'यह शुरुआत है।',
+        'hero-sub': 'निर्माण और विध्वंस अपशिष्ट को पुन: प्रयोज्य सामग्री में बदलें — एक टैप से। Waste2Wealth छोटे ठेकेदारों को छांटने, कुचलने और रीसायकल करने की कम लागत वाली मोबाइल प्रणाली देता है।',
+        'hero-cta1': 'ऐप आज़माएं — मुफ्त',
+        'hero-cta2': 'यह कैसे काम करता है देखें',
+        'hero-users': 'ठेकेदार पहले से स्मार्ट छंटाई कर रहे हैं',
+        'hero-demo-status': 'AI-संचालित — कोई अपलोड आवश्यक नहीं',
+        'hero-stat': 'रिकवरी दर',
+        'problem-label': 'समस्या',
+        'problem-title': 'निर्माण अपशिष्ट हमारे ग्रह का दम घोंट रहा है',
+        'problem-desc': 'हर साल अरबों टन कंक्रीट, ईंट और धातु लैंडफिल में पहुंच जाते हैं — सिर्फ इसलिए कि छोटे ठेकेदार बड़ी कंपनियों की तकनीक नहीं खरीद सकते।',
+        'prob-head1': 'पुराना तरीका',
+        'prob-item1': 'मिश्रित अपशिष्ट उच्च लागत पर लैंडफिल ले जाया गया',
+        'prob-item2': 'कोई ऑन-साइट छंटाई नहीं — सब कुछ एक साथ डंप किया गया',
+        'prob-item3': 'महंगा उपकरण छोटी टीमों की पहुंच से बाहर',
+        'prob-item4': 'मूल्यवान सामग्री हमेशा के लिए लैंडफिल में खो गई',
+        'sol-head1': 'Waste2Wealth के साथ',
+        'sol-item1': 'अपने फोन से मिनटों में ऑन-साइट छांटें',
+        'sol-item2': 'AI कैमरा तुरंत सामग्री प्रकार पहचानता है',
+        'sol-item3': 'शून्य उपकरण लागत — किसी भी स्मार्टफोन पर काम करता है',
+        'sol-item4': 'अपशिष्ट को राजस्व-ग्रेड रीसाइक्लिंग सामग्री में बदलें',
+        'stat1': 'टन C&D अपशिष्ट वार्षिक',
+        'stat2': 'सही छंटाई से रीसायकल योग्य',
+        'stat3': 'आज छंटाई शुरू करने की लागत',
+        'how-label': 'कार्य मॉडल',
+        'how-title': 'तीन टैप। लैंडफिल के लिए शून्य अपशिष्ट।',
+        'how-desc': 'कोई प्रशिक्षण नहीं, कोई उपकरण नहीं, कोई लागत नहीं। बस आपका फोन और अपशिष्ट का ढेर।',
+        'step1-title': 'स्कैन या वर्णन करें',
+        'step1-desc': 'अपने कैमरे को अपशिष्ट ढेर पर इंगित करें या टाइप करें। AI कंक्रीट, ईंट, धातु, लकड़ी और अधिक पहचानता है।',
+        'step2-title': 'छंटाई निर्देश प्राप्त करें',
+        'step2-desc': 'प्रत्येक सामग्री को पुन: उपयोग या बिक्री के लिए छांटने, कुचलने और तैयार करने की चरण-दर-चरण मार्गदर्शिका।',
+        'step3-title': 'रीसायकल और बचाएं',
+        'step3-desc': 'सामग्री पुनर्प्राप्ति, लैंडफिल शुल्क कम करने और रीसाइक्लिंग समुच्चय बेचने की योजना का पालन करें।',
+        'market-label': 'स्मार्ट मार्केटप्लेस',
+        'market-title': 'रीसाइक्लर और खरीदार, स्वतः मिलान।',
+        'market-desc': 'Waste2Wealth आपके छांटे गए कचरे को पास के सत्यापित रीसाइक्लरों और खरीदारों से जोड़ता है — निर्धारित पिकअप से लेकर भुगतान तक, एक सहज प्रक्रिया में।',
+        'mp-step1-title': 'पिकअप',
+        'mp-step1-desc': 'अपनी छांटी गई सामग्री के लिए ऐप से ही निर्धारित पिकअप बुक करें।',
+        'mp-step2-title': 'परिवहन',
+        'mp-step2-desc': 'अपने लोड को नजदीकी रीसाइक्लिंग केंद्र तक लाइव ट्रैक करें।',
+        'mp-step3-title': 'रीसाइक्लिंग',
+        'mp-step3-desc': 'प्रमाणित केंद्रों पर सामग्री को कुचला, साफ और पुनः प्रोसेस किया जाता है।',
+        'mp-step4-title': 'सामग्री पुनर्प्राप्ति',
+        'mp-step4-desc': 'रीसाइक्लिंग समुच्चय, धातु और पुन: प्रयोज्य सामग्री के लिए भुगतान पाएं।',
+        'market-live': 'आपके पास लाइव मांग',
+        'market-buyers-title': 'रीसाइक्लर खरीदने के लिए तैयार',
+        'market-cta': 'अपनी सामग्री सूचीबद्ध करें',
+        'market-b1-name': 'सिटी रीसाइक्लर्स',
+        'market-b1-dist': '12 किमी दूर',
+        'market-b1-item': 'कंक्रीट समुच्चय',
+        'market-b1-rate': '₹450/टन',
+        'market-b2-name': 'ग्रीनबिल्ड मैटेरियल्स',
+        'market-b2-dist': '18 किमी दूर',
+        'market-b2-item': 'धातु स्क्रैप',
+        'market-b2-rate': '₹32,000/टन',
+        'market-b3-name': 'इकोमेसन वर्क्स',
+        'market-b3-dist': '7 किमी दूर',
+        'market-b3-item': 'साबुत ईंटें',
+        'market-b3-rate': '₹3,500/टन',
+        'features-label': 'विशेषताएं',
+        'features-title': 'अपशिष्ट पहचानने के तीन तरीके',
+        'features-desc': 'जो आपके लिए सबसे तेज़ हो चुनें — कैमरा, आवाज़, या टेक्स्ट। किसी भी भाषा में काम करता है।',
+        'feat1-title': 'AI कैमरा स्कैन',
+        'feat1-desc': 'अपने फोन को अपशिष्ट के ढेर पर इंगित करें। हमारा AI तुरंत सामग्री प्रकार पहचानता है — कोई टाइपिंग आवश्यक नहीं।',
+        'feat1-badge': 'ऑफलाइन-रेडी काम करता है',
+        'feat2-title': 'आवाज़ और टेक्स्ट इनपुट',
+        'feat2-desc': 'अपने शब्दों और भाषा में अपने अपशिष्ट का वर्णन करें। स्मार्ट मिलान इंजन सही निर्देश ढूंढता है।',
+        'feat2-badge': '12+ भाषाएं समर्थित',
+        'feat3-title': 'स्मार्ट छंटाई गाइड',
+        'feat3-desc': 'प्रत्येक सामग्री प्रकार को पुन: उपयोग के लिए छांटने, कुचलने और तैयार करने के विस्तृत चरण-दर-चरण निर्देश प्राप्त करें।',
+        'feat3-badge': '8 सामग्री प्रकार कवर',
+        'benefits-label': 'किसे लाभ',
+        'benefits-title': 'ठेकेदारों के लिए बनाया गया। निवेशकों द्वारा समर्थित।',
+        'benefit-contractor-title': 'छोटे ठेकेदारों के लिए',
+        'benefit-c1': 'शून्य लागत ऑन-साइट छंटाई — कोई मशीनरी आवश्यक नहीं',
+        'benefit-c2': 'लैंडफिल शुल्क में 60% तक की कमी',
+        'benefit-c3': 'अपशिष्ट से बिक्री योग्य रीसाइक्लिंग समुच्चय बनाएं',
+        'benefit-c4': 'कोई प्रशिक्षण आवश्यक नहीं — किसी भी स्मार्टफोन पर काम करता है',
+        'benefit-c5': 'कई भाषाओं और स्थानीय शब्दावली का समर्थन',
+        'benefit-investor-title': 'निवेशकों के लिए',
+        'benefit-i1': 'विशाल बाजार: $200B+ वैश्विक C&D अपशिष्ट उद्योग',
+        'benefit-i2': 'स्तरीय मुद्रीकरण: मुफ्त, प्रीमियम, एंटरप्राइज',
+        'benefit-i3': 'स्थिरता नियम अनिवार्य अपनाने को बढ़ावा दे रहे हैं',
+        'benefit-i4': 'कम खर्च — ब्राउज़र-आधारित, कोई ऐप स्टोर घर्षण नहीं',
+        'benefit-i5': 'अविकसित छोटे-ठेकेदार खंड में अग्रणी',
+        'cta-label': 'आज शुरू करें',
+        'cta-title': 'अपने अपशिष्ट के ढेर को\nआय के ढेर में बदलें।',
+        'cta-desc': 'कोई क्रेडिट कार्ड नहीं। कोई डाउनलोड नहीं। कोई उपकरण नहीं। बस ऐप खोलें और स्मार्ट छंटाई शुरू करें।',
+        'cta-btn1': 'मुफ्त ऐप लॉन्च करें',
+        'cta-btn2': 'निवेशक डेक',
+        'cta-check1': 'खाता आवश्यक नहीं',
+        'cta-check2': 'किसी भी फोन पर काम करता है',
+        'cta-check3': '100% मुफ्त',
+        'footer-tag': 'छोटे ठेकेदारों के लिए जो स्मार्ट बनाना चाहते हैं'
+      },
+      es: {
+        'hero-badge': 'Solución de residuos C&D in situ',
+        'hero-line1': 'Los residuos no son el final.',
+        'hero-line2': 'Es el principio.',
+        'hero-sub': 'Convierta los residuos de construcción y demolición en material reutilizable — in situ, con presupuesto limitado, con un solo toque. Waste2Wealth ofrece a los pequeños contratistas un sistema móvil de bajo costo para clasificar, triturar y reciclar.',
+        'hero-cta1': 'Prueba la App — Gratis',
+        'hero-cta2': 'Ver Cómo Funciona',
+        'hero-users': 'contratistas ya clasifican de forma inteligente',
+        'hero-demo-status': 'Impulsado por IA — no necesita subir archivos',
+        'hero-stat': 'tasa de recuperación',
+        'problem-label': 'El Problema',
+        'problem-title': 'Los residuos de construcción están asfixiando nuestro planeta',
+        'problem-desc': 'Cada año, miles de millones de toneladas de hormigón, ladrillos y metal terminan en vertederos — simplemente porque los pequeños contratistas no pueden pagar la tecnología que usan las grandes empresas.',
+        'prob-head1': 'La Forma Antigua',
+        'prob-item1': 'Residuos mezclados llevados a vertederos a alto costo',
+        'prob-item2': 'Sin clasificación in situ — todo se tira junto',
+        'prob-item3': 'Equipos costosos fuera del alcance de las pequeñas cuadrillas',
+        'prob-item4': 'Materiales valiosos perdidos para siempre en vertederos',
+        'sol-head1': 'Con Waste2Wealth',
+        'sol-item1': 'Clasifique in situ en minutos usando su teléfono',
+        'sol-item2': 'La cámara IA identifica instantáneamente los tipos de material',
+        'sol-item3': 'Costo de equipo cero — funciona en cualquier smartphone',
+        'sol-item4': 'Convierta residuos en material reciclado de calidad comercial',
+        'stat1': 'toneladas de residuos C&D al año',
+        'stat2': 'reciclable con la clasificación adecuada',
+        'stat3': 'costo para empezar a clasificar hoy',
+        'how-label': 'Modelo de Trabajo',
+        'how-title': 'Tres toques. Cero residuos al vertedero.',
+        'how-desc': 'Sin capacitación, sin equipo, sin costo. Solo su teléfono y un montón de residuos.',
+        'step1-title': 'Escanear o Describir',
+        'step1-desc': 'Apunte su cámara al montón de residuos o escriba lo que tiene. La IA identifica hormigón, ladrillo, metal, madera y más.',
+        'step2-title': 'Obtener Instrucciones de Clasificación',
+        'step2-desc': 'Guía paso a paso sobre cómo clasificar, triturar y preparar cada material para su reutilización o venta.',
+        'step3-title': 'Reciclar y Ahorrar',
+        'step3-desc': 'Siga el plan para recuperar materiales, reducir las tarifas de vertedero y vender agregado reciclado.',
+        'market-label': 'Mercado Inteligente',
+        'market-title': 'Recicladores y compradores, emparejados automáticamente.',
+        'market-desc': 'Waste2Wealth conecta tus residuos clasificados con recicladores y compradores verificados cercanos — desde la recogida programada hasta el pago por material recuperado.',
+        'mp-step1-title': 'Recogida',
+        'mp-step1-desc': 'Reserva una recogida programada para tu material clasificado directamente en la app.',
+        'mp-step2-title': 'Transporte',
+        'mp-step2-desc': 'Rastrea tu carga en tiempo real hasta la planta de reciclaje más cercana.',
+        'mp-step3-title': 'Reciclaje',
+        'mp-step3-desc': 'El material se tritura, limpia y reprocesa en instalaciones certificadas.',
+        'mp-step4-title': 'Recuperación de Material',
+        'mp-step4-desc': 'Recibe pago por agregado recuperado, metal y materiales reutilizables.',
+        'market-live': 'Demanda en vivo cerca de ti',
+        'market-buyers-title': 'Recicladores listos para comprar',
+        'market-cta': 'Publica tu Material',
+        'market-b1-name': 'City Recyclers',
+        'market-b1-dist': 'a 12 km',
+        'market-b1-item': 'Agregado de hormigón',
+        'market-b1-rate': '₹450/t',
+        'market-b2-name': 'GreenBuild Materials',
+        'market-b2-dist': 'a 18 km',
+        'market-b2-item': 'Chatarra metálica',
+        'market-b2-rate': '₹32.000/t',
+        'market-b3-name': 'EcoMason Works',
+        'market-b3-dist': 'a 7 km',
+        'market-b3-item': 'Ladrillos completos',
+        'market-b3-rate': '₹3.500/t',
+        'features-label': 'Características',
+        'features-title': 'Tres formas de identificar residuos',
+        'features-desc': 'Elija lo más rápido para usted — cámara, voz o texto. Funciona en cualquier idioma.',
+        'feat1-title': 'Escaneo con Cámara IA',
+        'feat1-desc': 'Apunte su teléfono a cualquier montón de residuos. Nuestra IA identifica el tipo de material al instante — sin necesidad de escribir.',
+        'feat1-badge': 'Funciona sin conexión',
+        'feat2-title': 'Entrada por Voz y Texto',
+        'feat2-desc': 'Describa sus residuos en sus propias palabras e idioma. El motor de coincidencias inteligente encuentra las instrucciones correctas.',
+        'feat2-badge': 'Más de 12 idiomas soportados',
+        'feat3-title': 'Guía de Clasificación Inteligente',
+        'feat3-desc': 'Obtenga instrucciones detalladas paso a paso para clasificar, triturar y preparar cada tipo de material para su reutilización.',
+        'feat3-badge': '8 tipos de material cubiertos',
+        'benefits-label': 'Quién se Beneficia',
+        'benefits-title': 'Construido para contratistas. Respaldado por inversores.',
+        'benefit-contractor-title': 'Para Pequeños Contratistas',
+        'benefit-c1': 'Clasificación in situ sin costo — no necesita maquinaria',
+        'benefit-c2': 'Reduzca las tarifas de vertedero hasta en un 60%',
+        'benefit-c3': 'Cree agregado reciclado vendible a partir de residuos',
+        'benefit-c4': 'Sin capacitación requerida — funciona en cualquier smartphone',
+        'benefit-c5': 'Soporta múltiples idiomas y terminología local',
+        'benefit-investor-title': 'Para Inversores',
+        'benefit-i1': 'Mercado masivo: industria global de residuos C&D de $200B+',
+        'benefit-i2': 'Monetización escalonada: freemium, premium, empresarial',
+        'benefit-i3': 'Regulaciones de sostenibilidad impulsan la adopción obligatoria',
+        'benefit-i4': 'Bajo consumo — basado en navegador, sin fricción de tienda de aplicaciones',
+        'benefit-i5': 'Primer movimiento en el segmento desatendido de pequeños contratistas',
+        'cta-label': 'Comience Hoy',
+        'cta-title': 'Convierta su pila de residuos en\nuna pila de ingresos.',
+        'cta-desc': 'Sin tarjeta de crédito. Sin descarga. Sin equipo. Solo abra la aplicación y comience a clasificar de manera más inteligente.',
+        'cta-btn1': 'Lanzar la App Gratis',
+        'cta-btn2': 'Presentación para Inversores',
+        'cta-check1': 'No necesita cuenta',
+        'cta-check2': 'Funciona en cualquier teléfono',
+        'cta-check3': '100% gratis',
+        'footer-tag': 'Construido para pequeños contratistas que quieren construir de forma más inteligente'
+      },
+      ar: {
+        'hero-badge': 'حل متكامل لنفايات البناء والهدم',
+        'hero-line1': 'النفايات ليست النهاية.',
+        'hero-line2': 'إنها البداية.',
+        'hero-sub': 'حوّل نفايات البناء والهدم إلى مواد قابلة لإعادة الاستخدام — في الموقع، بميزانية محدودة، بلمسة واحدة. يمنح Waste2Wealth المقاولين الصغار نظامًا محمولًا منخفض التكلفة للفرز والتكسير وإعادة التدوير.',
+        'hero-cta1': 'جرب التطبيق — مجانًا',
+        'hero-cta2': 'شاهد كيف يعمل',
+        'hero-users': 'مقاولًا يفرزون بذكاء بالفعل',
+        'hero-demo-status': 'مدعوم بالذكاء الاصطناعي — لا حاجة للرفع',
+        'hero-stat': 'معدل الاسترداد',
+        'problem-label': 'المشكلة',
+        'problem-title': 'نفايات البناء تخنق كوكبنا',
+        'problem-desc': 'كل عام، تنتهي مليارات الأطنان من الخرسانة والطوب والمعادن في مكبات النفايات — ببساطة لأن المقاولين الصغار لا يستطيعون تحمل تكلفة التقنية التي تستخدمها الشركات الكبيرة.',
+        'prob-head1': 'الطريقة القديمة',
+        'prob-item1': 'نفايات مختلطة تُنقل إلى المكبات بتكلفة عالية',
+        'prob-item2': 'لا فرز في الموقع — كل شيء يُلقى معًا',
+        'prob-item3': 'معدات باهظة الثمن خارج متناول الفرق الصغيرة',
+        'prob-item4': 'مواد ثمينة تُفقد في المكبات إلى الأبد',
+        'sol-head1': 'مع Waste2Wealth',
+        'sol-item1': 'افرز في الموقع في دقائق باستخدام هاتفك',
+        'sol-item2': 'كاميرا الذكاء الاصطناعي تحدد أنواع المواد فورًا',
+        'sol-item3': 'تكلفة معدات صفرية — يعمل على أي هاتف ذكي',
+        'sol-item4': 'حوّل النفايات إلى مواد معاد تدويرها قابلة للبيع',
+        'stat1': 'طن من نفايات البناء والهدم سنويًا',
+        'stat2': 'قابلة لإعادة التدوير بالفرز الصحيح',
+        'stat3': 'تكلفة البدء في الفرز اليوم',
+        'how-label': 'نموذج العمل',
+        'how-title': 'ثلاث نقرات. صفر نفايات إلى المكب.',
+        'how-desc': 'لا تدريب، لا معدات، لا تكلفة. فقط هاتفك وكومة من النفايات.',
+        'step1-title': 'امسح أو صِف',
+        'step1-desc': 'وجّه كاميرتك إلى كومة النفايات أو اكتب ما لديك. الذكاء الاصطناعي يحدد الخرسانة والطوب والمعادن والخشب والمزيد.',
+        'step2-title': 'احصل على تعليمات الفرز',
+        'step2-desc': 'إرشادات خطوة بخطوة حول كيفية فرز وتكسير وتحضير كل مادة لإعادة الاستخدام أو البيع.',
+        'step3-title': 'أعد التدوير ووفّر',
+        'step3-desc': 'اتبع الخطة لاستعادة المواد، وتقليل رسوم المكب، وحتى بيع الركام المعاد تدويره.',
+        'market-label': 'سوق ذكي',
+        'market-title': 'معالِجو التدوير والمشترون، متطابقون تلقائيًا.',
+        'market-desc': 'يربط Waste2Wealth نفاياتك المفروزة بمعالِجي تدوير ومشترين موثوقين قريبين — من الاستلام المجدول إلى الدفع مقابل استرداد المواد، في مسار واحد سلس.',
+        'mp-step1-title': 'الاستلام',
+        'mp-step1-desc': 'احجز استلامًا مجدولًا لموادك المفروزة مباشرة من التطبيق.',
+        'mp-step2-title': 'النقل',
+        'mp-step2-desc': 'تتبع حمولتك في الوقت الفعلي حتى أقرب منشأة إعادة تدوير.',
+        'mp-step3-title': 'إعادة التدوير',
+        'mp-step3-desc': 'تُكسَّر المواد وتُنظَّف وتُعالَج في منشآت معتمدة.',
+        'mp-step4-title': 'استرداد المواد',
+        'mp-step4-desc': 'احصل على دفعة مقابل الركام المستعاد والمعادن والمواد القابلة لإعادة الاستخدام.',
+        'market-live': 'طلب مباشر بالقرب منك',
+        'market-buyers-title': 'معالِجو تدوير جاهزون للشراء',
+        'market-cta': 'اعرض مادتك',
+        'market-b1-name': 'City Recyclers',
+        'market-b1-dist': 'على بعد 12 كم',
+        'market-b1-item': 'ركام خرساني',
+        'market-b1-rate': '₹450/طن',
+        'market-b2-name': 'GreenBuild Materials',
+        'market-b2-dist': 'على بعد 18 كم',
+        'market-b2-item': 'خردة معدنية',
+        'market-b2-rate': '₹32,000/طن',
+        'market-b3-name': 'EcoMason Works',
+        'market-b3-dist': 'على بعد 7 كم',
+        'market-b3-item': 'طوب كامل',
+        'market-b3-rate': '₹3,500/طن',
+        'features-label': 'الميزات',
+        'features-title': 'ثلاث طرق لتحديد النفايات',
+        'features-desc': 'اختر الأسرع لك — الكاميرا، الصوت، أو النص. يعمل بأي لغة.',
+        'feat1-title': 'المسح بالكاميرا الذكية',
+        'feat1-desc': 'وجّه هاتفك إلى أي كومة نفايات. ذكاؤنا الاصطناعي يحدد نوع المادة فورًا — لا حاجة للكتابة.',
+        'feat1-badge': 'يعمل دون اتصال',
+        'feat2-title': 'الإدخال بالصوت والنص',
+        'feat2-desc': 'صف نفاياتك بكلماتك ولغتك الخاصة. محرك المطابقة الذكي يجد التعليمات الصحيحة.',
+        'feat2-badge': 'يدعم أكثر من 12 لغة',
+        'feat3-title': 'دليل الفرز الذكي',
+        'feat3-desc': 'احصل على تعليمات مفصلة خطوة بخطوة لفرز وتكسير وتحضير كل نوع من المواد لإعادة الاستخدام.',
+        'feat3-badge': 'يغطي 8 أنواع من المواد',
+        'benefits-label': 'من المستفيد',
+        'benefits-title': 'مبني للمقاولين. مدعوم من المستثمرين.',
+        'benefit-contractor-title': 'للمقاولين الصغار',
+        'benefit-c1': 'فرز في الموقع بدون تكلفة — لا حاجة للآلات',
+        'benefit-c2': 'قلّل رسوم المكب بنسبة تصل إلى 60%',
+        'benefit-c3': 'أنشئ ركامًا معاد تدويره قابل للبيع من النفايات',
+        'benefit-c4': 'لا حاجة للتدريب — يعمل على أي هاتف ذكي',
+        'benefit-c5': 'يدعم لغات متعددة والمصطلحات المحلية',
+        'benefit-investor-title': 'للمستثمرين',
+        'benefit-i1': 'سوق ضخم: أكثر من 200 مليار دولار صناعة نفايات البناء والهدم العالمية',
+        'benefit-i2': 'تحقيق أرباح متدرج: مجاني، متميز، مؤسسي',
+        'benefit-i3': 'لوائح الاستدامة تدفع نحو التبني الإلزامي',
+        'benefit-i4': 'نفقات منخفضة — قائم على المتصفح، لا احتكاك متجر التطبيقات',
+        'benefit-i5': 'أول من يدخل قطاع المقاولين الصغار غير المخدوم',
+        'cta-label': 'ابدأ اليوم',
+        'cta-title': 'حوّل كومة نفاياتك إلى\nكومة إيرادات.',
+        'cta-desc': 'لا بطاقة ائتمان. لا تحميل. لا معدات. فقط افتح التطبيق وابدأ الفرز بذكاء.',
+        'cta-btn1': 'شغّل التطبيق مجانًا',
+        'cta-btn2': 'عرض للمستثمرين',
+        'cta-check1': 'لا حاجة لحساب',
+        'cta-check2': 'يعمل على أي هاتف',
+        'cta-check3': 'مجاني 100%',
+        'footer-tag': 'مبني للمقاولين الصغار الذين يريدون البناء بذكاء'
+      }
+    };
+
+    let currentLang = 'en';
+
+    function applyLang(lang) {
+      currentLang = lang;
+      const data = langData[lang] || langData.en;
+      document.querySelectorAll('[id]').forEach(el => {
+        const key = el.id;
+        if (data[key] !== undefined) {
+          if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+            el.placeholder = data[key];
+          } else {
+            el.innerHTML = data[key];
+          }
+        }
+      });
+      document.getElementById('lang-label').textContent = lang.toUpperCase();
+      // Handle RTL for Arabic
+      if (lang === 'ar') {
+        document.body.dir = 'rtl';
+      } else {
+        document.body.dir = 'ltr';
+      }
+      closeLang();
+    }
+
+    function toggleLang() {
+      const dd = document.getElementById('lang-dropdown');
+      dd.classList.toggle('open');
+    }
+
+    function closeLang() {
+      document.getElementById('lang-dropdown').classList.remove('open');
+    }
+
+    function setLang(lang) {
+      applyLang(lang);
+    }
+
+    document.addEventListener('click', function(e) {
+      const wrap = document.getElementById('lang-wrap');
+      if (!wrap.contains(e.target)) closeLang();
+    });
+
+    // ===== MOBILE MENU =====
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobile-menu');
+      const openIcon = document.getElementById('menu-icon-open');
+      const closeIcon = document.getElementById('menu-icon-close');
+      const isOpen = menu.style.maxHeight !== '0px' && menu.style.maxHeight !== '';
+      if (isOpen) {
+        menu.style.maxHeight = '0';
+        menu.style.opacity = '0';
+        openIcon.style.display = 'block';
+        closeIcon.style.display = 'none';
+      } else {
+        menu.style.maxHeight = '400px';
+        menu.style.opacity = '1';
+        openIcon.style.display = 'none';
+        closeIcon.style.display = 'block';
+      }
+    }
+
+    function closeMobileMenu() {
+      const menu = document.getElementById('mobile-menu');
+      menu.style.maxHeight = '0';
+      menu.style.opacity = '0';
+      document.getElementById('menu-icon-open').style.display = 'block';
+      document.getElementById('menu-icon-close').style.display = 'none';
+    }
+
+    // ===== SCROLL REVEAL =====
+    function initReveal() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => {
+        observer.observe(el);
+      });
+    }
+
+    // ===== NAVBAR SHADOW ON SCROLL =====
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > 40) {
+        navbar.style.boxShadow = '0 4px 30px rgba(0,0,0,0.06)';
+      } else {
+        navbar.style.boxShadow = 'none';
+      }
+    });
+
+    // ===== INIT =====
+    document.addEventListener('DOMContentLoaded', function() {
+      initReveal();
+      applyLang('en');
+    });
+  </script>
+</body>
+</html>
