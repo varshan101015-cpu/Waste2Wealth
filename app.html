@@ -166,7 +166,14 @@
     body.dark .dash-pill { color:#34D399; background:rgba(52,211,153,0.06); border-color:rgba(52,211,153,0.18); }
 
     /* ===== AI CHAT ===== */
+    .ai-shell { max-width:380px; margin:0 auto; width:100%; display:flex; flex-direction:column; height:calc(100dvh - 100px); position:relative; z-index:2; }
     .ai-chat { display:flex; flex-direction:column; gap:8px; flex:1; overflow-y:auto; padding:2px 2px 10px; min-height:0; -webkit-overflow-scrolling:touch; }
+    .ai-bar { max-width:100%; margin:0 auto; width:100%; }
+    @media (min-width: 900px) {
+      .ai-shell { max-width:860px; height:calc(100dvh - 150px); }
+      .ai-chat { max-width:640px; width:100%; align-self:center; }
+      .ai-bar { max-width:640px; }
+    }
     .bubble { max-width:86%; padding:10px 13px; border-radius:16px; font-size:0.8rem; line-height:1.5; word-break:break-word; }
     .bubble.user { align-self:flex-end; background:linear-gradient(135deg,#059669,#0D9488); color:#fff; border-bottom-right-radius:4px; animation:slideUp 0.3s ease; }
     .bubble.bot { align-self:flex-start; background:rgba(124,58,237,0.06); border:1px solid rgba(124,58,237,0.16); color:#334155; border-bottom-left-radius:4px; animation:slideUp 0.3s ease; }
@@ -691,7 +698,7 @@
 
   <!-- ===== AI CHAT ===== -->
   <div id="screen-ai" class="screen" style="min-height:100dvh;padding:20px 20px 12px;">
-    <div style="max-width:380px;margin:0 auto;width:100%;display:flex;flex-direction:column;height:calc(100dvh - 100px);position:relative;z-index:2;">
+    <div class="ai-shell">
       <div style="display:flex;align-items:center;margin-bottom:10px;">
         <button onclick="goToScreen('home')" style="background:none;border:none;cursor:pointer;padding:4px;margin-right:8px;color:#059669;">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
@@ -712,14 +719,14 @@
         <span></span><span></span><span></span>
       </div>
 
-      <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;">
+      <div class="ai-bar" style="display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;">
         <span class="chip" data-q="Concrete + rebar" onclick="aiChip(this.dataset.q)"><span id="ai-ex1">Concrete + rebar</span></span>
         <span class="chip" data-q="Brick and mortar" onclick="aiChip(this.dataset.q)"><span id="ai-ex2">Brick &amp; mortar</span></span>
         <span class="chip" data-q="Mixed demolition rubble" onclick="aiChip(this.dataset.q)"><span id="ai-ex3">Mixed rubble</span></span>
         <span class="chip" data-q="Wood timber with nails" onclick="aiChip(this.dataset.q)"><span id="ai-ex4">Wood timber</span></span>
       </div>
 
-      <div style="display:flex;gap:8px;margin-top:8px;padding-bottom:env(safe-area-inset-bottom);">
+      <div class="ai-bar" style="display:flex;gap:8px;margin-top:8px;padding-bottom:env(safe-area-inset-bottom);">
         <input id="ai-input" class="ai-input" placeholder="Ask me about your waste…" aria-label="Describe your waste">
         <button id="ai-send-btn" class="btn-primary ripple-btn" aria-label="Send" style="padding:0;width:44px;height:44px;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg>
