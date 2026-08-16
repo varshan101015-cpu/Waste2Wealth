@@ -95,6 +95,27 @@
     .dropdown.open { opacity: 1; transform: translateY(0); pointer-events: auto; }
 
     .parallax-shape { position: absolute; border-radius: 50%; pointer-events: none; opacity: 0.03; }
+
+    /* ===== From Waste to Wealth (premium section) ===== */
+    .wtw-card { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); cursor: pointer; }
+    .wtw-card:hover { transform: translateY(-8px); box-shadow: 0 28px 60px rgba(0,0,0,0.35); }
+    .wtw-card.active { border-color: rgba(200,164,85,0.45) !important; box-shadow: 0 28px 60px rgba(0,0,0,0.35); }
+    .wtw-detail { max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.16,1,0.3,1), opacity 0.4s; }
+    .wtw-card.active .wtw-detail { max-height: 300px; opacity: 1; }
+    .wtw-chev { transition: transform 0.4s cubic-bezier(0.16,1,0.3,1); }
+    .wtw-card.active .wtw-chev { transform: rotate(180deg); }
+    .wtw-bar { width: 0; transition: width 1s cubic-bezier(0.16,1,0.3,1); }
+    .wtw-result { opacity: 0; max-height: 0; overflow: hidden; transition: max-height 0.7s cubic-bezier(0.16,1,0.3,1), opacity 0.6s; }
+    .wtw-result.open { opacity: 1; max-height: 1400px; }
+    .wtw-btn-loading { pointer-events: none; opacity: 0.8; }
+    .wtw-spinner { display: none; }
+    .wtw-btn-loading .wtw-spinner { display: inline-block; animation: wtwSpin 0.7s linear infinite; }
+    @keyframes wtwSpin { to { transform: rotate(360deg); } }
+    @keyframes wtwFlow { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+    .wtw-flowline { background-size: 220% 100%; background-repeat: no-repeat; background-position: 200% 0; animation: wtwFlow 2.4s linear infinite; }
+    #wtw-qty:focus, #wtw-type:focus { outline: none; border-color: #C8A455 !important; box-shadow: 0 0 0 3px rgba(200,164,85,0.15); background: rgba(27,107,74,0.18) !important; }
+    .wtw-metric { transition: transform 0.4s cubic-bezier(0.16,1,0.3,1); }
+    .wtw-metric:hover { transform: translateY(-4px); }
   </style>
 </head>
 <body>
@@ -112,7 +133,9 @@
         <a href="#problem" class="text-sm font-medium no-underline transition-colors" style="color:#4B5563;" onmouseover="this.style.color='#1B6B4A'" onmouseout="this.style.color='#4B5563'">Problem</a>
         <a href="#how-it-works" class="text-sm font-medium no-underline transition-colors" style="color:#4B5563;" onmouseover="this.style.color='#1B6B4A'" onmouseout="this.style.color='#4B5563'">How It Works</a>
         <a href="#features" class="text-sm font-medium no-underline transition-colors" style="color:#4B5563;" onmouseover="this.style.color='#1B6B4A'" onmouseout="this.style.color='#4B5563'">Features</a>
+        <a href="#ai-assistant" class="text-sm font-medium no-underline transition-colors" style="color:#4B5563;" onmouseover="this.style.color='#1B6B4A'" onmouseout="this.style.color='#4B5563'">AI Assistant</a>
         <a href="#marketplace" class="text-sm font-medium no-underline transition-colors" style="color:#4B5563;" onmouseover="this.style.color='#1B6B4A'" onmouseout="this.style.color='#4B5563'">Marketplace</a>
+        <a href="#waste-to-wealth" class="text-sm font-medium no-underline transition-colors" style="color:#4B5563;" onmouseover="this.style.color='#1B6B4A'" onmouseout="this.style.color='#4B5563'">Waste to Wealth</a>
         <a href="#benefits" class="text-sm font-medium no-underline transition-colors" style="color:#4B5563;" onmouseover="this.style.color='#1B6B4A'" onmouseout="this.style.color='#4B5563'">Benefits</a>
       </div>
       <div class="flex items-center gap-3">
@@ -144,7 +167,9 @@
         <a href="#problem" onclick="closeMobileMenu()" class="px-3 py-2 rounded-lg text-sm font-medium no-underline transition-colors" style="color:#4B5563;" onmouseover="this.style.background='#E8F5EE'" onmouseout="this.style.background='transparent'">Problem</a>
         <a href="#how-it-works" onclick="closeMobileMenu()" class="px-3 py-2 rounded-lg text-sm font-medium no-underline transition-colors" style="color:#4B5563;" onmouseover="this.style.background='#E8F5EE'" onmouseout="this.style.background='transparent'">How It Works</a>
         <a href="#features" onclick="closeMobileMenu()" class="px-3 py-2 rounded-lg text-sm font-medium no-underline transition-colors" style="color:#4B5563;" onmouseover="this.style.background='#E8F5EE'" onmouseout="this.style.background='transparent'">Features</a>
+        <a href="#ai-assistant" onclick="closeMobileMenu()" class="px-3 py-2 rounded-lg text-sm font-medium no-underline transition-colors" style="color:#4B5563;" onmouseover="this.style.background='#E8F5EE'" onmouseout="this.style.background='transparent'">AI Assistant</a>
         <a href="#marketplace" onclick="closeMobileMenu()" class="px-3 py-2 rounded-lg text-sm font-medium no-underline transition-colors" style="color:#4B5563;" onmouseover="this.style.background='#E8F5EE'" onmouseout="this.style.background='transparent'">Marketplace</a>
+        <a href="#waste-to-wealth" onclick="closeMobileMenu()" class="px-3 py-2 rounded-lg text-sm font-medium no-underline transition-colors" style="color:#4B5563;" onmouseover="this.style.background='#E8F5EE'" onmouseout="this.style.background='transparent'">Waste to Wealth</a>
         <a href="#benefits" onclick="closeMobileMenu()" class="px-3 py-2 rounded-lg text-sm font-medium no-underline transition-colors" style="color:#4B5563;" onmouseover="this.style.background='#E8F5EE'" onmouseout="this.style.background='transparent'">Benefits</a>
         <a href="index.html" class="px-3 py-2 rounded-lg text-sm font-semibold no-underline text-center" style="background:#1B6B4A;color:white;margin-top:4px;">Launch App</a>
       </div>
@@ -403,7 +428,7 @@
         </h2>
         <p class="text-lg max-w-2xl mx-auto" style="color:#9CA3AF;line-height:1.7;" id="features-desc">Choose whatever's fastest for you — camera, voice, or text. Works in any language.</p>
       </div>
-      <div class="grid md:grid-cols-3 gap-6 lg:gap-8">
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-6">
         <div class="card-hover rounded-2xl p-8 text-center relative overflow-hidden group" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);">
           <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style="background:linear-gradient(180deg,transparent,rgba(27,107,74,0.08));"></div>
           <div style="width:64px;height:64px;border-radius:20px;background:rgba(27,107,74,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;position:relative;z-index:1;">
@@ -445,6 +470,420 @@
               <span id="feat3-badge">8 material types covered</span>
             </span>
           </div>
+        </div>
+        <div class="card-hover rounded-2xl p-8 text-center relative overflow-hidden group" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);">
+          <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style="background:linear-gradient(180deg,transparent,rgba(124,58,237,0.08));"></div>
+          <div style="width:64px;height:64px;border-radius:20px;background:rgba(124,58,237,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;position:relative;z-index:1;">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 1 4 4c1.5.5 2.5 2 2.5 3.5 0 1.2-.7 2.3-1.7 2.8A4.5 4.5 0 0 1 12 22a4.5 4.5 0 0 1-4.8-9.7A3.5 3.5 0 0 1 5.5 9.5C5.5 8 6.5 6.5 8 6a4 4 0 0 1 4-4z"/><path d="M9 14h.01"/><path d="M15 14h.01"/></svg>
+          </div>
+          <h3 class="text-lg font-bold mb-3 relative z-1" style="color:white;" id="feat4-title">AI Waste Management Assistant</h3>
+          <p class="text-sm relative z-1" style="color:#9CA3AF;line-height:1.7;" id="feat4-desc">Scan or describe your waste. The AI detects the material and the problem, then gives clear step-by-step instructions in simple English.</p>
+          <div class="mt-4 relative z-1">
+            <span class="inline-flex items-center gap-1 text-xs font-medium" style="color:#4CAF50;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span id="feat4-badge">Simple English, no jargon</span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 7. AI WASTE MANAGEMENT ASSISTANT ===== -->
+  <section id="ai-assistant" class="relative py-24 sm:py-32 overflow-hidden" style="background:#F8F6F2;">
+    <div class="parallax-shape" style="width:420px;height:420px;top:8%;left:-120px;background:radial-gradient(circle,#7C3AED 0%,transparent 70%);opacity:0.04;"></div>
+    <div class="parallax-shape" style="width:360px;height:360px;bottom:6%;right:-100px;background:radial-gradient(circle,#0D7377 0%,transparent 70%);opacity:0.04;"></div>
+    <div class="max-w-6xl mx-auto px-5 sm:px-8">
+      <div class="text-center mb-16">
+        <span class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-4" style="background:rgba(124,58,237,0.1);color:#7C3AED;border:1px solid rgba(124,58,237,0.2);" id="ai-badge">7. 🧠 AI Waste Management Assistant</span>
+        <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mb-5" style="color:#0F1E36;">
+          <span id="ai-title">Your AI assistant spots the problem — and tells you exactly what to do.</span>
+        </h2>
+        <p class="text-lg max-w-2xl mx-auto" style="color:#6B7280;line-height:1.7;" id="ai-desc">
+          Describe or scan your waste. The AI detects the material and the problem, then gives clear, step-by-step instructions in simple English.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-8 lg:gap-12 items-center mb-14">
+        <div class="reveal-left">
+          <div class="rounded-3xl overflow-hidden shadow-2xl" style="background:linear-gradient(145deg,#0F1E36,#1A2A3A);border:1px solid rgba(124,58,237,0.25);">
+            <div class="p-4" style="border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#7C3AED,#059669);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 1 4 4c1.5.5 2.5 2 2.5 3.5 0 1.2-.7 2.3-1.7 2.8A4.5 4.5 0 0 1 12 22a4.5 4.5 0 0 1-4.8-9.7A3.5 3.5 0 0 1 5.5 9.5C5.5 8 6.5 6.5 8 6a4 4 0 0 1 4-4z"/><path d="M9 14h.01"/><path d="M15 14h.01"/></svg>
+              </div>
+              <div>
+                <p class="text-sm font-semibold" style="color:white;">AI Assistant</p>
+                <p class="text-xs" style="color:#9CA3AF;"><span id="ai-demo-online">Online — detects waste &amp; problems</span></p>
+              </div>
+              <span class="ml-auto inline-flex items-center gap-1 text-xs font-medium" style="color:#4CAF50;flex-shrink:0;"><span style="width:6px;height:6px;border-radius:50%;background:#4CAF50;display:inline-block;animation:pulseGlow 2s ease-in-out infinite;"></span><span id="ai-demo-live">Live</span></span>
+            </div>
+            <div class="p-4" style="font-size:0.85rem;">
+              <div class="flex justify-end mb-3">
+                <span class="inline-block px-4 py-2 rounded-2xl" style="background:#1B6B4A;color:white;border-bottom-right-radius:4px;"><span id="ai-demo-user">broken concrete with steel bars</span></span>
+              </div>
+              <div class="flex justify-start mb-3">
+                <span class="inline-block px-4 py-2 rounded-2xl" style="background:rgba(255,255,255,0.05);color:#E5E0D6;border:1px solid rgba(255,255,255,0.08);border-bottom-left-radius:4px;" id="ai-demo-find">Found: Reinforced concrete. Problem: metal bars are mixed in.</span>
+              </div>
+              <div class="rounded-2xl p-4" style="background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.2);">
+                <p class="text-xs font-semibold mb-3" style="color:#C8A455;">Simple steps</p>
+                <div class="flex items-start gap-2 mb-2.5" style="color:#E5E0D6;"><span class="flex-shrink-0" style="width:18px;height:18px;border-radius:50%;background:#7C3AED;color:white;display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:700;">1</span><span id="ai-demo-step1">Pull out all the metal bars first.</span></div>
+                <div class="flex items-start gap-2 mb-2.5" style="color:#E5E0D6;"><span class="flex-shrink-0" style="width:18px;height:18px;border-radius:50%;background:#7C3AED;color:white;display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:700;">2</span><span id="ai-demo-step2">Break the concrete into small pieces.</span></div>
+                <div class="flex items-start gap-2 mb-2.5" style="color:#E5E0D6;"><span class="flex-shrink-0" style="width:18px;height:18px;border-radius:50%;background:#7C3AED;color:white;display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:700;">3</span><span id="ai-demo-step3">Pick out wood and plastic by hand.</span></div>
+                <div class="flex items-start gap-2" style="color:#E5E0D6;"><span class="flex-shrink-0" style="width:18px;height:18px;border-radius:50%;background:#7C3AED;color:white;display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:700;">4</span><span id="ai-demo-step4">Crush to 2–4 cm. It is ready to reuse.</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="reveal-right space-y-5">
+          <div class="card-hover rounded-2xl p-6 flex items-start gap-4" style="background:white;border:1px solid #E5E0D6;box-shadow:0 4px 24px rgba(0,0,0,0.04);">
+            <div style="width:48px;height:48px;border-radius:14px;background:#F3E8FF;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold mb-1" style="color:#0F1E36;" id="ai-f1-title">Finds the problem</h3>
+              <p class="text-sm" style="color:#6B7280;line-height:1.6;" id="ai-f1-desc">The AI checks your waste and points out what needs attention — mixed-in metal, stuck-on mortar, or treated wood.</p>
+            </div>
+          </div>
+          <div class="card-hover rounded-2xl p-6 flex items-start gap-4" style="background:white;border:1px solid #E5E0D6;box-shadow:0 4px 24px rgba(0,0,0,0.04);">
+            <div style="width:48px;height:48px;border-radius:14px;background:#E6F2F2;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0D7377" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M12 11v4"/><path d="M10 13h4"/></svg>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold mb-1" style="color:#0F1E36;" id="ai-f2-title">Clear steps in plain English</h3>
+              <p class="text-sm" style="color:#6B7280;line-height:1.6;" id="ai-f2-desc">Every instruction is short and easy to understand. No jargon, no guesswork.</p>
+            </div>
+          </div>
+          <div class="card-hover rounded-2xl p-6 flex items-start gap-4" style="background:white;border:1px solid #E5E0D6;box-shadow:0 4px 24px rgba(0,0,0,0.04);">
+            <div style="width:48px;height:48px;border-radius:14px;background:#F9F3E8;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#A6883E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M8.5 14.5A5 5 0 0 1 7 6a5 5 0 0 1 10 0 5 5 0 0 1-1.5 8.5L15 15H9z"/></svg>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold mb-1" style="color:#0F1E36;" id="ai-f3-title">Explains why it matters</h3>
+              <p class="text-sm" style="color:#6B7280;line-height:1.6;" id="ai-f3-desc">Each step tells you why, so you stay safe and get better recycling results.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center">
+        <a href="index.html" class="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-base font-semibold no-underline transition-all animate-pulse-glow" style="background:linear-gradient(135deg,#7C3AED,#059669);color:white;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 1 4 4c1.5.5 2.5 2 2.5 3.5 0 1.2-.7 2.3-1.7 2.8A4.5 4.5 0 0 1 12 22a4.5 4.5 0 0 1-4.8-9.7A3.5 3.5 0 0 1 5.5 9.5C5.5 8 6.5 6.5 8 6a4 4 0 0 1 4-4z"/></svg>
+          <span id="ai-cta">Try the AI Assistant</span>
+        </a>
+        <a href="#features" class="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-base font-semibold no-underline transition-all" style="border:2px solid #0D7377;color:#0D7377;background:transparent;margin-left:12px;" onmouseover="this.style.background='#0D7377';this.style.color='white'" onmouseout="this.style.background='transparent';this.style.color='#0D7377'">
+          <span id="ai-cta2">See All Features</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FROM WASTE TO WEALTH (PREMIUM) ===== -->
+  <section id="waste-to-wealth" class="relative py-24 sm:py-32 overflow-hidden" style="background:linear-gradient(160deg,#0F1E36 0%,#10233D 30%,#0A1628 60%,#0F1E36 100%);">
+    <div class="hero-glow" style="top:5%;right:-8%;width:520px;height:520px;"></div>
+    <div class="hero-glow-2" style="bottom:12%;left:-6%;"></div>
+    <div class="parallax-shape" style="width:380px;height:380px;top:24%;left:-130px;background:radial-gradient(circle,#C8A455 0%,transparent 70%);opacity:0.035;"></div>
+    <div class="parallax-shape" style="width:300px;height:300px;bottom:8%;right:-80px;background:radial-gradient(circle,#5DB586 0%,transparent 70%);opacity:0.04;"></div>
+
+    <div class="max-w-6xl mx-auto px-5 sm:px-8 relative z-10">
+      <!-- ===== HERO BLOCK ===== -->
+      <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center mb-24">
+        <div class="reveal-left text-center lg:text-left">
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold mb-6" style="background:rgba(200,164,85,0.15);color:#C8A455;border:1px solid rgba(200,164,85,0.2);">
+            <span style="width:6px;height:6px;border-radius:50%;background:#C8A455;display:inline-block;box-shadow:0 0 10px rgba(200,164,85,0.8);"></span>
+            <span id="wtw-badge">Construction &amp; Demolition Recovery</span>
+          </div>
+          <h2 class="font-heading text-4xl sm:text-5xl lg:text-6xl leading-tight font-bold mb-6" style="color:white;">
+            <span id="wtw-title1">From Waste</span><br>
+            <span id="wtw-title2" class="gold-gradient-text">to Wealth</span>
+          </h2>
+          <p class="text-lg sm:text-xl mb-8 max-w-xl mx-auto lg:mx-0" style="color:#9CA3AF;line-height:1.7;" id="wtw-sub">
+            Construction waste doesn't have to become landfill. Waste2Wealth identifies, separates and redirects valuable materials into productive reuse and recycling streams.
+          </p>
+          <div class="flex flex-wrap gap-3 justify-center lg:justify-start mb-9">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full" style="background:rgba(255,255,255,0.05);border:1px solid rgba(200,164,85,0.15);">
+              <span class="font-heading text-lg font-bold" style="color:#C8A455;">96%</span>
+              <span class="text-xs" style="color:#9CA3AF;" id="wtw-stat-label1">avg. recovery rate</span>
+            </div>
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full" style="background:rgba(255,255,255,0.05);border:1px solid rgba(200,164,85,0.15);">
+              <span class="font-heading text-lg font-bold" style="color:#5DB586;">0 t</span>
+              <span class="text-xs" style="color:#9CA3AF;" id="wtw-stat-label2">needlessly to landfill</span>
+            </div>
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full" style="background:rgba(255,255,255,0.05);border:1px solid rgba(200,164,85,0.15);">
+              <span class="font-heading text-lg font-bold" style="color:#E5E0D6;">8+</span>
+              <span class="text-xs" style="color:#9CA3AF;" id="wtw-stat-label3">recovery streams</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal-right flex justify-center lg:justify-end relative">
+          <div class="relative w-full max-w-md">
+            <div class="absolute inset-0 rounded-3xl opacity-15 animate-spin-slow" style="background:conic-gradient(from 0deg,#1B6B4A,#0D7377,#C8A455,#1B6B4A);"></div>
+            <div class="relative rounded-3xl overflow-hidden shadow-2xl" style="background:linear-gradient(145deg,#0A1628,#10233D);border:1px solid rgba(200,164,85,0.2);">
+              <div class="p-4" style="border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:8px;">
+                <div class="flex gap-1.5">
+                  <span style="width:9px;height:9px;border-radius:50%;background:#EF4444;"></span>
+                  <span style="width:9px;height:9px;border-radius:50%;background:#F59E0B;"></span>
+                  <span style="width:9px;height:9px;border-radius:50%;background:#10B981;"></span>
+                </div>
+                <p class="text-xs font-semibold ml-1" style="color:#E5E0D6;" id="wtw-console-title">W2W Recovery Console</p>
+                <span class="ml-auto inline-flex items-center gap-1 text-[0.65rem] font-medium" style="color:#4CAF50;"><span style="width:6px;height:6px;border-radius:50%;background:#4CAF50;display:inline-block;animation:pulseGlow 2s ease-in-out infinite;"></span><span id="wtw-console-live">Live</span></span>
+              </div>
+              <div class="p-4 sm:p-5">
+                <div class="flex flex-col sm:flex-row items-stretch gap-3">
+                  <div class="flex-1 rounded-2xl p-3" style="background:rgba(27,107,74,0.12);border:1px solid rgba(93,181,134,0.25);">
+                    <div class="flex items-center gap-2 mb-2">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5DB586" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                      <span class="text-xs font-semibold" style="color:#E5E0D6;" id="wtw-console-in">Mixed C&amp;D waste</span>
+                    </div>
+                    <div class="flex gap-1.5">
+                      <span style="flex:1;height:5px;border-radius:2px;background:rgba(93,181,134,0.25);"></span>
+                      <span style="flex:2;height:5px;border-radius:2px;background:rgba(93,181,134,0.35);"></span>
+                      <span style="flex:1;height:5px;border-radius:2px;background:rgba(93,181,134,0.22);"></span>
+                    </div>
+                  </div>
+                  <div class="wtw-flowline self-center h-1 w-10 rounded-full" style="background-image:linear-gradient(90deg,#5DB586,#C8A455);"></div>
+                  <div class="flex-1 rounded-2xl p-3" style="background:linear-gradient(135deg,rgba(27,107,74,0.28),rgba(13,115,119,0.28));border:1px solid rgba(200,164,85,0.3);">
+                    <div class="flex items-center gap-2 mb-2">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C8A455" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5"/><path d="M11 19h8.203a1.83 1.83 0 0 0 1.556-.89 1.784 1.784 0 0 0 0-1.775l-1.226-2.12"/><path d="M14 16l-3 3 3 3"/><path d="M8.293 13.596L7.196 9.5 3.1 10.598"/></svg>
+                      <span class="text-xs font-semibold" style="color:#E5E0D6;" id="wtw-console-hub">AI Segregation</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <div class="flex-1 h-2 rounded-full" style="background:rgba(255,255,255,0.07);overflow:hidden;">
+                        <div class="h-full rounded-full animate-shimmer w-[94%]" style="background:linear-gradient(90deg,#1B6B4A,#4CAF50);"></div>
+                      </div>
+                      <span class="text-[0.65rem] font-semibold" style="color:#4CAF50;">94%</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="grid grid-cols-3 gap-2 mt-3">
+                  <div class="rounded-xl px-2 py-3 text-center" style="background:rgba(255,255,255,0.04);border:1px solid rgba(93,181,134,0.22);">
+                    <div class="text-xs font-bold mb-0.5" style="color:#5DB586;" id="wtw-console-s1">Aggregate</div>
+                    <div class="text-[0.6rem]" style="color:#9CA3AF;">reuse</div>
+                  </div>
+                  <div class="rounded-xl px-2 py-3 text-center" style="background:rgba(255,255,255,0.04);border:1px solid rgba(200,164,85,0.22);">
+                    <div class="text-xs font-bold mb-0.5" style="color:#C8A455;" id="wtw-console-s2">Scrap metal</div>
+                    <div class="text-[0.6rem]" style="color:#9CA3AF;">recycle</div>
+                  </div>
+                  <div class="rounded-xl px-2 py-3 text-center" style="background:rgba(255,255,255,0.04);border:1px solid rgba(13,115,119,0.3);">
+                    <div class="text-xs font-bold mb-0.5" style="color:#4DA3A7;" id="wtw-console-s3">Energy feed</div>
+                    <div class="text-[0.6rem]" style="color:#9CA3AF;">recover</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2 mt-3">
+                  <span style="width:6px;height:6px;border-radius:50%;background:#C8A455;"></span>
+                  <span class="text-[0.7rem]" style="color:#9CA3AF;"><span id="wtw-console-rec">Recovered from landfill</span> — shrink the pile, straight to reuse</span>
+                </div>
+              </div>
+            </div>
+            <div class="hidden sm:flex absolute -top-5 -right-4 items-center gap-2 px-4 py-2.5 rounded-2xl glass-dark shadow-lg" style="border:1px solid rgba(200,164,85,0.2);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5DB586" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+              <div>
+                <div class="text-sm font-bold" style="color:#5DB586;">480 kg</div>
+                <div class="text-[0.6rem]" style="color:#9CA3AF;" id="wtw-console-f1">recovered</div>
+              </div>
+            </div>
+            <div class="hidden sm:flex absolute -bottom-5 -left-4 items-center gap-2 px-4 py-2.5 rounded-2xl glass-dark shadow-lg" style="border:1px solid rgba(200,164,85,0.2);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C8A455" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/><path d="m17 5-2-2 2-2"/></svg>
+              <div>
+                <div class="text-sm font-bold" style="color:#C8A455;">432 kg</div>
+                <div class="text-[0.6rem]" style="color:#9CA3AF;" id="wtw-console-f2">CO&#8322; avoided</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== FOUR FEATURE CARDS ===== -->
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-24">
+        <div class="wtw-card reveal rounded-2xl p-6" style="background:linear-gradient(145deg,#0A1628,#10233D);border:1px solid rgba(200,164,85,0.15);" role="button" tabindex="0">
+          <div class="flex items-start justify-between mb-4">
+            <div style="width:52px;height:52px;border-radius:15px;background:linear-gradient(135deg,rgba(27,107,74,0.28),rgba(13,115,119,0.28));display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid rgba(93,181,134,0.3);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5DB586" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/><path d="M6 7h12"/></svg>
+            </div>
+            <svg class="wtw-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C8A455" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+          <h3 class="font-heading text-lg font-bold mb-2" style="color:white;" id="wtw-f1-title">Smart Segregation</h3>
+          <p class="text-sm mb-3" style="color:#9CA3AF;line-height:1.6;" id="wtw-f1-desc">Use AI-assisted identification to classify C&amp;D waste such as concrete, bricks, metal, wood and other materials, then recommend the appropriate recovery stream.</p>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[0.65rem] font-semibold" style="background:rgba(200,164,85,0.12);color:#C8A455;border:1px solid rgba(200,164,85,0.2);" id="wtw-f1-tag">AI-assisted · instant</span>
+          <div class="wtw-detail mt-3">
+            <p class="text-sm" style="color:#E5E0D6;line-height:1.6;" id="wtw-f1-detail">Point, speak or type. The AI sorts the pile into streams — concrete aggregate, brick, metal scrap, timber and non-recyclables — and routes each one to the right recovery channel.</p>
+          </div>
+        </div>
+        <div class="wtw-card reveal rounded-2xl p-6" style="background:linear-gradient(145deg,#0A1628,#10233D);border:1px solid rgba(200,164,85,0.15);" role="button" tabindex="0">
+          <div class="flex items-start justify-between mb-4">
+            <div style="width:52px;height:52px;border-radius:15px;background:linear-gradient(135deg,rgba(200,164,85,0.16),rgba(200,164,85,0.05));display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid rgba(200,164,85,0.3);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C8A455" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5"/><path d="M11 19h8.203a1.83 1.83 0 0 0 1.556-.89 1.784 1.784 0 0 0 0-1.775l-1.226-2.12"/><path d="M14 16l-3 3 3 3"/><path d="M8.293 13.596L7.196 9.5 3.1 10.598"/></svg>
+            </div>
+            <svg class="wtw-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C8A455" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+          <h3 class="font-heading text-lg font-bold mb-2" style="color:white;" id="wtw-f2-title">Material Recovery</h3>
+          <p class="text-sm mb-3" style="color:#9CA3AF;line-height:1.6;" id="wtw-f2-desc">Recover and reprocess concrete, bricks, metals and other suitable materials so they return to construction as new aggregate or reusable elements.</p>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[0.65rem] font-semibold" style="background:rgba(200,164,85,0.12);color:#C8A455;border:1px solid rgba(200,164,85,0.2);" id="wtw-f2-tag">Crush · clean · reuse</span>
+          <div class="wtw-detail mt-3">
+            <p class="text-sm" style="color:#E5E0D6;line-height:1.6;" id="wtw-f2-detail">Concrete becomes recycled aggregate and road base, clean brick becomes reusable brick or brick aggregate, and metal lines up for the scrap yard — closing the loop on the job site.</p>
+          </div>
+        </div>
+        <div class="wtw-card reveal rounded-2xl p-6" style="background:linear-gradient(145deg,#0A1628,#10233D);border:1px solid rgba(200,164,85,0.15);" role="button" tabindex="0">
+          <div class="flex items-start justify-between mb-4">
+            <div style="width:52px;height:52px;border-radius:15px;background:linear-gradient(135deg,rgba(13,115,119,0.28),rgba(200,164,85,0.1));display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid rgba(13,115,119,0.35);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4DA3A7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            </div>
+            <svg class="wtw-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C8A455" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+          <h3 class="font-heading text-lg font-bold mb-2" style="color:white;" id="wtw-f3-title">Energy Recovery</h3>
+          <p class="text-sm mb-3" style="color:#9CA3AF;line-height:1.6;" id="wtw-f3-desc">Suitable non-recyclable waste is directed toward responsible energy-recovery processes instead of unnecessary landfill disposal.</p>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[0.65rem] font-semibold" style="background:rgba(13,115,119,0.14);color:#4DA3A7;border:1px solid rgba(13,115,119,0.3);" id="wtw-f3-tag">Divert from landfill</span>
+          <div class="wtw-detail mt-3">
+            <p class="text-sm" style="color:#E5E0D6;line-height:1.6;" id="wtw-f3-detail">What can't be recycled — clean wood residuals, sorted fines and non-reusable fractions — is routed to licensed energy-from-waste facilities, keeping it out of the ground.</p>
+          </div>
+        </div>
+        <div class="wtw-card reveal rounded-2xl p-6" style="background:linear-gradient(145deg,#0A1628,#10233D);border:1px solid rgba(200,164,85,0.15);" role="button" tabindex="0">
+          <div class="flex items-start justify-between mb-4">
+            <div style="width:52px;height:52px;border-radius:15px;background:linear-gradient(135deg,rgba(27,107,74,0.2),rgba(200,164,85,0.12));display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid rgba(93,181,134,0.3);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5DB586" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="10" width="3" height="7" rx="1"/><rect x="12" y="6" width="3" height="11" rx="1"/><rect x="17" y="13" width="3" height="4" rx="1"/></svg>
+            </div>
+            <svg class="wtw-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C8A455" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+          <h3 class="font-heading text-lg font-bold mb-2" style="color:white;" id="wtw-f4-title">Impact Tracking</h3>
+          <p class="text-sm mb-3" style="color:#9CA3AF;line-height:1.6;" id="wtw-f4-desc">See measurable outcomes: waste diverted from landfill, materials recovered, estimated CO&#8322; avoided and energy recovered where applicable.</p>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[0.65rem] font-semibold" style="background:rgba(200,164,85,0.12);color:#C8A455;border:1px solid rgba(200,164,85,0.2);" id="wtw-f4-tag">Live metrics</span>
+          <div class="wtw-detail mt-3">
+            <p class="text-sm" style="color:#E5E0D6;line-height:1.6;" id="wtw-f4-detail">Every batch updates diverted tonnes, recovered tonnes and the CO&#8322; and energy savings your site is delivering — proof that sorting pays.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== TRY WASTE2WEALTH AI ===== -->
+      <div id="wtw-try" class="reveal rounded-3xl p-6 sm:p-10" style="background:linear-gradient(145deg,#0A1628,#10233D);border:1px solid rgba(200,164,85,0.18);box-shadow:0 30px 80px rgba(0,0,0,0.35);">
+        <div class="flex flex-col lg:flex-row items-start gap-10">
+          <div class="flex-1 w-full">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold mb-4" style="background:rgba(124,58,237,0.15);color:#A78BFA;border:1px solid rgba(124,58,237,0.25);">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 1 4 4c1.5.5 2.5 2 2.5 3.5 0 1.2-.7 2.3-1.7 2.8A4.5 4.5 0 0 1 12 22a4.5 4.5 0 0 1-4.8-9.7A3.5 3.5 0 0 1 5.5 9.5C5.5 8 6.5 6.5 8 6a4 4 0 0 1 4-4z"/></svg>
+              <span id="wtw-try-badge">Try Waste2Wealth AI</span>
+            </div>
+            <h3 class="font-heading text-2xl sm:text-3xl font-bold mb-3" style="color:white;" id="wtw-try-title">See exactly what your waste pile is worth.</h3>
+            <p class="text-sm sm:text-base mb-6 max-w-md" style="color:#9CA3AF;line-height:1.7;" id="wtw-try-sub">Enter a quantity of construction waste and the AI estimates how it splits into recoverable materials — and what that means for the landfill.</p>
+            <div class="grid sm:grid-cols-2 gap-4 mb-5">
+              <div>
+                <label for="wtw-qty" class="block text-xs font-semibold mb-1.5" style="color:#C8A455;" id="wtw-qty-label">Quantity of C&amp;D waste</label>
+                <div class="flex items-center gap-2">
+                  <input id="wtw-qty" type="number" min="100" step="50" value="500" aria-label="Quantity of C&amp;D waste in kg" class="w-full rounded-xl px-4 py-3 text-sm font-semibold" style="background:rgba(255,255,255,0.05);border:1.5px solid rgba(200,164,85,0.2);color:#E5E0D6;" inputmode="numeric">
+                  <span class="text-sm font-bold" style="color:#9CA3AF;" id="wtw-qty-unit">kg</span>
+                </div>
+              </div>
+              <div>
+                <label for="wtw-type" class="block text-xs font-semibold mb-1.5" style="color:#C8A455;" id="wtw-type-label">Waste type</label>
+                <select id="wtw-type" class="w-full rounded-xl px-4 py-3 text-sm font-medium cursor-pointer" style="background:rgba(255,255,255,0.05);border:1.5px solid rgba(200,164,85,0.2);color:#E5E0D6;">
+                  <option value="mixed" style="color:#0F1E36;" id="wtw-type-opt1">Mixed C&amp;D waste</option>
+                  <option value="concrete-heavy" style="color:#0F1E36;" id="wtw-type-opt2">Concrete-heavy</option>
+                  <option value="renovation" style="color:#0F1E36;" id="wtw-type-opt3">Renovation waste</option>
+                  <option value="demolition" style="color:#0F1E36;" id="wtw-type-opt4">Demolition waste</option>
+                </select>
+              </div>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-3 items-start sm:items-center mb-3">
+              <button id="wtw-analyze" class="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-sm font-bold transition-all cursor-pointer" style="background:linear-gradient(135deg,#C8A455,#A6883E);color:#0F1E36;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+                <svg class="wtw-spinner" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                <span id="wtw-analyze-label">Analyze Waste</span>
+              </button>
+            </div>
+            <p class="text-xs" style="color:#7C8CA6;line-height:1.6;" id="wtw-hint">Sample for 500 kg: 300 kg concrete · 100 kg bricks · 50 kg metal · 30 kg wood · 20 kg other.</p>
+          </div>
+
+          <div class="flex-1 w-full">
+            <div id="wtw-result-empty" style="padding:26px 10px 12px;">
+              <div class="rounded-2xl border-2 border-dashed" style="border-color:rgba(200,164,85,0.2);padding:28px 20px;text-align:center;">
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#C8A455" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="margin:0 auto 10px;opacity:0.8;"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><path d="M20 6h.01"/><path d="M4 6h.01"/><path d="M12 14v-6"/><path d="m9 9 3-3 3 3"/></svg>
+                <p class="text-sm font-semibold mb-1" style="color:#9CA3AF;" id="wtw-empty-title">Ready to test the AI?</p>
+                <p class="text-xs" style="color:#7C8CA6;" id="wtw-empty-sub">Click "Analyze Waste" to see the recovery breakdown.</p>
+              </div>
+            </div>
+            <div id="wtw-result" class="wtw-result">
+              <div class="flex items-center justify-between mb-5">
+                <h4 class="font-heading text-lg font-bold" style="color:white;" id="wtw-result-title">AI-Generated Breakdown</h4>
+                <span class="text-sm font-semibold" style="color:#C8A455;" id="wtw-total-label">Total: <span id="wtw-total-line">500 kg</span></span>
+              </div>
+              <div class="mb-5">
+                <div class="flex items-center justify-between text-sm mb-1.5">
+                  <span class="inline-flex items-center gap-2"><span class="inline-block w-2.5 h-2.5 rounded-sm" style="background:#5DB586;"></span><span id="wtw-m-concrete">Concrete</span></span>
+                  <span style="color:#E5E0D6;"><span id="wtw-v-concrete">0 kg</span> · <span id="wtw-p-concrete">0%</span></span>
+                </div>
+                <div class="h-2 rounded-full" style="background:rgba(255,255,255,0.06);overflow:hidden;"><div id="wtw-bar-concrete" class="wtw-bar h-full rounded-full" style="background:linear-gradient(90deg,#2D8F5E,#5DB586);"></div></div>
+              </div>
+              <div class="mb-5">
+                <div class="flex items-center justify-between text-sm mb-1.5">
+                  <span class="inline-flex items-center gap-2"><span class="inline-block w-2.5 h-2.5 rounded-sm" style="background:#C8A455;"></span><span id="wtw-m-brick">Bricks</span></span>
+                  <span style="color:#E5E0D6;"><span id="wtw-v-brick">0 kg</span> · <span id="wtw-p-brick">0%</span></span>
+                </div>
+                <div class="h-2 rounded-full" style="background:rgba(255,255,255,0.06);overflow:hidden;"><div id="wtw-bar-brick" class="wtw-bar h-full rounded-full" style="background:linear-gradient(90deg,#A6883E,#C8A455);"></div></div>
+              </div>
+              <div class="mb-5">
+                <div class="flex items-center justify-between text-sm mb-1.5">
+                  <span class="inline-flex items-center gap-2"><span class="inline-block w-2.5 h-2.5 rounded-sm" style="background:#94A3B8;"></span><span id="wtw-m-metal">Metal</span></span>
+                  <span style="color:#E5E0D6;"><span id="wtw-v-metal">0 kg</span> · <span id="wtw-p-metal">0%</span></span>
+                </div>
+                <div class="h-2 rounded-full" style="background:rgba(255,255,255,0.06);overflow:hidden;"><div id="wtw-bar-metal" class="wtw-bar h-full rounded-full" style="background:linear-gradient(90deg,#64748B,#94A3B8);"></div></div>
+              </div>
+              <div class="mb-5">
+                <div class="flex items-center justify-between text-sm mb-1.5">
+                  <span class="inline-flex items-center gap-2"><span class="inline-block w-2.5 h-2.5 rounded-sm" style="background:#D2AB5C;"></span><span id="wtw-m-wood">Wood</span></span>
+                  <span style="color:#E5E0D6;"><span id="wtw-v-wood">0 kg</span> · <span id="wtw-p-wood">0%</span></span>
+                </div>
+                <div class="h-2 rounded-full" style="background:rgba(255,255,255,0.06);overflow:hidden;"><div id="wtw-bar-wood" class="wtw-bar h-full rounded-full" style="background:linear-gradient(90deg,#B48A3E,#D2AB5C);"></div></div>
+              </div>
+              <div class="mb-6">
+                <div class="flex items-center justify-between text-sm mb-1.5">
+                  <span class="inline-flex items-center gap-2"><span class="inline-block w-2.5 h-2.5 rounded-sm" style="background:#64748B;"></span><span id="wtw-m-other">Other</span></span>
+                  <span style="color:#E5E0D6;"><span id="wtw-v-other">0 kg</span> · <span id="wtw-p-other">0%</span></span>
+                </div>
+                <div class="h-2 rounded-full" style="background:rgba(255,255,255,0.06);overflow:hidden;"><div id="wtw-bar-other" class="wtw-bar h-full rounded-full" style="background:linear-gradient(90deg,#475569,#64748B);"></div></div>
+              </div>
+              <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
+                <div class="wtw-metric rounded-2xl p-4" style="background:rgba(255,255,255,0.04);border:1px solid rgba(200,164,85,0.15);">
+                  <div class="text-[0.62rem] font-semibold uppercase tracking-wide mb-1.5" style="color:#9CA3AF;" id="wtw-l-total">Total analyzed</div>
+                  <div class="font-heading text-2xl font-bold" style="color:white;" id="wtw-m-total">0 kg</div>
+                </div>
+                <div class="wtw-metric rounded-2xl p-4" style="background:rgba(27,107,74,0.1);border:1px solid rgba(93,181,134,0.28);">
+                  <div class="text-[0.62rem] font-semibold uppercase tracking-wide mb-1.5" style="color:#5DB586;" id="wtw-l-recovered">Recovered &amp; recyclable</div>
+                  <div class="font-heading text-2xl font-bold" style="color:#5DB586;" id="wtw-m-recovered">0 kg</div>
+                </div>
+                <div class="wtw-metric rounded-2xl p-4" style="background:rgba(200,164,85,0.08);border:1px solid rgba(200,164,85,0.25);">
+                  <div class="text-[0.62rem] font-semibold uppercase tracking-wide mb-1.5" style="color:#C8A455;" id="wtw-l-diverted">Diverted from landfill</div>
+                  <div class="font-heading text-2xl font-bold" style="color:#C8A455;" id="wtw-m-diverted">0%</div>
+                </div>
+                <div class="wtw-metric rounded-2xl p-4" style="background:rgba(13,115,119,0.1);border:1px solid rgba(77,163,167,0.3);">
+                  <div class="text-[0.62rem] font-semibold uppercase tracking-wide mb-1.5" style="color:#4DA3A7;" id="wtw-l-impact">Environmental impact</div>
+                  <div class="font-heading text-2xl font-bold" style="color:#4DA3A7;" id="wtw-m-co2">0 kg CO&#8322;</div>
+                  <div class="text-[0.65rem] mt-1" style="color:#9CA3AF;"><span id="wtw-m-energy">0 kWh</span> <span id="wtw-l-energy">energy recovered</span></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex items-center justify-between text-xs font-semibold mb-1.5">
+                  <span style="color:#C8A455;" id="wtw-diverted-label">Materials diverted from landfill</span>
+                  <span style="color:#E5E0D6;"><span id="wtw-diverted-val">0%</span></span>
+                </div>
+                <div class="h-3 rounded-full" style="background:rgba(255,255,255,0.06);overflow:hidden;"><div id="wtw-diverted-bar" class="wtw-bar h-full rounded-full" style="background:linear-gradient(90deg,#1B6B4A,#4CAF50,#C8A455);"></div></div>
+                <p class="text-[0.65rem] mt-2" style="color:#7C8CA6;" id="wtw-note">Estimates for illustration. Your real breakdown appears in the app.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== CTA ===== -->
+      <div class="reveal mt-20 text-center">
+        <h3 class="font-heading text-3xl sm:text-4xl font-bold mb-4" style="color:white;" id="wtw-cta-title">Every ton you sort becomes a resource.</h3>
+        <p class="max-w-2xl mx-auto mb-9 text-base" style="color:#9CA3AF;line-height:1.7;" id="wtw-cta-sub">Run your own pile through the AI above, then launch the app to sort on-site with your phone — no machines, no accounts, just results.</p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <button id="wtw-cta" class="inline-flex items-center gap-2 px-10 py-4 rounded-full text-base font-bold no-underline cursor-pointer transition-all animate-pulse-glow" style="background:linear-gradient(135deg,#C8A455,#A6883E);color:#0F1E36;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 1 4 4c1.5.5 2.5 2 2.5 3.5 0 1.2-.7 2.3-1.7 2.8A4.5 4.5 0 0 1 12 22a4.5 4.5 0 0 1-4.8-9.7A3.5 3.5 0 0 1 5.5 9.5C5.5 8 6.5 6.5 8 6a4 4 0 0 1 4-4z"/></svg>
+            <span id="wtw-cta-label">Analyze My Waste</span>
+          </button>
+          <a href="index.html" class="inline-flex items-center gap-2 px-10 py-4 rounded-full text-base font-semibold no-underline transition-all" style="border:2px solid #0D7377;color:#4DA3A7;background:transparent;" onmouseover="this.style.background='#0D7377';this.style.color='white'" onmouseout="this.style.background='transparent';this.style.color='#4DA3A7'">
+            <span id="wtw-cta2-label">Launch App</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
         </div>
       </div>
     </div>
@@ -797,8 +1236,8 @@
         'market-b3-item': 'Whole bricks',
         'market-b3-rate': '₹3,500/t',
         'features-label': 'Features',
-        'features-title': 'Three ways to identify waste',
-        'features-desc': "Choose whatever's fastest for you — camera, voice, or text. Works in any language.",
+        'features-title': 'Spot the waste. Then let the AI guide you.',
+        'features-desc': 'Scan, speak, or type to identify your waste. The AI assistant detects the problem and gives clear, simple steps in plain English.',
         'feat1-title': 'AI Camera Scan',
         'feat1-desc': 'Point your phone at any pile of waste. Our AI identifies the material type instantly — no typing needed.',
         'feat1-badge': 'Works offline-ready',
@@ -808,6 +1247,28 @@
         'feat3-title': 'Smart Sorting Guide',
         'feat3-desc': 'Get detailed step-by-step instructions for sorting, crushing, and prepping each material type for reuse.',
         'feat3-badge': '8 material types covered',
+        'feat4-title': 'AI Waste Management Assistant',
+        'feat4-desc': 'Scan or describe your waste. The AI detects the material and the problem, then gives clear step-by-step instructions in simple English.',
+        'feat4-badge': 'Simple English, no jargon',
+        'ai-badge': '7. 🧠 AI Waste Management Assistant',
+        'ai-title': 'Your AI assistant spots the problem — and tells you exactly what to do.',
+        'ai-desc': 'Describe or scan your waste. The AI detects the material and the problem, then gives clear, step-by-step instructions in simple English.',
+        'ai-demo-online': 'Online — detects waste & problems',
+        'ai-demo-live': 'Live',
+        'ai-demo-user': 'broken concrete with steel bars',
+        'ai-demo-find': 'Found: Reinforced concrete. Problem: metal bars are mixed in.',
+        'ai-demo-step1': 'Pull out all the metal bars first.',
+        'ai-demo-step2': 'Break the concrete into small pieces.',
+        'ai-demo-step3': 'Pick out wood and plastic by hand.',
+        'ai-demo-step4': 'Crush to 2–4 cm. It is ready to reuse.',
+        'ai-f1-title': 'Finds the problem',
+        'ai-f1-desc': 'The AI checks your waste and points out what needs attention — mixed-in metal, stuck-on mortar, or treated wood.',
+        'ai-f2-title': 'Clear steps in plain English',
+        'ai-f2-desc': 'Every instruction is short and easy to understand. No jargon, no guesswork.',
+        'ai-f3-title': 'Explains why it matters',
+        'ai-f3-desc': 'Each step tells you why, so you stay safe and get better recycling results.',
+        'ai-cta': 'Try the AI Assistant',
+        'ai-cta2': 'See All Features',
         'benefits-label': 'Who Benefits',
         'benefits-title': 'Built for contractors. Backed by investors.',
         'benefit-contractor-title': 'For Small Contractors',
@@ -894,8 +1355,8 @@
         'market-b3-item': 'साबुत ईंटें',
         'market-b3-rate': '₹3,500/टन',
         'features-label': 'विशेषताएं',
-        'features-title': 'अपशिष्ट पहचानने के तीन तरीके',
-        'features-desc': 'जो आपके लिए सबसे तेज़ हो चुनें — कैमरा, आवाज़, या टेक्स्ट। किसी भी भाषा में काम करता है।',
+        'features-title': 'अपशिष्ट पहचानें। फिर AI का मार्गदर्शन लें।',
+        'features-desc': 'अपने कचरे की पहचान के लिए स्कैन करें, बोलें या टाइप करें। AI असिस्टेंट समस्या पहचानता है और सरल हिंदी में स्पष्ट कदम देता है।',
         'feat1-title': 'AI कैमरा स्कैन',
         'feat1-desc': 'अपने फोन को अपशिष्ट के ढेर पर इंगित करें। हमारा AI तुरंत सामग्री प्रकार पहचानता है — कोई टाइपिंग आवश्यक नहीं।',
         'feat1-badge': 'ऑफलाइन-रेडी काम करता है',
@@ -905,6 +1366,28 @@
         'feat3-title': 'स्मार्ट छंटाई गाइड',
         'feat3-desc': 'प्रत्येक सामग्री प्रकार को पुन: उपयोग के लिए छांटने, कुचलने और तैयार करने के विस्तृत चरण-दर-चरण निर्देश प्राप्त करें।',
         'feat3-badge': '8 सामग्री प्रकार कवर',
+        'feat4-title': 'AI अपशिष्ट प्रबंधन असिस्टेंट',
+        'feat4-desc': 'अपने कचरे को स्कैन करें या वर्णन करें। AI सामग्री और समस्या पहचानता है, फिर सरल अंग्रेजी में स्पष्ट चरण देता है।',
+        'feat4-badge': 'सरल अंग्रेजी, कोई तकनीकी शब्द नहीं',
+        'ai-badge': '7. 🧠 AI अपशिष्ट प्रबंधन असिस्टेंट',
+        'ai-title': 'आपका AI असिस्टेंट समस्या पहचानता है — और बताता है कि क्या करना है।',
+        'ai-desc': 'अपने कचरे का वर्णन करें या स्कैन करें। AI सामग्री और समस्या पहचानता है, फिर सरल अंग्रेजी में स्पष्ट चरण-दर-चरण निर्देश देता है।',
+        'ai-demo-online': 'ऑनलाइन — कचरा और समस्या पहचानता है',
+        'ai-demo-live': 'लाइव',
+        'ai-demo-user': 'लोहे की छड़ों वाला कंक्रीट',
+        'ai-demo-find': 'पाया गया: प्रबलित कंक्रीट। समस्या: धातु की छड़ें मिश्रित हैं।',
+        'ai-demo-step1': 'पहले सभी धातु की छड़ें निकालें।',
+        'ai-demo-step2': 'कंक्रीट को छोटे टुकड़ों में तोड़ें।',
+        'ai-demo-step3': 'लकड़ी और प्लास्टिक हाथ से अलग करें।',
+        'ai-demo-step4': '2–4 सेमी तक कुचलें। यह पुन: उपयोग के लिए तैयार है।',
+        'ai-f1-title': 'समस्या खोजता है',
+        'ai-f1-desc': 'AI आपके कचरे की जांच करता है और बताता है कि किस पर ध्यान देना है — मिश्रित धातु, चिपका मोर्टार, या उपचारित लकड़ी।',
+        'ai-f2-title': 'सरल अंग्रेजी में स्पष्ट कदम',
+        'ai-f2-desc': 'हर निर्देश छोटा और आसान है। कोई तकनीकी शब्द नहीं, कोई अंदाज़ा नहीं।',
+        'ai-f3-title': 'बताता है क्यों ज़रूरी है',
+        'ai-f3-desc': 'हर कदम बताता है कि क्यों, ताकि आप सुरक्षित रहें और बेहतर रीसाइक्लिंग परिणाम पाएं।',
+        'ai-cta': 'AI असिस्टेंट आज़माएं',
+        'ai-cta2': 'सभी फीचर देखें',
         'benefits-label': 'किसे लाभ',
         'benefits-title': 'ठेकेदारों के लिए बनाया गया। निवेशकों द्वारा समर्थित।',
         'benefit-contractor-title': 'छोटे ठेकेदारों के लिए',
@@ -991,8 +1474,8 @@
         'market-b3-item': 'Ladrillos completos',
         'market-b3-rate': '₹3.500/t',
         'features-label': 'Características',
-        'features-title': 'Tres formas de identificar residuos',
-        'features-desc': 'Elija lo más rápido para usted — cámara, voz o texto. Funciona en cualquier idioma.',
+        'features-title': 'Identifica el residuo. Luego deja que la IA te guíe.',
+        'features-desc': 'Escanea, di o escribe para identificar tu residuo. El asistente IA detecta el problema y da pasos claros y simples.',
         'feat1-title': 'Escaneo con Cámara IA',
         'feat1-desc': 'Apunte su teléfono a cualquier montón de residuos. Nuestra IA identifica el tipo de material al instante — sin necesidad de escribir.',
         'feat1-badge': 'Funciona sin conexión',
@@ -1002,6 +1485,28 @@
         'feat3-title': 'Guía de Clasificación Inteligente',
         'feat3-desc': 'Obtenga instrucciones detalladas paso a paso para clasificar, triturar y preparar cada tipo de material para su reutilización.',
         'feat3-badge': '8 tipos de material cubiertos',
+        'feat4-title': 'Asistente IA de Gestión de Residuos',
+        'feat4-desc': 'Escanea o describe tu residuo. La IA detecta el material y el problema, luego da instrucciones paso a paso en inglés simple.',
+        'feat4-badge': 'Inglés simple, sin tecnicismos',
+        'ai-badge': '7. 🧠 Asistente IA de Gestión de Residuos',
+        'ai-title': 'Tu asistente IA detecta el problema — y te dice exactamente qué hacer.',
+        'ai-desc': 'Describe o escanea tu residuo. La IA detecta el material y el problema, luego da instrucciones claras paso a paso en inglés simple.',
+        'ai-demo-online': 'En línea — detecta residuos y problemas',
+        'ai-demo-live': 'En vivo',
+        'ai-demo-user': 'hormigón con barras de acero',
+        'ai-demo-find': 'Encontrado: hormigón armado. Problema: hay barras de metal mezcladas.',
+        'ai-demo-step1': 'Primero, saca todas las barras de metal.',
+        'ai-demo-step2': 'Rompe el hormigón en trozos pequeños.',
+        'ai-demo-step3': 'Separa la madera y el plástico a mano.',
+        'ai-demo-step4': 'Tritura a 2–4 cm. Listo para reutilizar.',
+        'ai-f1-title': 'Encuentra el problema',
+        'ai-f1-desc': 'La IA revisa tu residuo y señala lo que necesita atención — metal mezclado, mortero pegado o madera tratada.',
+        'ai-f2-title': 'Pasos claros en inglés simple',
+        'ai-f2-desc': 'Cada instrucción es corta y fácil de entender. Sin tecnicismos, sin adivinar.',
+        'ai-f3-title': 'Explica por qué importa',
+        'ai-f3-desc': 'Cada paso te dice el porqué, para que trabajes seguro y mejores tus resultados de reciclaje.',
+        'ai-cta': 'Probar el Asistente IA',
+        'ai-cta2': 'Ver todas las funciones',
         'benefits-label': 'Quién se Beneficia',
         'benefits-title': 'Construido para contratistas. Respaldado por inversores.',
         'benefit-contractor-title': 'Para Pequeños Contratistas',
@@ -1088,8 +1593,8 @@
         'market-b3-item': 'طوب كامل',
         'market-b3-rate': '₹3,500/طن',
         'features-label': 'الميزات',
-        'features-title': 'ثلاث طرق لتحديد النفايات',
-        'features-desc': 'اختر الأسرع لك — الكاميرا، الصوت، أو النص. يعمل بأي لغة.',
+        'features-title': 'حدد النفايات. ثم دع المساعد الذكي يرشدك.',
+        'features-desc': 'امسح أو انطق أو اكتب لتحديد نفاياتك. يكتشف المساعد الذكي المشكلة ويقدم خطوات واضحة وبسيطة.',
         'feat1-title': 'المسح بالكاميرا الذكية',
         'feat1-desc': 'وجّه هاتفك إلى أي كومة نفايات. ذكاؤنا الاصطناعي يحدد نوع المادة فورًا — لا حاجة للكتابة.',
         'feat1-badge': 'يعمل دون اتصال',
@@ -1099,6 +1604,28 @@
         'feat3-title': 'دليل الفرز الذكي',
         'feat3-desc': 'احصل على تعليمات مفصلة خطوة بخطوة لفرز وتكسير وتحضير كل نوع من المواد لإعادة الاستخدام.',
         'feat3-badge': 'يغطي 8 أنواع من المواد',
+        'feat4-title': 'المساعد الذكي لإدارة النفايات',
+        'feat4-desc': 'امسح نفاياتك أو صفها. يكتشف الذكاء الاصطناعي المادة والمشكلة، ثم يقدم خطوات واضحة بإنجليزية بسيطة.',
+        'feat4-badge': 'إنجليزية بسيطة، بلا مصطلحات',
+        'ai-badge': '7. 🧠 المساعد الذكي لإدارة النفايات',
+        'ai-title': 'المساعد الذكي يكتشف المشكلة — ويخبرك بما يجب فعله بالضبط.',
+        'ai-desc': 'صف نفاياتك أو امسحها. يكتشف الذكاء الاصطناعي المادة والمشكلة، ثم يقدم خطوات واضحة بإنجليزية بسيطة.',
+        'ai-demo-online': 'متصل — يكتشف النفايات والمشاكل',
+        'ai-demo-live': 'مباشر',
+        'ai-demo-user': 'خرسانة بقضبان فولاذية',
+        'ai-demo-find': 'تم العثور على: خرسانة مسلحة. المشكلة: قضبان معدنية مخلوطة.',
+        'ai-demo-step1': 'أولًا أخرج جميع القضبان المعدنية.',
+        'ai-demo-step2': 'اكسر الخرسانة إلى قطع صغيرة.',
+        'ai-demo-step3': 'افصل الخشب والبلاستيك يدويًا.',
+        'ai-demo-step4': 'اسحقها إلى 2–4 سم. جاهزة لإعادة الاستخدام.',
+        'ai-f1-title': 'يكتشف المشكلة',
+        'ai-f1-desc': 'يفحص الذكاء الاصطناعي نفاياتك ويشير إلى ما يحتاج انتباهًا — معادن مخلوطة أو ملاط لاصق أو خشب معالج.',
+        'ai-f2-title': 'خطوات واضحة بإنجليزية بسيطة',
+        'ai-f2-desc': 'كل تعليمات قصيرة وسهلة الفهم. بلا مصطلحات، بلا تخمين.',
+        'ai-f3-title': 'يشرح لماذا يهم',
+        'ai-f3-desc': 'كل خطوة تشرح السبب، لتظل آمنًا وتحصل على نتائج تدوير أفضل.',
+        'ai-cta': 'جرب المساعد الذكي',
+        'ai-cta2': 'عرض كل المزايا',
         'benefits-label': 'من المستفيد',
         'benefits-title': 'مبني للمقاولين. مدعوم من المستثمرين.',
         'benefit-contractor-title': 'للمقاولين الصغار',
@@ -1219,9 +1746,122 @@
       }
     });
 
+    // ===== WASTE TO WEALTH — CARDS & ANALYZER =====
+    const wtwProfiles = {
+      mixed:          { concrete: 0.60, brick: 0.20, metal: 0.10, wood: 0.06, other: 0.04 },
+      'concrete-heavy':{ concrete: 0.75, brick: 0.08, metal: 0.07, wood: 0.05, other: 0.05 },
+      renovation:     { concrete: 0.35, brick: 0.30, metal: 0.08, wood: 0.22, other: 0.05 },
+      demolition:     { concrete: 0.55, brick: 0.20, metal: 0.12, wood: 0.08, other: 0.05 }
+    };
+    const wtwMats = ['concrete', 'brick', 'metal', 'wood', 'other'];
+    const wtwAnimIds = {};
+
+    function wtwToggleCard(card) {
+      card.classList.toggle('active');
+    }
+
+    function wtwCardInit() {
+      document.querySelectorAll('.wtw-card').forEach(function(card) {
+        card.addEventListener('click', function() { wtwToggleCard(card); });
+        card.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); wtwToggleCard(card); }
+        });
+      });
+    }
+
+    function wtwAnimateCount(el, to, suffix) {
+      const from = parseFloat(el.dataset.val || '0');
+      const dur = 900;
+      const start = performance.now();
+      if (wtwAnimIds[el.id]) cancelAnimationFrame(wtwAnimIds[el.id]);
+      function tick(now) {
+        const p = Math.min((now - start) / dur, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        const val = from + (to - from) * eased;
+        const d = to % 1 === 0 ? 0 : 1;
+        el.textContent = val.toLocaleString(undefined, { maximumFractionDigits: d }) + suffix;
+        el.dataset.val = val;
+        if (p < 1) wtwAnimIds[el.id] = requestAnimationFrame(tick); else delete wtwAnimIds[el.id];
+      }
+      wtwAnimIds[el.id] = requestAnimationFrame(tick);
+    }
+
+    function wtwRunAnalyze() {
+      const btn = document.getElementById('wtw-analyze');
+      const qtyInput = document.getElementById('wtw-qty');
+      const typeSel = document.getElementById('wtw-type');
+      let qty = parseFloat(qtyInput.value);
+      if (!qty || qty < 0) qty = 100;
+      const profile = wtwProfiles[typeSel.value] || wtwProfiles.mixed;
+      const sum = wtwMats.reduce(function(a, m) { return a + profile[m]; }, 0);
+
+      btn.classList.add('wtw-btn-loading');
+      const result = document.getElementById('wtw-result');
+      const empty = document.getElementById('wtw-result-empty');
+      result.classList.remove('open');
+
+      setTimeout(function() {
+        empty.style.display = 'none';
+        document.getElementById('wtw-total-line').textContent = Math.round(qty) + ' kg';
+
+        const details = wtwMats.map(function(m) {
+          const kg = Math.round(qty * profile[m] / sum);
+          return { mat: m, kg: kg, pct: Math.round((kg / qty) * 100) };
+        });
+        const otherKg = details.filter(function(d) { return d.mat === 'other'; })[0].kg;
+        const recovered = details.filter(function(d) { return d.mat !== 'other'; })
+          .reduce(function(a, d) { return a + d.kg; }, 0);
+        const divertedPct = Math.min(100, Math.round(((qty - otherKg) / qty) * 100));
+        const woodKg = details.filter(function(d) { return d.mat === 'wood'; })[0].kg;
+        const co2 = Math.round(recovered * 0.5);
+        const energy = Math.round((woodKg + otherKg) * 0.5);
+
+        details.forEach(function(d) {
+          const bar = document.getElementById('wtw-bar-' + d.mat);
+          const v = document.getElementById('wtw-v-' + d.mat);
+          const p = document.getElementById('wtw-p-' + d.mat);
+          bar.style.width = '0%';
+          v.dataset.val = '0';
+          setTimeout(function() {
+            bar.style.width = d.pct + '%';
+            wtwAnimateCount(v, d.kg, ' kg');
+            p.textContent = d.pct + '%';
+          }, 30);
+        });
+
+        ['wtw-m-total', 'wtw-m-recovered', 'wtw-m-diverted', 'wtw-m-co2', 'wtw-diverted-val']
+          .forEach(function(id) { document.getElementById(id).dataset.val = '0'; });
+
+        setTimeout(function() {
+          wtwAnimateCount(document.getElementById('wtw-m-total'), qty, ' kg');
+          wtwAnimateCount(document.getElementById('wtw-m-recovered'), recovered, ' kg');
+          wtwAnimateCount(document.getElementById('wtw-m-diverted'), divertedPct, '%');
+          wtwAnimateCount(document.getElementById('wtw-m-co2'), co2, ' kg CO\u2082');
+          wtwAnimateCount(document.getElementById('wtw-diverted-val'), divertedPct, '%');
+        }, 70);
+
+        document.getElementById('wtw-m-energy').textContent = energy + ' kWh';
+        const dBar = document.getElementById('wtw-diverted-bar');
+        dBar.style.width = '0%';
+        setTimeout(function() { dBar.style.width = divertedPct + '%'; }, 50);
+
+        result.classList.add('open');
+        btn.classList.remove('wtw-btn-loading');
+      }, 700);
+    }
+
+    document.getElementById('wtw-analyze').addEventListener('click', wtwRunAnalyze);
+
+    document.getElementById('wtw-cta').addEventListener('click', function() {
+      const target = document.getElementById('wtw-try');
+      window.scrollTo({ top: target.getBoundingClientRect().top + window.pageYOffset - 90, behavior: 'smooth' });
+      setTimeout(wtwRunAnalyze, 850);
+    });
+
     // ===== INIT =====
     document.addEventListener('DOMContentLoaded', function() {
       initReveal();
+      wtwCardInit();
       applyLang('en');
     });
   </script>
