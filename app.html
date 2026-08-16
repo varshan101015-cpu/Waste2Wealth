@@ -164,6 +164,31 @@
     .trend-row:hover .bin-bar-fill { filter:brightness(1.1); }
     .dash-pill { display:inline-flex; align-items:center; gap:5px; padding:5px 12px; border-radius:100px; font-size:0.72rem; font-weight:700; color:#065F46; background:rgba(5,150,105,0.06); border:1px solid rgba(5,150,105,0.14); }
     body.dark .dash-pill { color:#34D399; background:rgba(52,211,153,0.06); border-color:rgba(52,211,153,0.18); }
+
+    /* ===== AI CHAT ===== */
+    .ai-chat { display:flex; flex-direction:column; gap:8px; flex:1; overflow-y:auto; padding:2px 2px 10px; min-height:0; -webkit-overflow-scrolling:touch; }
+    .bubble { max-width:86%; padding:10px 13px; border-radius:16px; font-size:0.8rem; line-height:1.5; word-break:break-word; }
+    .bubble.user { align-self:flex-end; background:linear-gradient(135deg,#059669,#0D9488); color:#fff; border-bottom-right-radius:4px; animation:slideUp 0.3s ease; }
+    .bubble.bot { align-self:flex-start; background:rgba(124,58,237,0.06); border:1px solid rgba(124,58,237,0.16); color:#334155; border-bottom-left-radius:4px; animation:slideUp 0.3s ease; }
+    body.dark .bubble.bot { background:rgba(124,58,237,0.12); border-color:rgba(124,58,237,0.28); color:#E2E8F0; }
+    .bubble.bot .ai-find { font-weight:700; margin-bottom:3px; color:inherit; }
+    .bubble.bot .ai-find strong { color:#7C3AED; }
+    .bubble.bot .ai-problem { color:#D97706; margin-bottom:6px; }
+    .bubble.bot .ai-steps-h { font-weight:700; color:#C8A455; font-size:0.72rem; margin-bottom:3px; text-transform:uppercase; letter-spacing:0.4px; }
+    .bubble.bot ol.ai-steps { padding-left:17px; margin:0 0 6px; }
+    .bubble.bot ol.ai-steps li { margin-bottom:3px; }
+    .bubble.bot .ai-tip { font-size:0.72rem; color:#059669; display:flex; gap:5px; }
+    body.dark .bubble.bot .ai-tip { color:#34D399; }
+    .typing-dots { display:flex; gap:4px; align-items:center; padding:8px 12px; }
+    .typing-dots span { width:6px; height:6px; border-radius:50%; background:#7C3AED; animation:aiBlink 1.2s infinite; }
+    .typing-dots span:nth-child(2){ animation-delay:0.2s; }
+    .typing-dots span:nth-child(3){ animation-delay:0.4s; }
+    @keyframes aiBlink { 0%,80%,100%{opacity:0.2;transform:translateY(0);} 40%{opacity:1;transform:translateY(-3px);} }
+    .ai-input { flex:1; border-radius:100px; border:1.5px solid #E2E8F0; padding:11px 18px; font-size:0.85rem; font-family:'Inter',sans-serif; background:rgba(255,255,255,0.8); color:#0F172A; outline:none; transition:all 0.3s; }
+    .ai-input:focus { border-color:#059669; box-shadow:0 0 0 4px rgba(5,150,105,0.08); }
+    body.dark .ai-input { background:rgba(26,21,48,0.8); border-color:#2D2550; color:#E2E8F0; }
+    body.dark .ai-input:focus { border-color:#34D399; box-shadow:0 0 0 4px rgba(52,211,153,0.08); }
+    body.dark .ai-input::placeholder { color:#64748B; }
   </style>
 </head>
 <body>
@@ -211,6 +236,17 @@
         <span class="chip" onclick="quickSelect(this)">Metal scraps</span>
       </div>
     </div>
+
+    <div onclick="aiSpeakTo()" class="glass ripple-btn" style="cursor:pointer;display:flex;align-items:center;gap:10px;padding:13px 14px;margin-bottom:16px;background:linear-gradient(135deg,rgba(7,94,84,0.05),rgba(124,58,237,0.05));border-color:rgba(124,58,237,0.2);transform:none;">
+        <div style="width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#7C3AED,#059669);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 14px rgba(124,58,237,0.22);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        </div>
+        <div style="flex:1;min-width:0;">
+          <p id="ui-ai-home-title" style="font-family:'Space Grotesk',sans-serif;font-size:0.85rem;font-weight:700;color:#7C3AED;margin-bottom:1px;">Ask the AI Assistant</p>
+          <p id="ui-ai-home-sub" style="font-size:0.72rem;color:#64748B;line-height:1.4;">Describe your waste — get instant, step-by-step help.</p>
+        </div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2" style="flex-shrink:0;"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
 
     <div style="display:flex;justify-content:center;gap:22px;padding-bottom:4px;position:relative;z-index:2;">
       <div style="text-align:center;">
@@ -653,6 +689,45 @@
     </div>
   </div>
 
+  <!-- ===== AI CHAT ===== -->
+  <div id="screen-ai" class="screen" style="min-height:100dvh;padding:20px 20px 12px;">
+    <div style="max-width:380px;margin:0 auto;width:100%;display:flex;flex-direction:column;height:calc(100dvh - 100px);position:relative;z-index:2;">
+      <div style="display:flex;align-items:center;margin-bottom:10px;">
+        <button onclick="goToScreen('home')" style="background:none;border:none;cursor:pointer;padding:4px;margin-right:8px;color:#059669;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        </button>
+        <div>
+          <h2 id="ui-ai-title" style="font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:700;">AI Assistant</h2>
+          <p id="ui-ai-sub" style="font-size:0.65rem;color:#94A3B8;">Describe waste, get step-by-step help</p>
+        </div>
+        <span style="margin-left:auto;display:inline-flex;align-items:center;gap:4px;font-size:0.62rem;font-weight:600;color:#059669;">
+          <span style="width:6px;height:6px;border-radius:50%;background:#10B981;display:inline-block;"></span>
+          <span id="ui-ai-online">Online</span>
+        </span>
+      </div>
+
+      <div id="ai-chat" class="ai-chat"></div>
+
+      <div id="ai-typing" class="bubble bot typing-dots" style="display:none;">
+        <span></span><span></span><span></span>
+      </div>
+
+      <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;">
+        <span class="chip" data-q="Concrete + rebar" onclick="aiChip(this.dataset.q)"><span id="ai-ex1">Concrete + rebar</span></span>
+        <span class="chip" data-q="Brick and mortar" onclick="aiChip(this.dataset.q)"><span id="ai-ex2">Brick &amp; mortar</span></span>
+        <span class="chip" data-q="Mixed demolition rubble" onclick="aiChip(this.dataset.q)"><span id="ai-ex3">Mixed rubble</span></span>
+        <span class="chip" data-q="Wood timber with nails" onclick="aiChip(this.dataset.q)"><span id="ai-ex4">Wood timber</span></span>
+      </div>
+
+      <div style="display:flex;gap:8px;margin-top:8px;padding-bottom:env(safe-area-inset-bottom);">
+        <input id="ai-input" class="ai-input" placeholder="Ask me about your waste…" aria-label="Describe your waste">
+        <button id="ai-send-btn" class="btn-primary ripple-btn" aria-label="Send" style="padding:0;width:44px;height:44px;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- ===== NAV ===== -->
   <nav class="bottom-nav">
     <button class="nav-item active" id="nav-home" onclick="stopAll();goToScreen('home')">
@@ -710,7 +785,7 @@
         'ui-about-title':'About','ui-about-why':'Why this app?','ui-about-desc':'Construction waste fills landfills worldwide. Waste2Wealth gives small contractors free, instant sorting instructions via their phone.',
         'ui-about-tips':'Quick Tips','ui-about-how':'How it works','ui-about-how-desc':'Say it, Type it, or Scan it. Get step-by-step recycling instructions. No accounts, no ads.',
         'nav-home-label':'Home','nav-speak-label':'Speak','nav-scan-label':'Scan','nav-type-label':'Type','nav-guide-label':'Guide','nav-impact-label':'Impact',
-        'ui-ai-label':'AI Waste Summary','ui-sum-detected':'Detected','ui-sum-problem':'What we found','ui-sum-action':'Recommended action','ui-sum-dest':'Potential destination','ui-sum-recyclable':'Estimated recyclable quantity','ui-sep-action':'Separate these materials before recycling','ui-steps-primary':'Sorting steps for the main material below',
+        'ui-ai-label':'AI Waste Summary','ui-sum-detected':'Detected','ui-sum-problem':'What we found','ui-sum-action':'Recommended action','ui-sum-dest':'Potential destination','ui-sum-recyclable':'Estimated recyclable quantity','ui-sep-action':'Separate these materials before recycling','ui-steps-primary':'Sorting steps for the main material below','ui-ai-title':'AI Assistant','ui-ai-sub':'Describe waste, get step-by-step help','ui-ai-online':'Online','ui-ai-hello':'Hi! I am the Waste2Wealth AI. Tell me what waste you have — for example "broken concrete with steel bars".','ui-ai-home-title':'Ask the AI Assistant','ui-ai-home-sub':'Describe your waste — get instant, step-by-step help.','ai-ex1':'Concrete + rebar','ai-ex2':'Brick &amp; mortar','ai-ex3':'Mixed rubble','ai-ex4':'Wood timber','ui-ai-ph':'Ask me about your waste…','ui-ai-found':'Found:','ui-ai-problem':'Problem:','ui-ai-steps':'Simple steps','ui-ai-tip':'Tip','ui-ai-full':'Full instructions',
         'nav-value-label':'Value','ui-value-title':'Waste-to-Value Calculator','ui-value-project-label':'Project size (optional)','ui-value-material-label':'Waste by material (tonnes)','ui-value-example':'Load example','ui-value-calc':'Calculate Value','ui-value-total-label':'Total waste','ui-value-recyclable':'Recyclable tonnes','ui-value-of':'of','ui-value-total-waste':'tonnes total','ui-value-mat-value':'Est. material resale value','ui-value-savings':'Landfill fees saved','ui-value-co2':'CO\u2082 saved','ui-value-breakdown':'Per-material breakdown','ui-value-empty':'Enter at least one material above.','ui-qr-title':'Batch QR','ui-qr-sub':'Scan to track this batch through the waste-to-wealth pipeline','ui-qr-fields-label':'Batch details','ui-qr-batchid':'Batch ID','ui-qr-download':'Download QR',
         'qr-source-label':'📍 Source','qr-material-label':'🧱 Material','qr-qty-label':'⚖️ Quantity','qr-collected-label':'🚛 Collected','qr-recycler-label':'♻️ Recycler','qr-processed-label':'✅ Processed','qr-outcome-label':'🌱 Recovery outcome','qr-tons':'tonnes',
         'nav-sustain-label':'Sustain','ui-sustain-title':'Sustainability Dashboard','ui-sustain-example':'Load example','ui-sustain-proj-label':'COMPANY SUSTAINABILITY','ui-sustain-rate-label':'RECOVERY RATE','ui-sustain-gen-label':'Waste Generated','ui-sustain-diverted-label':'Diverted from disposal','ui-sustain-t':'tonnes','ui-sustain-t2':'tonnes','ui-sustain-mats-label':'RECYCLED MATERIALS','ui-sustain-impact-label':'ESTIMATED ENVIRONMENTAL IMPACT','ui-sustain-trend-label':'MONTHLY TREND (COMBINED)','ui-sustain-input-label':'Branch waste (tonnes)','ui-sustain-branches-label':'BRANCHES','ui-sustain-add-branch':'+ Add Branch','ui-sustain-breakdown-label':'BY BRANCH','ui-sustain-newbranch':'Branch name:','ui-sustain-rename':'Rename branch:','ui-sustain-renamebtn':'Rename','ui-sustain-delbtn':'Delete','ui-sustain-delconfirm':'Delete branch ','ui-sustain-min1':'At least one branch is required.'}
@@ -731,7 +806,7 @@
         'ui-about-title':'बारे में','ui-about-why':'यह ऐप क्यों?','ui-about-desc':'निर्माण कचरा दुनिया भर में लैंडफिल भरता है। Waste2Wealth छोटे ठेकेदारों को मुफ्त छंटाई निर्देश देता है।',
         'ui-about-tips':'त्वरित सुझाव','ui-about-how':'यह कैसे काम करता है','ui-about-how-desc':'बोलें, टाइप करें या स्कैन करें। तुरंत रीसाइक्लिंग निर्देश। कोई खाता नहीं।',
         'nav-home-label':'होम','nav-speak-label':'बोलें','nav-scan-label':'स्कैन','nav-type-label':'टाइप','nav-guide-label':'गाइड','nav-impact-label':'प्रभाव',
-        'ui-ai-label':'AI अपशिष्ट सारांश','ui-sum-detected':'पहचाना गया','ui-sum-problem':'हमने क्या पाया','ui-sum-action':'अनुशंसित कार्रवाई','ui-sum-dest':'संभावित गंतव्य','ui-sum-recyclable':'अनुमानित रीसायकल मात्रा','ui-sep-action':'रीसाइक्लिंग से पहले इन सामग्रियों को अलग करें','ui-steps-primary':'नीचे मुख्य सामग्री के लिए छंटाई के चरण',
+        'ui-ai-label':'AI अपशिष्ट सारांश','ui-sum-detected':'पहचाना गया','ui-sum-problem':'हमने क्या पाया','ui-sum-action':'अनुशंसित कार्रवाई','ui-sum-dest':'संभावित गंतव्य','ui-sum-recyclable':'अनुमानित रीसायकल मात्रा','ui-sep-action':'रीसाइक्लिंग से पहले इन सामग्रियों को अलग करें','ui-steps-primary':'नीचे मुख्य सामग्री के लिए छंटाई के चरण','ui-ai-title':'AI असिस्टेंट','ui-ai-sub':'कचरे के बारे में बताएं, चरण-दर-चरण मदद पाएं','ui-ai-online':'ऑनलाइन','ui-ai-hello':'नमस्ते! मैं Waste2Wealth AI हूं। बताएं कि आपके पास क्या कचरा है — जैसे "लोहे की छड़ों वाला कंक्रीट"।','ui-ai-home-title':'AI असिस्टेंट से पूछें','ui-ai-home-sub':'अपने कचरे के बारे में बताएं — तुरंत चरण-दर-चरण मदद पाएं।','ai-ex1':'कंक्रीट + सरिया','ai-ex2':'ईंट और मोर्टार','ai-ex3':'मिश्रित मलबा','ai-ex4':'लकड़ी का टिम्बर','ui-ai-ph':'मुझे अपने कचरे के बारे में बताएं…','ui-ai-found':'पाया गया:','ui-ai-problem':'समस्या:','ui-ai-steps':'सरल चरण','ui-ai-tip':'सुझाव','ui-ai-full':'पूर्ण निर्देश',
         'nav-value-label':'मूल्य','ui-value-title':'अपशिष्ट-से-मूल्य कैलकुलेटर','ui-value-project-label':'परियोजना का आकार (वैकल्पिक)','ui-value-material-label':'सामग्री के अनुसार कचरा (टन)','ui-value-example':'उदाहरण लोड करें','ui-value-calc':'मूल्य की गणना करें','ui-value-total-label':'कुल कचरा','ui-value-recyclable':'रीसायकल योग्य टन','ui-value-of':'में से','ui-value-total-waste':'टन कुल','ui-value-mat-value':'अनुमानित सामग्री पुनर्विक्रय मूल्य','ui-value-savings':'बचाई गई लैंडफिल फीस','ui-value-co2':'बचाया गया CO\u2082','ui-value-breakdown':'सामग्री-वार विवरण','ui-value-empty':'ऊपर कम से कम एक सामग्री दर्ज करें।','ui-qr-title':'बैच QR','ui-qr-sub':'इस बैच को वेस्ट-टू-वेल्थ पाइपलाइन में ट्रैक करने के लिए स्कैन करें','ui-qr-fields-label':'बैच विवरण','ui-qr-batchid':'बैच आईडी','ui-qr-download':'QR डाउनलोड करें',
         'qr-source-label':'📍 स्रोत','qr-material-label':'🧱 सामग्री','qr-qty-label':'⚖️ मात्रा','qr-collected-label':'🚛 संग्रहित','qr-recycler-label':'♻️ रीसाइक्लर','qr-processed-label':'✅ प्रोसेस्ड','qr-outcome-label':'🌱 रिकवरी परिणाम','qr-tons':'टन',
         'nav-sustain-label':'सस्टेन','ui-sustain-title':'सस्टेनेबिलिटी डैशबोर्ड','ui-sustain-example':'उदाहरण लोड करें','ui-sustain-proj-label':'कंपनी सस्टेनेबिलिटी','ui-sustain-rate-label':'रिकवरी दर','ui-sustain-gen-label':'उत्पन्न कचरा','ui-sustain-diverted-label':'निपटान से बचाया गया','ui-sustain-t':'टन','ui-sustain-t2':'टन','ui-sustain-mats-label':'रीसाइकिल की गई सामग्री','ui-sustain-impact-label':'अनुमानित पर्यावरणीय प्रभाव','ui-sustain-trend-label':'मासिक रुझान (संयुक्त)','ui-sustain-input-label':'शाखा कचरा (टन)','ui-sustain-branches-label':'शाखाएं','ui-sustain-add-branch':'+ शाखा जोड़ें','ui-sustain-breakdown-label':'शाखा अनुसार','ui-sustain-newbranch':'शाखा का नाम:','ui-sustain-rename':'शाखा का नाम बदलें:','ui-sustain-renamebtn':'नाम बदलें','ui-sustain-delbtn':'हटाएं','ui-sustain-delconfirm':'शाखा हटाएं ','ui-sustain-min1':'कम से कम एक शाखा आवश्यक है।'}
@@ -752,7 +827,7 @@
         'ui-about-title':'Acerca de','ui-about-why':'¿Por qué esta app?','ui-about-desc':'Los residuos de construcción llenan vertederos. Waste2Wealth ofrece instrucciones gratuitas.',
         'ui-about-tips':'Consejos rápidos','ui-about-how':'Cómo funciona','ui-about-how-desc':'Di, escribe o escanea. Instrucciones de reciclaje al instante. Sin cuentas.',
         'nav-home-label':'Inicio','nav-speak-label':'Decir','nav-scan-label':'Escanear','nav-type-label':'Escribir','nav-guide-label':'Guía','nav-impact-label':'Impacto',
-        'ui-ai-label':'Resumen IA del residuo','ui-sum-detected':'Detectado','ui-sum-problem':'Lo que encontramos','ui-sum-action':'Acción recomendada','ui-sum-dest':'Destino potencial','ui-sum-recyclable':'Cantidad reciclable estimada','ui-sep-action':'Separa estos materiales antes de reciclar','ui-steps-primary':'Pasos de clasificación del material principal abajo',
+        'ui-ai-label':'Resumen IA del residuo','ui-sum-detected':'Detectado','ui-sum-problem':'Lo que encontramos','ui-sum-action':'Acción recomendada','ui-sum-dest':'Destino potencial','ui-sum-recyclable':'Cantidad reciclable estimada','ui-sep-action':'Separa estos materiales antes de reciclar','ui-steps-primary':'Pasos de clasificación del material principal abajo','ui-ai-title':'Asistente IA','ui-ai-sub':'Describe tu residuo, obtén ayuda paso a paso','ui-ai-online':'En línea','ui-ai-hello':'¡Hola! Soy la IA de Waste2Wealth. Dime qué residuo tienes — por ejemplo "hormigón con barras de acero".','ui-ai-home-title':'Pregunta al Asistente IA','ui-ai-home-sub':'Describe tu residuo — ayuda instantánea paso a paso.','ai-ex1':'Hormigón + barras','ai-ex2':'Ladrillo y mortero','ai-ex3':'Escombros mixtos','ai-ex4':'Madera','ui-ai-ph':'Pregúntame sobre tu residuo…','ui-ai-found':'Encontrado:','ui-ai-problem':'Problema:','ui-ai-steps':'Pasos simples','ui-ai-tip':'Consejo','ui-ai-full':'Instrucciones completas',
         'nav-value-label':'Valor','ui-value-title':'Calculadora Residuo-a-Valor','ui-value-project-label':'Tamaño del proyecto (opcional)','ui-value-material-label':'Residuos por material (toneladas)','ui-value-example':'Cargar ejemplo','ui-value-calc':'Calcular Valor','ui-value-total-label':'Residuos totales','ui-value-recyclable':'Toneladas reciclables','ui-value-of':'de','ui-value-total-waste':'toneladas totales','ui-value-mat-value':'Valor de reventa estimado','ui-value-savings':'Tarifas de vertedero ahorradas','ui-value-co2':'CO\u2082 ahorrado','ui-value-breakdown':'Desglose por material','ui-value-empty':'Ingresa al menos un material arriba.','ui-qr-title':'QR del Lote','ui-qr-sub':'Escanea para rastrear este lote en el proceso residuo-a-valor','ui-qr-fields-label':'Detalles del lote','ui-qr-batchid':'ID del Lote','ui-qr-download':'Descargar QR',
         'qr-source-label':'📍 Fuente','qr-material-label':'🧱 Material','qr-qty-label':'⚖️ Cantidad','qr-collected-label':'🚛 Recogido','qr-recycler-label':'♻️ Reciclador','qr-processed-label':'✅ Procesado','qr-outcome-label':'🌱 Resultado de recuperación','qr-tons':'toneladas',
         'nav-sustain-label':'Sostén','ui-sustain-title':'Panel de Sostenibilidad','ui-sustain-example':'Cargar ejemplo','ui-sustain-proj-label':'SOSTENIBILIDAD DE LA EMPRESA','ui-sustain-rate-label':'TASA DE RECUPERACIÓN','ui-sustain-gen-label':'Residuos generados','ui-sustain-diverted-label':'Desviados de vertedero','ui-sustain-t':'toneladas','ui-sustain-t2':'toneladas','ui-sustain-mats-label':'MATERIALES RECICLADOS','ui-sustain-impact-label':'IMPACTO AMBIENTAL ESTIMADO','ui-sustain-trend-label':'TENDENCIA MENSUAL (COMBINADA)','ui-sustain-input-label':'Residuos de sucursal (toneladas)','ui-sustain-branches-label':'SUCURSALES','ui-sustain-add-branch':'+ Añadir Sucursal','ui-sustain-breakdown-label':'POR SUCURSAL','ui-sustain-newbranch':'Nombre de la sucursal:','ui-sustain-rename':'Renombrar sucursal:','ui-sustain-renamebtn':'Renombrar','ui-sustain-delbtn':'Eliminar','ui-sustain-delconfirm':'Eliminar sucursal ','ui-sustain-min1':'Se requiere al menos una sucursal.'}
@@ -1293,6 +1368,95 @@
       document.querySelectorAll('#value-materials input').forEach(i=>{const id=i.getAttribute('data-id'),w=parseFloat(i.value)||0;if(w>0)vals[id]=w;});
       if(Object.keys(vals).length){p.vals=vals;saveProjects();buildDashInputs();updateDash();}
     }
+
+    // ===== AI CHAT =====
+    let aiGreeted = false;
+
+    function aiScroll() { const w = document.getElementById('ai-chat'); if (w) w.scrollTop = w.scrollHeight; }
+
+    function aiTyping(on) {
+      const t = document.getElementById('ai-typing');
+      if (t) t.style.display = on ? 'flex' : 'none';
+      if (on) setTimeout(aiScroll, 20);
+    }
+
+    function aiAppendUser(text) {
+      const wrap = document.getElementById('ai-chat');
+      const d = document.createElement('div');
+      d.className = 'bubble user';
+      d.textContent = text;
+      wrap.appendChild(d);
+      aiScroll();
+    }
+
+    function aiAppendBot(html) {
+      const wrap = document.getElementById('ai-chat');
+      const d = document.createElement('div');
+      d.className = 'bubble bot';
+      d.innerHTML = html;
+      wrap.appendChild(d);
+      aiScroll();
+    }
+
+    function aiEsc(t) { return t.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;'); }
+
+    function aiChip(q) { aiSendFrom(q); }
+
+    function aiSend() {
+      const inp = document.getElementById('ai-input');
+      if (!inp) return;
+      aiSendFrom(inp.value.trim());
+    }
+
+    function aiSendFrom(text) {
+      if (!text) return;
+      const inp = document.getElementById('ai-input');
+      if (inp) { inp.value = ''; inp.focus(); }
+      aiAppendUser(text);
+      aiTyping(true);
+      setTimeout(function () {
+        const mats = findAllWaste(text);
+        const primary = (mats && mats[0]) ? mats[0] : DB[3];
+        const extra = (mats && mats.length > 1)
+          ? ' · ' + mats.slice(1).map(function (m) { return m.type; }).join(', ')
+          : '';
+        const dl = U[L] || U.en;
+        const html =
+          '<p class="ai-find">' + (dl['ui-ai-found'] || 'Found:') + ' <strong>' + primary.type + '</strong>' + extra + '</p>' +
+          '<p class="ai-problem">' + (dl['ui-ai-problem'] || 'Problem:') + ' ' + primary.problem + '</p>' +
+          '<p class="ai-steps-h">' + (dl['ui-ai-steps'] || 'Simple steps') + '</p>' +
+          '<ol class="ai-steps">' + primary.st.map(function (s) { return '<li>' + s + '</li>'; }).join('') + '</ol>' +
+          '<p class="ai-tip">' + (dl['ui-ai-tip'] || 'Tip') + ': ' + primary.tp + '</p>' +
+          '<button class="btn-primary ripple-btn" style="font-size:0.75rem;padding:7px 16px;margin-top:6px;" onclick="aiFullSteps(\'' + aiEsc(text) + '\')">' + (dl['ui-ai-full'] || 'Full instructions') + '</button>';
+        aiTyping(false);
+        aiAppendBot(html);
+      }, 900);
+    }
+
+    function aiFullSteps(text) {
+      const i = document.getElementById('waste-input');
+      if (i) i.value = text;
+      segText = text;
+      runAutoSegregate(findAllWaste(text), null);
+    }
+
+    function aiSpeakTo() {
+      goToScreen('ai');
+      const inp = document.getElementById('ai-input');
+      if (inp) { inp.placeholder = (U[L]['ui-ai-ph'] || 'Ask me about your waste…'); }
+      if (!aiGreeted) {
+        aiGreeted = true;
+        setTimeout(function () {
+          aiAppendBot((U[L]['ui-ai-hello'] || 'Hi! Tell me what waste you have.'));
+        }, 250);
+      }
+      setTimeout(function () { if (inp) inp.focus(); }, 350);
+    }
+
+    document.getElementById('ai-send-btn').addEventListener('click', aiSend);
+    document.getElementById('ai-input').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); aiSend(); }
+    });
 
     window.addEventListener('load',function(){setTimeout(ensureModel,1500);buildValueInputs();renderDash();});
   </script>
