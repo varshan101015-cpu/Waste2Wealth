@@ -16,6 +16,8 @@
     body { font-family:'Inter',sans-serif; background:#FAFAFA; color:#0F172A; min-height:100dvh; overflow-x:hidden; transition:background 0.6s cubic-bezier(0.16,1,0.3,1),color 0.6s cubic-bezier(0.16,1,0.3,1); }
     body.dark { background:#0C0A1D; color:#E2E8F0; }
 
+    @keyframes slideDown { from{opacity:0;transform:translate(-50%,-20px)} to{opacity:1;transform:translate(-50%,0)} }
+
     .screen { display:none; }
     .screen.active { display:flex; flex-direction:column; animation:slideUp 0.5s cubic-bezier(0.16,1,0.3,1) forwards; }
     #screen-auth.active { align-items:center; justify-content:center; }
@@ -1148,7 +1150,7 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
       <span id="nav-track-label">Track</span>
     </button>
-    <button class="nav-item" id="nav-rewards" onclick="stopAll();goToScreen('rewards')">
+    <button class="nav-item" id="nav-rewards" onclick="stopAll();goToScreen('rewards');updatePointsDisplay();buildRewardsList()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
       <span id="nav-rewards-label">Rewards</span>
     </button>
@@ -1331,6 +1333,7 @@
       segMaterials=normalizeMats(materials);
       segPrimary=segMaterials[0].item; segPhotoUrl=photoUrl; segTracked=false;
       goToScreen('segregate');
+      addPoints(10, 'Waste scanned');
       const pb=document.getElementById('seg-photo-box'),pe=document.getElementById('seg-photo');
       if(photoUrl){pe.src=photoUrl;pb.style.display='block';}else{pb.style.display='none';}
       document.getElementById('btn-send-model').style.display='none';
@@ -1387,6 +1390,7 @@
           });
           out.style.display='block';db.style.display='flex';
           if(!segTracked){segMaterials.forEach(m=>trackSort(m.item.type));segTracked=true;}
+          addPoints(15, 'W2W model processed');
         }
       }
       tick();
@@ -1574,6 +1578,7 @@
       trackRecs.push({id:Date.now(),mat:+matSel.value,type:DB[+matSel.value].type,qty:qty,date:date,source:source,dest:dest});
       if(trackRecs.length>200)trackRecs=trackRecs.slice(-200);
       saveTrack();renderTrack();
+      addPoints(25, 'Batch recorded');
     }
     function delTrackRecord(id){trackRecs=trackRecs.filter(r=>r.id!==id);saveTrack();renderTrack();}
     function renderTrack(){
@@ -2144,6 +2149,75 @@
     // ===== AUTHENTICATION =====
     let currentUser = null;
     let selectedRole = 'individual';
+    let userPoints = parseInt(localStorage.getItem('w2w-points') || '0');
+
+    function addPoints(amount, reason) {
+      userPoints += amount;
+      localStorage.setItem('w2w-points', userPoints.toString());
+      updatePointsDisplay();
+      showPointsToast(amount, reason);
+    }
+
+    // ===== REWARDS LIST =====
+    const rewardsItems = [
+      { name: 'Eco-Friendly Tote Bag', cost: 100, icon: '👜', desc: 'Reusable cotton bag' },
+      { name: 'Plant a Tree', cost: 200, icon: '🌳', desc: 'We plant a tree in your name' },
+      { name: 'Recycled Notebook', cost: 150, icon: '📓', desc: 'Made from recycled paper' },
+      { name: 'Coffee Voucher', cost: 300, icon: '☕', desc: '₹100 coffee shop voucher' },
+      { name: 'Donate to Education', cost: 500, icon: '📚', desc: 'Fund waste management training' }
+    ];
+
+    function buildRewardsList() {
+      var list = document.getElementById('rewards-list');
+      if (!list) return;
+      list.innerHTML = '';
+      rewardsItems.forEach(function(item) {
+        var canRedeem = userPoints >= item.cost;
+        var el = document.createElement('div');
+        el.style.cssText = 'display:flex;align-items:center;gap:10px;padding:10px;border-radius:12px;background:' + (canRedeem ? 'rgba(5,150,105,0.05)' : 'rgba(148,163,184,0.05)') + ';border:1px solid ' + (canRedeem ? 'rgba(5,150,105,0.15)' : 'rgba(148,163,184,0.1)') + ';';
+        el.innerHTML = '<span style="font-size:1.5rem;">' + item.icon + '</span>' +
+          '<div style="flex:1;"><p style="font-size:0.78rem;font-weight:600;">' + item.name + '</p>' +
+          '<p style="font-size:0.68rem;color:#94A3B8;">' + item.desc + '</p></div>' +
+          '<button onclick="redeemReward(' + item.cost + ',\'' + item.name + '\')" style="padding:6px 12px;border-radius:8px;border:none;font-size:0.7rem;font-weight:600;cursor:pointer;' +
+          (canRedeem ? 'background:linear-gradient(135deg,#059669,#0D9488);color:white;' : 'background:#E2E8F0;color:#94A3B8;') + '">' + item.cost + ' pts</button>';
+        list.appendChild(el);
+      });
+    }
+
+    function redeemReward(cost, name) {
+      if (userPoints < cost) {
+        alert('Not enough points! You need ' + (cost - userPoints) + ' more points.');
+        return;
+      }
+      if (confirm('Redeem ' + cost + ' points for ' + name + '?')) {
+        userPoints -= cost;
+        localStorage.setItem('w2w-points', userPoints.toString());
+        updatePointsDisplay();
+        buildRewardsList();
+        showPointsToast(-cost, 'Redeemed: ' + name);
+      }
+    }
+
+    function updatePointsDisplay() {
+      var el = document.getElementById('rewards-points');
+      if (el) el.textContent = userPoints;
+      var status = document.getElementById('rewards-status');
+      if (status) {
+        if (userPoints > 0) {
+          status.textContent = userPoints + ' points earned!';
+          status.style.color = '#059669';
+        }
+      }
+    }
+
+    function showPointsToast(amount, reason) {
+      var toast = document.createElement('div');
+      toast.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#059669,#0D9488);color:white;padding:12px 24px;border-radius:100px;font-size:0.85rem;font-weight:600;z-index:9999;box-shadow:0 8px 32px rgba(5,150,105,0.3);animation:slideDown 0.3s ease-out;';
+      toast.innerHTML = ' +' + amount + ' pts — ' + reason;
+      document.body.appendChild(toast);
+      setTimeout(function() { toast.style.opacity = '0'; toast.style.transition = 'opacity 0.3s'; }, 2000);
+      setTimeout(function() { toast.remove(); }, 2500);
+    }
 
     function selectRole(role) {
       selectedRole = role;
