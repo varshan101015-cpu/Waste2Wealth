@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Waste2Wealth</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -166,6 +166,9 @@
     body.dark .dash-pill { color:#34D399; background:rgba(52,211,153,0.06); border-color:rgba(52,211,153,0.18); }
 
     /* ===== AI CHAT ===== */
+    .flow-step { display:inline-flex; align-items:center; padding:4px 10px; border-radius:100px; font-size:0.58rem; font-weight:700; letter-spacing:1px; color:#059669; background:rgba(5,150,105,0.06); border:1px solid rgba(5,150,105,0.14); }
+    body.dark .flow-step { color:#34D399; background:rgba(52,211,153,0.06); border-color:rgba(52,211,153,0.2); }
+    .flow-arrow { display:inline-flex; align-items:center; }
     .ai-shell { max-width:380px; margin:0 auto; width:100%; display:flex; flex-direction:column; height:calc(100dvh - 100px); position:relative; z-index:2; }
     .ai-chat { display:flex; flex-direction:column; gap:8px; flex:1; overflow-y:auto; padding:2px 2px 10px; min-height:0; -webkit-overflow-scrolling:touch; }
     .ai-bar { max-width:100%; margin:0 auto; width:100%; }
@@ -232,8 +235,16 @@
           <path d="M16 8L22 12V18L16 22L10 18V12L16 8Z" fill="#059669" opacity="0.3"/>
         </svg>
       </div>
+      <p id="ui-home-hero" style="font-family:'Space Grotesk',sans-serif;font-size:0.7rem;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#059669;margin-bottom:10px;">Turn Construction Waste Into Recoverable Value.</p>
       <h1 id="ui-home-title" style="font-family:'Space Grotesk',sans-serif;font-size:1.35rem;font-weight:700;margin-bottom:2px;line-height:1.3;"><span class="gradient-text">What kind of waste</span><br>do you have?</h1>
-      <p id="ui-home-sub" style="font-size:0.78rem;color:#94A3B8;margin-bottom:16px;">Scan, speak, or type — get instant sorting instructions.</p>
+      <p id="ui-home-sub" style="font-size:0.78rem;color:#94A3B8;margin-bottom:14px;">Identify C&D waste, segregate it correctly, discover recovery options, and track your environmental impact.</p>
+      <div style="display:flex;align-items:center;justify-content:center;gap:2px;flex-wrap:wrap;margin-bottom:16px;" id="home-flow">
+        <span class="flow-step" id="ui-flow-1">IDENTIFY</span><span class="flow-arrow"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2.4"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+        <span class="flow-step" id="ui-flow-2">SEGREGATE</span><span class="flow-arrow"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2.4"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+        <span class="flow-step" id="ui-flow-3">RECOVER</span><span class="flow-arrow"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2.4"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+        <span class="flow-step" id="ui-flow-4">TRACK</span><span class="flow-arrow"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2.4"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+        <span class="flow-step" id="ui-flow-5">MEASURE IMPACT</span>
+      </div>
       <div class="stagger" style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-bottom:22px;">
         <span class="chip" onclick="quickSelect(this)">Concrete + rebar</span>
         <span class="chip" onclick="quickSelect(this)">Brick & mortar</span>
@@ -250,7 +261,7 @@
         </div>
         <div style="flex:1;min-width:0;">
           <p id="ui-ai-home-title" style="font-family:'Space Grotesk',sans-serif;font-size:0.85rem;font-weight:700;color:#7C3AED;margin-bottom:1px;">Ask the AI Assistant</p>
-          <p id="ui-ai-home-sub" style="font-size:0.72rem;color:#64748B;line-height:1.4;">Describe your waste — get instant, step-by-step help.</p>
+          <p id="ui-ai-home-sub" style="font-size:0.72rem;color:#64748B;line-height:1.4;">Ask anything — reuse ideas, recycling options, environmental impact.</p>
         </div>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2" style="flex-shrink:0;"><path d="M9 18l6-6-6-6"/></svg>
       </div>
@@ -402,6 +413,14 @@
               <div id="result-detected-list" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
             </div>
             <div class="ai-row">
+              <p id="ui-sum-bin" class="ai-lab">Recommended bin</p>
+              <div style="display:flex;align-items:center;gap:6px;margin-top:4px;flex-wrap:wrap;">
+                <span id="result-bin-dot" style="width:12px;height:12px;border-radius:4px;background:#059669;display:inline-block;flex-shrink:0;"></span>
+                <span id="result-bin" style="font-size:0.8rem;font-weight:600;color:#0F172A;">—</span>
+                <span id="result-rec-badge" style="display:none;font-size:0.65rem;font-weight:700;color:#065F46;background:rgba(5,150,105,0.08);border:1px solid rgba(5,150,105,0.2);padding:2px 8px;border-radius:100px;"></span>
+              </div>
+            </div>
+            <div class="ai-row">
               <p id="ui-sum-problem" class="ai-lab">What we found</p>
               <p id="result-problem" class="ai-val" style="color:#D97706;"></p>
             </div>
@@ -425,6 +444,7 @@
               <div><p id="ui-tip-label" style="font-size:0.7rem;font-weight:600;color:#059669;margin-bottom:1px;">Tip</p><p id="result-tip" style="font-size:0.75rem;color:#065F46;"></p></div>
             </div>
           </div>
+          <p id="ui-scan-disclaimer" style="font-size:0.62rem;color:#94A3B8;margin-top:8px;text-align:center;">Scan results are AI estimates — verify on site before sorting or disposal.</p>
         </div>
       </div>
       <div id="result-buttons" style="display:flex;justify-content:center;gap:8px;padding:12px 0 4px;flex-wrap:wrap;">
@@ -564,10 +584,67 @@
         <h2 id="ui-impact-title" style="font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:700;">Impact</h2>
       </div>
       <div class="stagger" style="display:flex;flex-direction:column;gap:8px;">
-        <div class="stat-card"><p id="ui-impact-co2-label" style="font-size:0.65rem;color:#94A3B8;font-weight:500;">CO₂ saved by recycling</p><p style="font-family:'Space Grotesk',sans-serif;font-size:1.6rem;font-weight:700;" class="gradient-text"><span id="impact-co2">0</span> kg</p><p style="font-size:0.6rem;color:#94A3B8;">equivalent to <span id="impact-trees">0</span> trees planted</p></div>
+        <div class="stat-card"><p id="ui-impact-co2-label" style="font-size:0.65rem;color:#94A3B8;font-weight:500;">Est. CO₂ saved by recovery</p><p style="font-family:'Space Grotesk',sans-serif;font-size:1.6rem;font-weight:700;" class="gradient-text"><span id="impact-co2">0</span> kg</p><p style="font-size:0.6rem;color:#94A3B8;">equivalent to <span id="impact-trees">0</span> trees/yr (est.)</p></div>
         <div class="stat-card"><p id="ui-impact-landfill-label" style="font-size:0.65rem;color:#94A3B8;font-weight:500;">Landfill waste diverted</p><p style="font-family:'Space Grotesk',sans-serif;font-size:1.6rem;font-weight:700;" class="gradient-text"><span id="impact-tons">0</span> tons</p><p style="font-size:0.6rem;color:#94A3B8;"><span id="ui-impact-saved">that's </span><span id="impact-trucks">0</span><span id="ui-impact-trucks"> truckloads saved</span></p></div>
         <div class="stat-card"><p id="ui-impact-energy-label" style="font-size:0.65rem;color:#94A3B8;font-weight:500;">Energy conserved</p><p style="font-family:'Space Grotesk',sans-serif;font-size:1.6rem;font-weight:700;" class="gradient-text"><span id="impact-energy">0</span> kWh</p><p style="font-size:0.6rem;color:#94A3B8;"><span id="ui-impact-homes">enough to power a home for </span><span id="impact-days">0</span><span id="ui-impact-days"> days</span></p></div>
-        <div style="text-align:center;margin-top:4px;"><p id="ui-impact-desc" style="font-size:0.7rem;color:#94A3B8;">Every ton of recycled material counts. These stats update as you sort.</p></div>
+        <div style="text-align:center;margin-top:4px;"><p id="ui-impact-desc" style="font-size:0.7rem;color:#94A3B8;">Estimates based on what you record. Add batches in Track to grow these numbers.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TRACK (New) ===== -->
+  <div id="screen-track" class="screen" style="min-height:100dvh;padding:20px 20px 85px;">
+    <div style="max-width:380px;margin:0 auto;width:100%;position:relative;z-index:2;">
+      <div style="display:flex;align-items:center;margin-bottom:12px;">
+        <button onclick="goToScreen('home')" style="background:none;border:none;cursor:pointer;padding:4px;margin-right:8px;color:#059669;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        </button>
+        <h2 id="ui-track-title" style="font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:700;">Track Waste</h2>
+      </div>
+      <div class="glass" style="padding:14px 16px;margin-bottom:8px;">
+        <p id="ui-track-record-label" style="font-size:0.78rem;font-weight:700;margin-bottom:8px;">Record a batch</p>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div>
+            <p class="ai-lab" id="ui-track-material">Material</p>
+            <select id="track-material" class="ai-num" style="width:100%;text-align:left;"></select>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <div style="flex:1;">
+              <p class="ai-lab" id="ui-track-qty">Quantity (tonnes)</p>
+              <input id="track-qty" type="number" min="0" step="0.1" value="0.5" class="ai-num" style="width:100%;">
+            </div>
+            <div style="flex:1;">
+              <p class="ai-lab" id="ui-track-date">Date</p>
+              <input id="track-date" type="date" class="ai-num" style="width:100%;font-weight:600;">
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <div style="flex:1;">
+              <p class="ai-lab" id="ui-track-source">Source / site</p>
+              <input id="track-source" type="text" class="ai-num" style="width:100%;text-align:left;font-weight:600;" value="Site 1">
+            </div>
+          </div>
+          <div>
+            <p class="ai-lab" id="ui-track-dest">Destination</p>
+            <select id="track-dest" class="ai-num" style="width:100%;text-align:left;">
+              <option value="reuse" id="ui-track-d-reuse">Reuse</option>
+              <option value="recycle" id="ui-track-d-recycle">Recycle</option>
+              <option value="recovery" id="ui-track-d-recovery">Recovery / energy</option>
+              <option value="disposal" id="ui-track-d-disposal">Disposal</option>
+            </select>
+          </div>
+          <button class="btn-primary ripple-btn" onclick="addTrackRecord()" style="width:100%;padding:11px 18px;font-size:0.82rem;"><span id="ui-track-add">+ Record Batch</span></button>
+        </div>
+      </div>
+      <div class="stagger" style="display:flex;flex-direction:column;gap:8px;">
+        <div class="stat-card"><p id="ui-track-total-label" style="font-size:0.65rem;color:#94A3B8;font-weight:500;">Total recorded</p><p style="font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:700;" class="gradient-text"><span id="track-total">0</span> t</p></div>
+        <div class="stat-card"><p id="ui-track-recovered-label" style="font-size:0.65rem;color:#94A3B8;font-weight:500;">Recovered (reuse + recycle + recovery)</p><p style="font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:700;" class="gradient-text"><span id="track-recovered">0</span> t</p></div>
+        <div class="stat-card"><p id="ui-track-disposed-label" style="font-size:0.65rem;color:#94A3B8;font-weight:500;">Sent for disposal</p><p style="font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:700;" class="gradient-text"><span id="track-disposed">0</span> t</p></div>
+        <div class="stat-card"><p id="ui-track-rate-label" style="font-size:0.65rem;color:#94A3B8;font-weight:500;">Recovery rate</p><p style="font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:700;" class="gradient-text"><span id="track-rate">0</span>%</p></div>
+        <div class="glass" style="padding:14px 16px;">
+          <p id="ui-track-history-label" style="font-size:0.62rem;color:#94A3B8;font-weight:600;letter-spacing:1.2px;margin-bottom:8px;">BATCHES</p>
+          <div id="track-list" style="display:flex;flex-direction:column;gap:8px;"><p style="font-size:0.72rem;color:#94A3B8;">—</p></div>
+        </div>
       </div>
     </div>
   </div>
@@ -634,10 +711,6 @@
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
         </button>
         <h2 id="ui-value-title" style="font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:700;">Waste-to-Value Calculator</h2>
-        <div style="margin-left:auto;display:flex;gap:3px;">
-          <button id="cur-inr" class="lang-pill active" onclick="setCur('inr')" style="font-size:0.7rem;">₹</button>
-          <button id="cur-usd" class="lang-pill" onclick="setCur('usd')" style="font-size:0.7rem;">$</button>
-        </div>
       </div>
       <div class="glass" style="padding:14px 16px;margin-bottom:8px;">
         <p id="ui-value-project-label" class="ai-lab">Project size (optional)</p>
@@ -660,9 +733,9 @@
       <div id="value-results" style="display:none;">
         <div class="stagger" style="display:flex;flex-direction:column;gap:8px;">
           <div class="stat-card"><p id="ui-value-recyclable" style="font-size:0.65rem;color:#94A3B8;font-weight:500;">Recyclable tonnes</p><p style="font-family:'Space Grotesk',sans-serif;font-size:1.6rem;font-weight:700;" class="gradient-text"><span id="value-recyclable">0</span> t</p><p style="font-size:0.6rem;color:#94A3B8;"><span id="ui-value-of">of</span> <span id="value-waste-total">0</span> <span id="ui-value-total-waste">tonnes total</span></p></div>
-          <div class="stat-card"><p id="ui-value-mat-value" style="font-size:0.65rem;color:#94A3B8;font-weight:500;">Est. material resale value</p><p style="font-family:'Space Grotesk',sans-serif;font-size:1.6rem;font-weight:700;" class="gradient-text"><span id="value-matval">₹0</span></p></div>
-          <div class="stat-card"><p id="ui-value-savings" style="font-size:0.65rem;color:#94A3B8;font-weight:500;">Landfill fees saved</p><p style="font-family:'Space Grotesk',sans-serif;font-size:1.6rem;font-weight:700;" class="gradient-text"><span id="value-savings">₹0</span></p></div>
-          <div class="stat-card"><p id="ui-value-co2" style="font-size:0.65rem;color:#94A3B8;font-weight:500;">CO₂ saved</p><p style="font-family:'Space Grotesk',sans-serif;font-size:1.6rem;font-weight:700;" class="gradient-text"><span id="value-co2">0</span> kg</p></div>
+          <div class="stat-card"><p id="ui-value-mat-value" style="font-size:0.65rem;color:#94A3B8;font-weight:500;">Potential recovery value</p><p style="font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:700;" class="gradient-text"><span id="value-matval">—</span></p><p style="font-size:0.6rem;color:#94A3B8;">illustrative — verify locally, not market prices</p></div>
+          <div class="stat-card"><p id="ui-value-savings" style="font-size:0.65rem;color:#94A3B8;font-weight:500;">Recovery potential</p><p style="font-family:'Space Grotesk',sans-serif;font-size:1.6rem;font-weight:700;" class="gradient-text"><span id="value-savings">—</span></p><p style="font-size:0.6rem;color:#94A3B8;"><span id="ui-value-potential-tag">reuse &amp; recycle opportunity per material</span></p></div>
+          <div class="stat-card"><p id="ui-value-co2" style="font-size:0.65rem;color:#94A3B8;font-weight:500;">Est. CO₂ saved</p><p style="font-family:'Space Grotesk',sans-serif;font-size:1.6rem;font-weight:700;" class="gradient-text"><span id="value-co2">0</span> kg</p></div>
           <div class="glass" style="padding:14px 16px;">
             <p id="ui-value-breakdown" style="font-size:0.78rem;font-weight:700;margin-bottom:8px;">Per-material breakdown</p>
             <div id="value-breakdown" style="display:flex;flex-direction:column;gap:8px;"></div>
@@ -735,49 +808,263 @@
     </div>
   </div>
 
+  <!-- ===== LEARNING HUB ===== -->
+  <div id="screen-learn" class="screen" style="min-height:100dvh;padding:20px 20px 85px;">
+    <div style="max-width:380px;margin:0 auto;width:100%;position:relative;z-index:2;">
+      <div style="display:flex;align-items:center;margin-bottom:12px;">
+        <button onclick="goToScreen('home')" style="background:none;border:none;cursor:pointer;padding:4px;margin-right:8px;color:#059669;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        </button>
+        <h2 id="ui-learn-title" style="font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:700;">Learning Hub</h2>
+      </div>
+      <div class="glass" style="padding:14px 16px;margin-bottom:10px;border-color:rgba(124,58,237,0.2);background:linear-gradient(135deg,rgba(124,58,237,0.05),rgba(5,150,105,0.04));">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+          <div style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#7C3AED,#059669);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          </div>
+          <div>
+            <p id="ui-learn-subtitle" style="font-size:0.78rem;font-weight:700;color:#7C3AED;">Recycling & Sustainability</p>
+            <p id="ui-learn-desc" style="font-size:0.68rem;color:#94A3B8;">Learn best practices for waste management</p>
+          </div>
+        </div>
+      </div>
+      <div id="learn-list" class="stagger" style="display:flex;flex-direction:column;gap:8px;"></div>
+    </div>
+  </div>
+
+  <!-- ===== REWARDS ===== -->
+  <div id="screen-rewards" class="screen" style="min-height:100dvh;padding:20px 20px 85px;">
+    <div style="max-width:380px;margin:0 auto;width:100%;position:relative;z-index:2;">
+      <div style="display:flex;align-items:center;margin-bottom:12px;">
+        <button onclick="goToScreen('home')" style="background:none;border:none;cursor:pointer;padding:4px;margin-right:8px;color:#059669;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        </button>
+        <h2 id="ui-rewards-title" style="font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:700;">Rewards</h2>
+      </div>
+      <div class="glass" style="padding:16px;margin-bottom:10px;text-align:center;border-color:rgba(200,164,85,0.3);background:linear-gradient(135deg,rgba(200,164,85,0.08),rgba(5,150,105,0.05));">
+        <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#C8A455,#F59E0B);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <p id="ui-rewards-points-label" style="font-size:0.65rem;color:#94A3B8;font-weight:500;">Your Points</p>
+        <p style="font-family:'Space Grotesk',sans-serif;font-size:2rem;font-weight:800;" class="gradient-text"><span id="rewards-points">0</span></p>
+        <p id="ui-rewards-status" style="font-size:0.72rem;color:#059669;font-weight:600;">Start recycling to earn points!</p>
+      </div>
+      <div class="glass" style="padding:14px 16px;margin-bottom:10px;">
+        <p id="ui-rewards-how-title" style="font-size:0.78rem;font-weight:700;margin-bottom:8px;">How to Earn Points</p>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;align-items:center;gap:10px;padding:10px;border-radius:12px;background:rgba(5,150,105,0.04);border:1px solid rgba(5,150,105,0.1);">
+            <span style="font-size:1.2rem;">📸</span>
+            <div style="flex:1;"><p style="font-size:0.78rem;font-weight:600;">Scan Waste</p><p style="font-size:0.65rem;color:#94A3B8;">+10 points per scan</p></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;padding:10px;border-radius:12px;background:rgba(124,58,237,0.04);border:1px solid rgba(124,58,237,0.1);">
+            <span style="font-size:1.2rem;">♻️</span>
+            <div style="flex:1;"><p style="font-size:0.78rem;font-weight:600;">Recycle Material</p><p style="font-size:0.65rem;color:#94A3B8;">+25 points per batch</p></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;padding:10px;border-radius:12px;background:rgba(200,164,85,0.04);border:1px solid rgba(200,164,85,0.1);">
+            <span style="font-size:1.2rem;">📊</span>
+            <div style="flex:1;"><p style="font-size:0.78rem;font-weight:600;">Track Impact</p><p style="font-size:0.65rem;color:#94A3B8;">+15 points per record</p></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;padding:10px;border-radius:12px;background:rgba(13,148,136,0.04);border:1px solid rgba(13,148,136,0.1);">
+            <span style="font-size:1.2rem;">🤝</span>
+            <div style="flex:1;"><p style="font-size:0.78rem;font-weight:600;">Refer a Friend</p><p style="font-size:0.65rem;color:#94A3B8;">+50 points per referral</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="glass" style="padding:14px 16px;">
+        <p id="ui-rewards-redeem-title" style="font-size:0.78rem;font-weight:700;margin-bottom:8px;">Redeem Points</p>
+        <div id="rewards-list" style="display:flex;flex-direction:column;gap:8px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== COMMUNITY ===== -->
+  <div id="screen-community" class="screen" style="min-height:100dvh;padding:20px 20px 85px;">
+    <div style="max-width:380px;margin:0 auto;width:100%;position:relative;z-index:2;">
+      <div style="display:flex;align-items:center;margin-bottom:12px;">
+        <button onclick="goToScreen('home')" style="background:none;border:none;cursor:pointer;padding:4px;margin-right:8px;color:#059669;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        </button>
+        <h2 id="ui-community-title" style="font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:700;">Community</h2>
+      </div>
+      <div class="glass" style="padding:14px 16px;margin-bottom:10px;border-color:rgba(5,150,105,0.2);">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+          <div style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#059669,#0D9488);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div>
+            <p style="font-size:0.78rem;font-weight:700;color:#059669;">Connect & Share</p>
+            <p id="ui-community-desc" style="font-size:0.68rem;color:#94A3B8;">Share ideas & recycling initiatives</p>
+          </div>
+        </div>
+      </div>
+      <div id="community-posts" class="stagger" style="display:flex;flex-direction:column;gap:8px;"></div>
+    </div>
+  </div>
+
+  <!-- ===== NEWS & UPDATES ===== -->
+  <div id="screen-news" class="screen" style="min-height:100dvh;padding:20px 20px 85px;">
+    <div style="max-width:380px;margin:0 auto;width:100%;position:relative;z-index:2;">
+      <div style="display:flex;align-items:center;margin-bottom:12px;">
+        <button onclick="goToScreen('home')" style="background:none;border:none;cursor:pointer;padding:4px;margin-right:8px;color:#059669;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        </button>
+        <h2 id="ui-news-title" style="font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:700;">News & Updates</h2>
+      </div>
+      <div id="news-list" class="stagger" style="display:flex;flex-direction:column;gap:8px;"></div>
+    </div>
+  </div>
+
+  <!-- ===== ALERTS ===== -->
+  <div id="screen-alerts" class="screen" style="min-height:100dvh;padding:20px 20px 85px;">
+    <div style="max-width:380px;margin:0 auto;width:100%;position:relative;z-index:2;">
+      <div style="display:flex;align-items:center;margin-bottom:12px;">
+        <button onclick="goToScreen('home')" style="background:none;border:none;cursor:pointer;padding:4px;margin-right:8px;color:#059669;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        </button>
+        <h2 id="ui-alerts-title" style="font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:700;">Alerts</h2>
+      </div>
+      <div class="glass" style="padding:14px 16px;margin-bottom:10px;border-color:rgba(217,119,6,0.2);background:linear-gradient(135deg,rgba(217,119,6,0.05),rgba(245,158,11,0.04));">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+          <div style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#D97706,#F59E0B);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          </div>
+          <div>
+            <p style="font-size:0.78rem;font-weight:700;color:#D97706;">Bin & Pickup Alerts</p>
+            <p id="ui-alerts-desc" style="font-size:0.68rem;color:#94A3B8;">Get notified when bins are full or pickup is due</p>
+          </div>
+        </div>
+      </div>
+      <div id="alerts-list" class="stagger" style="display:flex;flex-direction:column;gap:8px;"></div>
+    </div>
+  </div>
+
+  <!-- ===== SETTINGS ===== -->
+  <div id="screen-settings" class="screen" style="min-height:100dvh;padding:20px 20px 85px;">
+    <div style="max-width:380px;margin:0 auto;width:100%;position:relative;z-index:2;">
+      <div style="display:flex;align-items:center;margin-bottom:12px;">
+        <button onclick="goToScreen('home')" style="background:none;border:none;cursor:pointer;padding:4px;margin-right:8px;color:#059669;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        </button>
+        <h2 id="ui-settings-title" style="font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:700;">Settings</h2>
+      </div>
+      <div class="glass" style="padding:14px 16px;margin-bottom:10px;">
+        <p id="ui-settings-profile" style="font-size:0.78rem;font-weight:700;margin-bottom:8px;">Profile</p>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px;border-radius:12px;background:rgba(5,150,105,0.04);border:1px solid rgba(5,150,105,0.1);margin-bottom:8px;">
+          <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#059669,#0D9488);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:0.9rem;">U</div>
+          <div style="flex:1;"><p style="font-size:0.82rem;font-weight:600;">User</p><p style="font-size:0.68rem;color:#94A3B8;">user@example.com</p></div>
+          <button class="btn-outline ripple-btn" style="font-size:0.65rem;padding:4px 10px;">Edit</button>
+        </div>
+      </div>
+      <div class="glass" style="padding:14px 16px;margin-bottom:10px;">
+        <p id="ui-settings-prefs" style="font-size:0.78rem;font-weight:700;margin-bottom:8px;">Preferences</p>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px;border-radius:12px;background:rgba(255,255,255,0.4);border:1px solid rgba(226,232,240,0.4);">
+            <span style="font-size:0.78rem;font-weight:500;">Dark Mode</span>
+            <button onclick="toggleDark()" style="width:44px;height:24px;border-radius:12px;border:none;background:#E2E8F0;cursor:pointer;position:relative;transition:background 0.3s;">
+              <div id="settings-dark-dot" style="width:20px;height:20px;border-radius:50%;background:white;position:absolute;top:2px;left:2px;transition:transform 0.3s;box-shadow:0 1px 3px rgba(0,0,0,0.1);"></div>
+            </button>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px;border-radius:12px;background:rgba(255,255,255,0.4);border:1px solid rgba(226,232,240,0.4);">
+            <span style="font-size:0.78rem;font-weight:500;">Notifications</span>
+            <button style="width:44px;height:24px;border-radius:12px;border:none;background:#059669;cursor:pointer;position:relative;">
+              <div style="width:20px;height:20px;border-radius:50%;background:white;position:absolute;top:2px;right:2px;box-shadow:0 1px 3px rgba(0,0,0,0.1);"></div>
+            </button>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px;border-radius:12px;background:rgba(255,255,255,0.4);border:1px solid rgba(226,232,240,0.4);">
+            <span style="font-size:0.78rem;font-weight:500;">Language</span>
+            <select style="font-size:0.75rem;padding:4px 8px;border-radius:8px;border:1px solid #E2E8F0;background:white;">
+              <option value="en">English</option>
+              <option value="hi">हिन्दी</option>
+              <option value="es">Español</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="glass" style="padding:14px 16px;">
+        <p style="font-size:0.78rem;font-weight:700;margin-bottom:8px;">About</p>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <a href="#" style="display:flex;align-items:center;justify-content:space-between;padding:8px;border-radius:8px;text-decoration:none;color:inherit;">
+            <span style="font-size:0.78rem;">Version</span>
+            <span style="font-size:0.72rem;color:#94A3B8;">1.0.0</span>
+          </a>
+          <a href="#" style="display:flex;align-items:center;justify-content:space-between;padding:8px;border-radius:8px;text-decoration:none;color:inherit;">
+            <span style="font-size:0.78rem;">Privacy Policy</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          </a>
+          <a href="#" style="display:flex;align-items:center;justify-content:space-between;padding:8px;border-radius:8px;text-decoration:none;color:inherit;">
+            <span style="font-size:0.78rem;">Terms of Service</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          </a>
+          <a href="#" style="display:flex;align-items:center;justify-content:space-between;padding:8px;border-radius:8px;text-decoration:none;color:inherit;">
+            <span style="font-size:0.78rem;">Contact Support</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== RECYCLERS ===== -->
+  <div id="screen-recyclers" class="screen" style="min-height:100dvh;padding:20px 20px 85px;">
+    <div style="max-width:380px;margin:0 auto;width:100%;position:relative;z-index:2;">
+      <div style="display:flex;align-items:center;margin-bottom:12px;">
+        <button onclick="goToScreen('home')" style="background:none;border:none;cursor:pointer;padding:4px;margin-right:8px;color:#059669;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        </button>
+        <h2 id="ui-recyclers-title" style="font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:700;">Nearby Recyclers</h2>
+      </div>
+      <div class="glass" style="padding:14px 16px;margin-bottom:10px;border-color:rgba(5,150,105,0.2);background:linear-gradient(135deg,rgba(5,150,105,0.05),rgba(13,148,136,0.04));">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+          <div style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#059669,#0D9488);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div>
+            <p style="font-size:0.78rem;font-weight:700;color:#059669;">Verified Recyclers</p>
+            <p id="ui-recyclers-desc" style="font-size:0.68rem;color:#94A3B8;">Connect with trusted recycling partners</p>
+          </div>
+        </div>
+      </div>
+      <div id="recyclers-list" class="stagger" style="display:flex;flex-direction:column;gap:8px;"></div>
+    </div>
+  </div>
+
   <!-- ===== NAV ===== -->
   <nav class="bottom-nav">
     <button class="nav-item active" id="nav-home" onclick="stopAll();goToScreen('home')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span id="nav-home-label">Home</span>
     </button>
-    <button class="nav-item" id="nav-voice" onclick="stopAll();startVoiceInput()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-      <span id="nav-speak-label">Speak</span>
-    </button>
-    <button class="nav-item" id="nav-scan" onclick="stopAll();startScan()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-      <span id="nav-scan-label">Scan</span>
-    </button>
-    <button class="nav-item" id="nav-input" onclick="stopAll();goToScreen('input')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-      <span id="nav-type-label">Type</span>
+    <button class="nav-item" id="nav-learn" onclick="stopAll();goToScreen('learn');buildLearn()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      <span id="nav-learn-label">Learn</span>
     </button>
     <button class="nav-item" id="nav-guide" onclick="stopAll();goToScreen('guide');buildGuide()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
       <span id="nav-guide-label">Guide</span>
     </button>
-    <button class="nav-item" id="nav-value" onclick="stopAll();goToScreen('value')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5"/><path d="M11 19h8.203a1.83 1.83 0 0 0 1.556-.89 1.784 1.784 0 0 0 0-1.775l-1.226-2.12"/><path d="m14 16-3 3 3 3"/><path d="M8.293 13.596 7.196 9.5 3.1 10.598"/><path d="m9.344 5.811 1.093-1.892A1.83 1.83 0 0 1 11.985 3a1.784 1.784 0 0 1 1.546.888l3.943 6.843"/><path d="m13.378 9.633 4.096 1.098 1.097-4.096"/></svg>
-      <span id="nav-value-label">Value</span>
+    <button class="nav-item" id="nav-track" onclick="stopAll();goToScreen('track');renderTrack()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+      <span id="nav-track-label">Track</span>
     </button>
-    <button class="nav-item" id="nav-impact" onclick="stopAll();goToScreen('impact');updateImpact()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
-      <span id="nav-impact-label">Impact</span>
+    <button class="nav-item" id="nav-rewards" onclick="stopAll();goToScreen('rewards')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      <span id="nav-rewards-label">Rewards</span>
     </button>
-    <button class="nav-item" id="nav-sustain" onclick="stopAll();goToScreen('sustain');updateDash()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14v4"/><path d="M12 9v9"/><path d="M17 6v12"/></svg>
-      <span id="nav-sustain-label">Sustain</span>
+    <button class="nav-item" id="nav-community" onclick="stopAll();goToScreen('community');buildCommunity()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span id="nav-community-label">Community</span>
+    </button>
+    <button class="nav-item" id="nav-recyclers" onclick="stopAll();goToScreen('recyclers');buildRecyclers()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <span id="nav-recyclers-label">Recyclers</span>
     </button>
   </nav>
 
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.21.0/dist/tf.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.1/dist/mobilenet.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
     const U = {
       en: {
-        'ui-home-title':'What kind of waste<br>do you have?','ui-home-sub':'Scan, speak, or type — get instant sorting instructions.',
+        'ui-home-title':'What kind of waste<br>do you have?','ui-home-sub':'Identify C&D waste, segregate it correctly, discover recovery options, and track your environmental impact.','ui-home-hero':'Turn Construction Waste Into Recoverable Value.','ui-flow-1':'IDENTIFY','ui-flow-2':'SEGREGATE','ui-flow-3':'RECOVER','ui-flow-4':'TRACK','ui-flow-5':'MEASURE IMPACT',
         'ui-say':'Say it','ui-type':'Type it','ui-scan':'Scan it',
         'ui-voice-listening':'Listening...','ui-voice-hint':'Say what waste you have','ui-voice-cancel':'Cancel',
         'ui-input-title':'Describe waste','ui-input-label':'What does your waste look like?','ui-input-tip':'Mention material, size, and anything mixed in','ui-get-instr':'Get Instructions',
@@ -791,14 +1078,15 @@
         'ui-impact-title':'Impact','ui-impact-co2-label':'CO\u2082 saved by recycling','ui-impact-landfill-label':'Landfill waste diverted','ui-impact-energy-label':'Energy conserved','ui-impact-desc':'Every ton of recycled material counts. These stats update as you sort.','ui-impact-saved':'that\'s ','ui-impact-trucks':' truckloads saved','ui-impact-homes':'enough to power a home for ','ui-impact-days':' days',
         'ui-about-title':'About','ui-about-why':'Why this app?','ui-about-desc':'Construction waste fills landfills worldwide. Waste2Wealth gives small contractors free, instant sorting instructions via their phone.',
         'ui-about-tips':'Quick Tips','ui-about-how':'How it works','ui-about-how-desc':'Say it, Type it, or Scan it. Get step-by-step recycling instructions. No accounts, no ads.',
-        'nav-home-label':'Home','nav-speak-label':'Speak','nav-scan-label':'Scan','nav-type-label':'Type','nav-guide-label':'Guide','nav-impact-label':'Impact',
-        'ui-ai-label':'AI Waste Summary','ui-sum-detected':'Detected','ui-sum-problem':'What we found','ui-sum-action':'Recommended action','ui-sum-dest':'Potential destination','ui-sum-recyclable':'Estimated recyclable quantity','ui-sep-action':'Separate these materials before recycling','ui-steps-primary':'Sorting steps for the main material below','ui-ai-title':'AI Assistant','ui-ai-sub':'Describe waste, get step-by-step help','ui-ai-online':'Online','ui-ai-hello':'Hi! I am the Waste2Wealth AI. Tell me what waste you have — for example "broken concrete with steel bars".','ui-ai-home-title':'Ask the AI Assistant','ui-ai-home-sub':'Describe your waste — get instant, step-by-step help.','ai-ex1':'Concrete + rebar','ai-ex2':'Brick &amp; mortar','ai-ex3':'Mixed rubble','ai-ex4':'Wood timber','ui-ai-ph':'Ask me about your waste…','ui-ai-found':'Found:','ui-ai-problem':'Problem:','ui-ai-steps':'Simple steps','ui-ai-tip':'Tip','ui-ai-full':'Full instructions',
+        'nav-home-label':'Home','nav-speak-label':'Speak','nav-scan-label':'Scan','nav-type-label':'Type','nav-guide-label':'Guide','nav-impact-label':'Impact','nav-track-label':'Track',
+        'ui-ai-label':'AI Waste Summary','ui-sum-detected':'Detected','ui-sum-problem':'What we found','ui-sum-action':'Recommended action','ui-sum-dest':'Potential destination','ui-sum-recyclable':'Estimated recyclable quantity','ui-sep-action':'Separate these materials before recycling','ui-steps-primary':'Sorting steps for the main material below','ui-ai-title':'AI Assistant','ui-ai-sub':'Describe waste, get step-by-step help','ui-ai-online':'Online','ui-ai-hello':'Hi! I can identify your waste AND answer questions \u2014 try "broken concrete with steel bars", "can these bricks be reused?", or "how do I reduce site waste?"','ui-ai-home-title':'Ask the AI Assistant','ui-ai-home-sub':'Describe your waste — get instant, step-by-step help.','ai-ex1':'Concrete + rebar','ai-ex2':'Brick &amp; mortar','ai-ex3':'Mixed rubble','ai-ex4':'Wood timber','ui-ai-ph':'Ask me about your waste…','ui-ai-found':'Found:','ui-ai-problem':'Problem:','ui-ai-steps':'Simple steps','ui-ai-tip':'Tip','ui-ai-full':'Full instructions',
         'nav-value-label':'Value','ui-value-title':'Waste-to-Value Calculator','ui-value-project-label':'Project size (optional)','ui-value-material-label':'Waste by material (tonnes)','ui-value-example':'Load example','ui-value-calc':'Calculate Value','ui-value-total-label':'Total waste','ui-value-recyclable':'Recyclable tonnes','ui-value-of':'of','ui-value-total-waste':'tonnes total','ui-value-mat-value':'Est. material resale value','ui-value-savings':'Landfill fees saved','ui-value-co2':'CO\u2082 saved','ui-value-breakdown':'Per-material breakdown','ui-value-empty':'Enter at least one material above.','ui-qr-title':'Batch QR','ui-qr-sub':'Scan to track this batch through the waste-to-wealth pipeline','ui-qr-fields-label':'Batch details','ui-qr-batchid':'Batch ID','ui-qr-download':'Download QR',
         'qr-source-label':'📍 Source','qr-material-label':'🧱 Material','qr-qty-label':'⚖️ Quantity','qr-collected-label':'🚛 Collected','qr-recycler-label':'♻️ Recycler','qr-processed-label':'✅ Processed','qr-outcome-label':'🌱 Recovery outcome','qr-tons':'tonnes',
-        'nav-sustain-label':'Sustain','ui-sustain-title':'Sustainability Dashboard','ui-sustain-example':'Load example','ui-sustain-proj-label':'COMPANY SUSTAINABILITY','ui-sustain-rate-label':'RECOVERY RATE','ui-sustain-gen-label':'Waste Generated','ui-sustain-diverted-label':'Diverted from disposal','ui-sustain-t':'tonnes','ui-sustain-t2':'tonnes','ui-sustain-mats-label':'RECYCLED MATERIALS','ui-sustain-impact-label':'ESTIMATED ENVIRONMENTAL IMPACT','ui-sustain-trend-label':'MONTHLY TREND (COMBINED)','ui-sustain-input-label':'Branch waste (tonnes)','ui-sustain-branches-label':'BRANCHES','ui-sustain-add-branch':'+ Add Branch','ui-sustain-breakdown-label':'BY BRANCH','ui-sustain-newbranch':'Branch name:','ui-sustain-rename':'Rename branch:','ui-sustain-renamebtn':'Rename','ui-sustain-delbtn':'Delete','ui-sustain-delconfirm':'Delete branch ','ui-sustain-min1':'At least one branch is required.'}
+        'nav-sustain-label':'Sustain','ui-sustain-title':'Sustainability Dashboard','ui-sustain-example':'Load example','ui-sustain-proj-label':'COMPANY SUSTAINABILITY','ui-sustain-rate-label':'RECOVERY RATE','ui-sustain-gen-label':'Waste Generated','ui-sustain-diverted-label':'Diverted from disposal','ui-sustain-t':'tonnes','ui-sustain-t2':'tonnes','ui-sustain-mats-label':'RECYCLED MATERIALS','ui-sustain-impact-label':'ESTIMATED ENVIRONMENTAL IMPACT','ui-sustain-trend-label':'MONTHLY TREND (COMBINED)','ui-sustain-input-label':'Branch waste (tonnes)','ui-sustain-branches-label':'BRANCHES','ui-sustain-add-branch':'+ Add Branch','ui-sustain-breakdown-label':'BY BRANCH','ui-sustain-newbranch':'Branch name:','ui-sustain-rename':'Rename branch:','ui-sustain-renamebtn':'Rename','ui-sustain-delbtn':'Delete','ui-sustain-delconfirm':'Delete branch ','ui-sustain-min1':'At least one branch is required.','ui-track-title':'Track Waste','ui-track-record-label':'Record a batch','ui-track-material':'Material','ui-track-qty':'Quantity (tonnes)','ui-track-date':'Date','ui-track-source':'Source / site','ui-track-dest':'Destination','ui-track-d-reuse':'Reuse','ui-track-d-recycle':'Recycle','ui-track-d-recovery':'Recovery / energy','ui-track-d-disposal':'Disposal','ui-track-add':'+ Record Batch','ui-track-total-label':'Total recorded','ui-track-recovered-label':'Recovered (reuse + recycle + recovery)','ui-track-disposed-label':'Sent for disposal','ui-track-rate-label':'Recovery rate','ui-track-history-label':'BATCHES','ui-track-empty':'No batches yet — record your first one above.','ui-sum-bin':'Recommended bin','ui-scan-disclaimer':'Scan results are AI estimates — verify on site before sorting or disposal.','ui-value-potential-tag':'reuse & recycle opportunity per material',
+        'ui-learn-title':'Learning Hub','ui-learn-subtitle':'Recycling & Sustainability','ui-learn-desc':'Learn best practices for waste management','ui-rewards-title':'Rewards','ui-rewards-points-label':'Your Points','ui-rewards-status':'Start recycling to earn points!','ui-rewards-how-title':'How to Earn Points','ui-rewards-redeem-title':'Redeem Points','ui-community-title':'Community','ui-community-desc':'Share ideas & recycling initiatives','ui-news-title':'News & Updates','ui-alerts-title':'Alerts','ui-alerts-desc':'Get notified when bins are full or pickup is due','ui-settings-title':'Settings','ui-settings-profile':'Profile','ui-settings-prefs':'Preferences','nav-learn-label':'Learn','nav-rewards-label':'Rewards','nav-community-label':'Community','nav-news-label':'News','nav-alerts-label':'Alerts','nav-settings-label':'Settings','ui-recyclers-title':'Nearby Recyclers','ui-recyclers-desc':'Connect with verified recycling partners','nav-recyclers-label':'Recyclers'}
       ,
       hi: {
-        'ui-home-title':'आपके पास किस तरह का<br>कचरा है?','ui-home-sub':'स्कैन करें, बोलें, या टाइप करें — तुरंत निर्देश प्राप्त करें।',
+        'ui-home-title':'आपके पास किस तरह का<br>कचरा है?','ui-home-sub':'C&D कचरे को पहचानें, सही ढंग से छांटें, रिकवरी विकल्प खोजें और अपने पर्यावरणीय प्रभाव को ट्रैक करें।','ui-home-hero':'निर्माण कचरे को वसूलने योग्य मूल्य में बदलें।','ui-flow-1':'पहचानें','ui-flow-2':'छांटें','ui-flow-3':'पुनर्प्राप्त','ui-flow-4':'ट्रैक','ui-flow-5':'प्रभाव मापें',
         'ui-say':'बोलें','ui-type':'टाइप करें','ui-scan':'स्कैन करें',
         'ui-voice-listening':'सुन रहा है...','ui-voice-hint':'बताएं कि आपके पास क्या कचरा है','ui-voice-cancel':'रद्द करें',
         'ui-input-title':'कचरे का वर्णन करें','ui-input-label':'आपका कचरा कैसा दिखता है?','ui-input-tip':'सामग्री, आकार और मिश्रित चीजें बताएं','ui-get-instr':'निर्देश प्राप्त करें',
@@ -812,14 +1100,15 @@
         'ui-impact-title':'प्रभाव','ui-impact-co2-label':'रीसाइक्लिंग से बचाया गया CO\u2082','ui-impact-landfill-label':'लैंडफिल से बचाया गया','ui-impact-energy-label':'संरक्षित ऊर्जा','ui-impact-saved':'यानी ','ui-impact-trucks':' ट्रक लोड बचे','ui-impact-homes':'एक घर को ','ui-impact-days':' दिन बिजली दे सकते हैं',
         'ui-about-title':'बारे में','ui-about-why':'यह ऐप क्यों?','ui-about-desc':'निर्माण कचरा दुनिया भर में लैंडफिल भरता है। Waste2Wealth छोटे ठेकेदारों को मुफ्त छंटाई निर्देश देता है।',
         'ui-about-tips':'त्वरित सुझाव','ui-about-how':'यह कैसे काम करता है','ui-about-how-desc':'बोलें, टाइप करें या स्कैन करें। तुरंत रीसाइक्लिंग निर्देश। कोई खाता नहीं।',
-        'nav-home-label':'होम','nav-speak-label':'बोलें','nav-scan-label':'स्कैन','nav-type-label':'टाइप','nav-guide-label':'गाइड','nav-impact-label':'प्रभाव',
-        'ui-ai-label':'AI अपशिष्ट सारांश','ui-sum-detected':'पहचाना गया','ui-sum-problem':'हमने क्या पाया','ui-sum-action':'अनुशंसित कार्रवाई','ui-sum-dest':'संभावित गंतव्य','ui-sum-recyclable':'अनुमानित रीसायकल मात्रा','ui-sep-action':'रीसाइक्लिंग से पहले इन सामग्रियों को अलग करें','ui-steps-primary':'नीचे मुख्य सामग्री के लिए छंटाई के चरण','ui-ai-title':'AI असिस्टेंट','ui-ai-sub':'कचरे के बारे में बताएं, चरण-दर-चरण मदद पाएं','ui-ai-online':'ऑनलाइन','ui-ai-hello':'नमस्ते! मैं Waste2Wealth AI हूं। बताएं कि आपके पास क्या कचरा है — जैसे "लोहे की छड़ों वाला कंक्रीट"।','ui-ai-home-title':'AI असिस्टेंट से पूछें','ui-ai-home-sub':'अपने कचरे के बारे में बताएं — तुरंत चरण-दर-चरण मदद पाएं।','ai-ex1':'कंक्रीट + सरिया','ai-ex2':'ईंट और मोर्टार','ai-ex3':'मिश्रित मलबा','ai-ex4':'लकड़ी का टिम्बर','ui-ai-ph':'मुझे अपने कचरे के बारे में बताएं…','ui-ai-found':'पाया गया:','ui-ai-problem':'समस्या:','ui-ai-steps':'सरल चरण','ui-ai-tip':'सुझाव','ui-ai-full':'पूर्ण निर्देश',
+        'nav-home-label':'होम','nav-speak-label':'बोलें','nav-scan-label':'स्कैन','nav-type-label':'टाइप','nav-guide-label':'गाइड','nav-impact-label':'प्रभाव','nav-track-label':'ट्रैक',
+        'ui-ai-label':'AI अपशिष्ट सारांश','ui-sum-detected':'पहचाना गया','ui-sum-problem':'हमने क्या पाया','ui-sum-action':'अनुशंसित कार्रवाई','ui-sum-dest':'संभावित गंतव्य','ui-sum-recyclable':'अनुमानित रीसायकल मात्रा','ui-sep-action':'रीसाइक्लिंग से पहले इन सामग्रियों को अलग करें','ui-steps-primary':'नीचे मुख्य सामग्री के लिए छंटाई के चरण','ui-ai-title':'AI असिस्टेंट','ui-ai-sub':'कचरे के बारे में बताएं, चरण-दर-चरण मदद पाएं','ui-ai-online':'ऑनलाइन','ui-ai-hello':'नमस्ते! मैं आपके कचरे की पहचान कर सकता हूं और सवालों के जवाब भी दे सकता हूं — जैसे "लोहे की छड़ों वाला कंक्रीट", "क्या ये ईंटें दोबारा इस्तेमाल हो सकती हैं?"','ui-ai-home-title':'AI असिस्टेंट से पूछें','ui-ai-home-sub':'अपने कचरे के बारे में बताएं — तुरंत चरण-दर-चरण मदद पाएं।','ai-ex1':'कंक्रीट + सरिया','ai-ex2':'ईंट और मोर्टार','ai-ex3':'मिश्रित मलबा','ai-ex4':'लकड़ी का टिम्बर','ui-ai-ph':'मुझे अपने कचरे के बारे में बताएं…','ui-ai-found':'पाया गया:','ui-ai-problem':'समस्या:','ui-ai-steps':'सरल चरण','ui-ai-tip':'सुझाव','ui-ai-full':'पूर्ण निर्देश',
         'nav-value-label':'मूल्य','ui-value-title':'अपशिष्ट-से-मूल्य कैलकुलेटर','ui-value-project-label':'परियोजना का आकार (वैकल्पिक)','ui-value-material-label':'सामग्री के अनुसार कचरा (टन)','ui-value-example':'उदाहरण लोड करें','ui-value-calc':'मूल्य की गणना करें','ui-value-total-label':'कुल कचरा','ui-value-recyclable':'रीसायकल योग्य टन','ui-value-of':'में से','ui-value-total-waste':'टन कुल','ui-value-mat-value':'अनुमानित सामग्री पुनर्विक्रय मूल्य','ui-value-savings':'बचाई गई लैंडफिल फीस','ui-value-co2':'बचाया गया CO\u2082','ui-value-breakdown':'सामग्री-वार विवरण','ui-value-empty':'ऊपर कम से कम एक सामग्री दर्ज करें।','ui-qr-title':'बैच QR','ui-qr-sub':'इस बैच को वेस्ट-टू-वेल्थ पाइपलाइन में ट्रैक करने के लिए स्कैन करें','ui-qr-fields-label':'बैच विवरण','ui-qr-batchid':'बैच आईडी','ui-qr-download':'QR डाउनलोड करें',
         'qr-source-label':'📍 स्रोत','qr-material-label':'🧱 सामग्री','qr-qty-label':'⚖️ मात्रा','qr-collected-label':'🚛 संग्रहित','qr-recycler-label':'♻️ रीसाइक्लर','qr-processed-label':'✅ प्रोसेस्ड','qr-outcome-label':'🌱 रिकवरी परिणाम','qr-tons':'टन',
-        'nav-sustain-label':'सस्टेन','ui-sustain-title':'सस्टेनेबिलिटी डैशबोर्ड','ui-sustain-example':'उदाहरण लोड करें','ui-sustain-proj-label':'कंपनी सस्टेनेबिलिटी','ui-sustain-rate-label':'रिकवरी दर','ui-sustain-gen-label':'उत्पन्न कचरा','ui-sustain-diverted-label':'निपटान से बचाया गया','ui-sustain-t':'टन','ui-sustain-t2':'टन','ui-sustain-mats-label':'रीसाइकिल की गई सामग्री','ui-sustain-impact-label':'अनुमानित पर्यावरणीय प्रभाव','ui-sustain-trend-label':'मासिक रुझान (संयुक्त)','ui-sustain-input-label':'शाखा कचरा (टन)','ui-sustain-branches-label':'शाखाएं','ui-sustain-add-branch':'+ शाखा जोड़ें','ui-sustain-breakdown-label':'शाखा अनुसार','ui-sustain-newbranch':'शाखा का नाम:','ui-sustain-rename':'शाखा का नाम बदलें:','ui-sustain-renamebtn':'नाम बदलें','ui-sustain-delbtn':'हटाएं','ui-sustain-delconfirm':'शाखा हटाएं ','ui-sustain-min1':'कम से कम एक शाखा आवश्यक है।'}
+        'nav-sustain-label':'सस्टेन','ui-sustain-title':'सस्टेनेबिलिटी डैशबोर्ड','ui-sustain-example':'उदाहरण लोड करें','ui-sustain-proj-label':'कंपनी सस्टेनेबिलिटी','ui-sustain-rate-label':'रिकवरी दर','ui-sustain-gen-label':'उत्पन्न कचरा','ui-sustain-diverted-label':'निपटान से बचाया गया','ui-sustain-t':'टन','ui-sustain-t2':'टन','ui-sustain-mats-label':'रीसाइकिल की गई सामग्री','ui-sustain-impact-label':'अनुमानित पर्यावरणीय प्रभाव','ui-sustain-trend-label':'मासिक रुझान (संयुक्त)','ui-sustain-input-label':'शाखा कचरा (टन)','ui-sustain-branches-label':'शाखाएं','ui-sustain-add-branch':'+ शाखा जोड़ें','ui-sustain-breakdown-label':'शाखा अनुसार','ui-sustain-newbranch':'शाखा का नाम:','ui-sustain-rename':'शाखा का नाम बदलें:','ui-sustain-renamebtn':'नाम बदलें','ui-sustain-delbtn':'हटाएं','ui-sustain-delconfirm':'शाखा हटाएं ','ui-sustain-min1':'कम से कम एक शाखा आवश्यक है।','ui-track-title':'कचरा ट्रैक करें','ui-track-record-label':'बैच दर्ज करें','ui-track-material':'सामग्री','ui-track-qty':'मात्रा (टन)','ui-track-date':'तारीख','ui-track-source':'स्रोत / साइट','ui-track-dest':'गंतव्य','ui-track-d-reuse':'दोबारा उपयोग','ui-track-d-recycle':'रीसायकल','ui-track-d-recovery':'रिकवरी / ऊर्जा','ui-track-d-disposal':'निपटान','ui-track-add':'+ बैच दर्ज करें','ui-track-total-label':'कुल दर्ज','ui-track-recovered-label':'रीकवर्ड (रीयूज़ + रीसायकल + रिकवरी)','ui-track-disposed-label':'निपटान हेतु भेजा','ui-track-rate-label':'रिकवरी दर','ui-track-history-label':'बैच','ui-track-empty':'अभी कोई बैच नहीं — ऊपर पहला बैच दर्ज करें।','ui-sum-bin':'अनुशंसित बिन','ui-scan-disclaimer':'स्कैन परिणाम AI अनुमान हैं — छंटाई से पहले साइट पर पुष्टि करें।','ui-value-potential-tag':'प्रति सामग्री रीयूज़ और रीसायकल अवसर',
+        'ui-learn-title':'लर्निंग हब','ui-learn-subtitle':'रीसाइक्लिंग और सततता','ui-learn-desc':'अपशिष्ट प्रबंधन की बेस्ट प्रैक्टिस सीखें','ui-rewards-title':'पुरस्कार','ui-rewards-points-label':'आपके अंक','ui-rewards-status':'अंक कमाने के लिए रीसाइक्लिंग शुरू करें!','ui-rewards-how-title':'अंक कैसे कमाएं','ui-rewards-redeem-title':'अंक रिडीम करें','ui-community-title':'समुदाय','ui-community-desc':'विचार और रीसाइक्लिंग पहल साझा करें','ui-news-title':'समाचार और अपडेट','ui-alerts-title':'अलर्ट','ui-alerts-desc':'बिन भरने या पिकअप पर सूचना पाएं','ui-settings-title':'सेटिंग्स','ui-settings-profile':'प्रोफ़ाइल','ui-settings-prefs':'वरीयताएं','nav-learn-label':'सीखें','nav-rewards-label':'पुरस्कार','nav-community-label':'समुदाय','nav-news-label':'समाचार','nav-alerts-label':'अलर्ट','nav-settings-label':'सेटिंग्स','ui-recyclers-title':'निकटतम रीसाइक्लर','ui-recyclers-desc':'सत्यापित रीसाइक्लिंग पार्टनर से जुड़ें','nav-recyclers-label':'रीसाइक्लर'}
       ,
       es: {
-        'ui-home-title':'¿Qué tipo de residuo<br>tienes?','ui-home-sub':'Escanea, di o escribe — instrucciones al instante.',
+        'ui-home-title':'¿Qué tipo de residuo<br>tienes?','ui-home-sub':'Identifica residuos C&D, clasifícalos bien, descubre opciones de recuperación y mide tu impacto ambiental.','ui-home-hero':'Convierte el residuo de construcción en valor recuperable.','ui-flow-1':'IDENTIFICA','ui-flow-2':'SEPARA','ui-flow-3':'RECUPERA','ui-flow-4':'RASTREA','ui-flow-5':'MIDE IMPACTO',
         'ui-say':'Decir','ui-type':'Escribir','ui-scan':'Escanear',
         'ui-voice-listening':'Escuchando...','ui-voice-hint':'Di qué residuo tienes','ui-voice-cancel':'Cancelar',
         'ui-input-title':'Describe residuo','ui-input-label':'¿Cómo se ve tu residuo?','ui-input-tip':'Menciona material, tamaño y mezclas','ui-get-instr':'Obtener Instrucciones',
@@ -833,11 +1122,12 @@
         'ui-impact-title':'Impacto','ui-impact-co2-label':'CO\u2082 ahorrado reciclando','ui-impact-landfill-label':'Residuos desviados','ui-impact-energy-label':'Energía conservada','ui-impact-saved':'','ui-impact-trucks':' camiones ahorrados','ui-impact-homes':'energía para un hogar ','ui-impact-days':' días',
         'ui-about-title':'Acerca de','ui-about-why':'¿Por qué esta app?','ui-about-desc':'Los residuos de construcción llenan vertederos. Waste2Wealth ofrece instrucciones gratuitas.',
         'ui-about-tips':'Consejos rápidos','ui-about-how':'Cómo funciona','ui-about-how-desc':'Di, escribe o escanea. Instrucciones de reciclaje al instante. Sin cuentas.',
-        'nav-home-label':'Inicio','nav-speak-label':'Decir','nav-scan-label':'Escanear','nav-type-label':'Escribir','nav-guide-label':'Guía','nav-impact-label':'Impacto',
-        'ui-ai-label':'Resumen IA del residuo','ui-sum-detected':'Detectado','ui-sum-problem':'Lo que encontramos','ui-sum-action':'Acción recomendada','ui-sum-dest':'Destino potencial','ui-sum-recyclable':'Cantidad reciclable estimada','ui-sep-action':'Separa estos materiales antes de reciclar','ui-steps-primary':'Pasos de clasificación del material principal abajo','ui-ai-title':'Asistente IA','ui-ai-sub':'Describe tu residuo, obtén ayuda paso a paso','ui-ai-online':'En línea','ui-ai-hello':'¡Hola! Soy la IA de Waste2Wealth. Dime qué residuo tienes — por ejemplo "hormigón con barras de acero".','ui-ai-home-title':'Pregunta al Asistente IA','ui-ai-home-sub':'Describe tu residuo — ayuda instantánea paso a paso.','ai-ex1':'Hormigón + barras','ai-ex2':'Ladrillo y mortero','ai-ex3':'Escombros mixtos','ai-ex4':'Madera','ui-ai-ph':'Pregúntame sobre tu residuo…','ui-ai-found':'Encontrado:','ui-ai-problem':'Problema:','ui-ai-steps':'Pasos simples','ui-ai-tip':'Consejo','ui-ai-full':'Instrucciones completas',
+        'nav-home-label':'Inicio','nav-speak-label':'Decir','nav-scan-label':'Escanear','nav-type-label':'Escribir','nav-guide-label':'Guía','nav-impact-label':'Impacto','nav-track-label':'Registro',
+        'ui-ai-label':'Resumen IA del residuo','ui-sum-detected':'Detectado','ui-sum-problem':'Lo que encontramos','ui-sum-action':'Acción recomendada','ui-sum-dest':'Destino potencial','ui-sum-recyclable':'Cantidad reciclable estimada','ui-sep-action':'Separa estos materiales antes de reciclar','ui-steps-primary':'Pasos de clasificación del material principal abajo','ui-ai-title':'Asistente IA','ui-ai-sub':'Describe tu residuo, obtén ayuda paso a paso','ui-ai-online':'En línea','ui-ai-hello':'¡Hola! Puedo identificar tu residuo y responder preguntas — prueba "hormigón con barras de acero", "¿se pueden reutilizar estos ladrillos?"','ui-ai-home-title':'Pregunta al Asistente IA','ui-ai-home-sub':'Describe tu residuo — ayuda instantánea paso a paso.','ai-ex1':'Hormigón + barras','ai-ex2':'Ladrillo y mortero','ai-ex3':'Escombros mixtos','ai-ex4':'Madera','ui-ai-ph':'Pregúntame sobre tu residuo…','ui-ai-found':'Encontrado:','ui-ai-problem':'Problema:','ui-ai-steps':'Pasos simples','ui-ai-tip':'Consejo','ui-ai-full':'Instrucciones completas',
         'nav-value-label':'Valor','ui-value-title':'Calculadora Residuo-a-Valor','ui-value-project-label':'Tamaño del proyecto (opcional)','ui-value-material-label':'Residuos por material (toneladas)','ui-value-example':'Cargar ejemplo','ui-value-calc':'Calcular Valor','ui-value-total-label':'Residuos totales','ui-value-recyclable':'Toneladas reciclables','ui-value-of':'de','ui-value-total-waste':'toneladas totales','ui-value-mat-value':'Valor de reventa estimado','ui-value-savings':'Tarifas de vertedero ahorradas','ui-value-co2':'CO\u2082 ahorrado','ui-value-breakdown':'Desglose por material','ui-value-empty':'Ingresa al menos un material arriba.','ui-qr-title':'QR del Lote','ui-qr-sub':'Escanea para rastrear este lote en el proceso residuo-a-valor','ui-qr-fields-label':'Detalles del lote','ui-qr-batchid':'ID del Lote','ui-qr-download':'Descargar QR',
         'qr-source-label':'📍 Fuente','qr-material-label':'🧱 Material','qr-qty-label':'⚖️ Cantidad','qr-collected-label':'🚛 Recogido','qr-recycler-label':'♻️ Reciclador','qr-processed-label':'✅ Procesado','qr-outcome-label':'🌱 Resultado de recuperación','qr-tons':'toneladas',
-        'nav-sustain-label':'Sostén','ui-sustain-title':'Panel de Sostenibilidad','ui-sustain-example':'Cargar ejemplo','ui-sustain-proj-label':'SOSTENIBILIDAD DE LA EMPRESA','ui-sustain-rate-label':'TASA DE RECUPERACIÓN','ui-sustain-gen-label':'Residuos generados','ui-sustain-diverted-label':'Desviados de vertedero','ui-sustain-t':'toneladas','ui-sustain-t2':'toneladas','ui-sustain-mats-label':'MATERIALES RECICLADOS','ui-sustain-impact-label':'IMPACTO AMBIENTAL ESTIMADO','ui-sustain-trend-label':'TENDENCIA MENSUAL (COMBINADA)','ui-sustain-input-label':'Residuos de sucursal (toneladas)','ui-sustain-branches-label':'SUCURSALES','ui-sustain-add-branch':'+ Añadir Sucursal','ui-sustain-breakdown-label':'POR SUCURSAL','ui-sustain-newbranch':'Nombre de la sucursal:','ui-sustain-rename':'Renombrar sucursal:','ui-sustain-renamebtn':'Renombrar','ui-sustain-delbtn':'Eliminar','ui-sustain-delconfirm':'Eliminar sucursal ','ui-sustain-min1':'Se requiere al menos una sucursal.'}
+        'nav-sustain-label':'Sostén','ui-sustain-title':'Panel de Sostenibilidad','ui-sustain-example':'Cargar ejemplo','ui-sustain-proj-label':'SOSTENIBILIDAD DE LA EMPRESA','ui-sustain-rate-label':'TASA DE RECUPERACIÓN','ui-sustain-gen-label':'Residuos generados','ui-sustain-diverted-label':'Desviados de vertedero','ui-sustain-t':'toneladas','ui-sustain-t2':'toneladas','ui-sustain-mats-label':'MATERIALES RECICLADOS','ui-sustain-impact-label':'IMPACTO AMBIENTAL ESTIMADO','ui-sustain-trend-label':'TENDENCIA MENSUAL (COMBINADA)','ui-sustain-input-label':'Residuos de sucursal (toneladas)','ui-sustain-branches-label':'SUCURSALES','ui-sustain-add-branch':'+ Añadir Sucursal','ui-sustain-breakdown-label':'POR SUCURSAL','ui-sustain-newbranch':'Nombre de la sucursal:','ui-sustain-rename':'Renombrar sucursal:','ui-sustain-renamebtn':'Renombrar','ui-sustain-delbtn':'Eliminar','ui-sustain-delconfirm':'Eliminar sucursal ','ui-sustain-min1':'Se requiere al menos una sucursal.','ui-track-title':'Registrar Residuos','ui-track-record-label':'Registrar un lote','ui-track-material':'Material','ui-track-qty':'Cantidad (toneladas)','ui-track-date':'Fecha','ui-track-source':'Fuente / obra','ui-track-dest':'Destino','ui-track-d-reuse':'Reutilizar','ui-track-d-recycle':'Reciclar','ui-track-d-recovery':'Recuperación / energía','ui-track-d-disposal':'Eliminación','ui-track-add':'+ Registrar Lote','ui-track-total-label':'Total registrado','ui-track-recovered-label':'Recuperado (reutilizar + reciclar + recuperación)','ui-track-disposed-label':'Enviado a eliminación','ui-track-rate-label':'Tasa de recuperación','ui-track-history-label':'LOTES','ui-track-empty':'Aún no hay lotes — registra el primero arriba.','ui-sum-bin':'Contenedor recomendado',        'ui-scan-disclaimer':'Los resultados del escáner son estimaciones IA — verifica en obra antes de clasificar.','ui-value-potential-tag':'oportunidad de reutilizar y reciclar por material',
+        'ui-learn-title':'Centro de Aprendizaje','ui-learn-subtitle':'Reciclaje y Sostenibilidad','ui-learn-desc':'Aprende mejores prácticas de gestión de residuos','ui-rewards-title':'Recompensas','ui-rewards-points-label':'Tus Puntos','ui-rewards-status':'¡Empieza a reciclar para ganar puntos!','ui-rewards-how-title':'Cómo Ganar Puntos','ui-rewards-redeem-title':'Canjear Puntos','ui-community-title':'Comunidad','ui-community-desc':'Comparte ideas e iniciativas de reciclaje','ui-news-title':'Noticias y Actualizaciones','ui-alerts-title':'Alertas','ui-alerts-desc':'Recibe notificaciones de contenedores y recolección','ui-settings-title':'Configuración','ui-settings-profile':'Perfil','ui-settings-prefs':'Preferencias','nav-learn-label':'Aprender','nav-rewards-label':'Recompensas','nav-community-label':'Comunidad','nav-news-label':'Noticias','nav-alerts-label':'Alertas','nav-settings-label':'Config','ui-recyclers-title':'Recicladores Cercanos','ui-recyclers-desc':'Conéctate con socios de reciclaje verificados','nav-recyclers-label':'Recicladores'}
     };
 
     let L = 'en';
@@ -852,6 +1142,7 @@
     document.addEventListener('click',function(e){const b=e.target.closest('.ripple-btn');if(!b)return;const r=b.getBoundingClientRect();const p=document.createElement('span');p.className='ripple';const s=Math.max(r.width,r.height);p.style.width=p.style.height=s+'px';p.style.left=(e.clientX-r.left-s/2)+'px';p.style.top=(e.clientY-r.top-s/2)+'px';b.appendChild(p);setTimeout(()=>p.remove(),500);});
 
     const BIN_COLORS = ['#059669','#D97706','#7C3AED','#64748B','#92400E','#94A3B8','#0EA5E9','#F5F5DC'];
+    const BIN_NAMES = ['Green \u2014 concrete & masonry','Amber \u2014 brick & tile','Violet \u2014 tiles & ceramics','Gray \u2014 mixed rubble','Brown \u2014 wood & timber','Silver \u2014 metal scrap','Sky \u2014 glass','Cream \u2014 gypsum & drywall'];
     const DB = [
       {id:0,kw:['concrete','cement','rebar','steel bar','reinforced','slab','foundation'],type:'Reinforced Concrete',clean:'Clean crushed aggregate (20–40mm)',action:'Remove the metal bars first, then crush',dest:'C&D recycling facility',rec:95,problem:'Metal bars (rebar) are mixed in with the concrete.',st:['Pull out all the metal bars first. Use a magnet or a pry bar.','Break the concrete into small pieces (smaller than 40 cm). Use a crusher or a heavy hammer.','Pick out any wood, plastic, or paper by hand.','Crush the pieces to about 2\u20134 cm size.','Now the concrete is ready to reuse. Use it as road base, backfill, or new concrete.'],tp:'Recycling 1 ton of concrete saves about 900 kg of CO2.',guide:'Concrete is the most recycled construction material. Remove all metal first, then crush to the right size for your project. Crushed concrete works great as road base.'},
       {id:1,kw:['brick','bricks','mortar','clay brick','masonry'],type:'Brick & Mortar Mix',clean:'Clean brick aggregate + reusable whole bricks',action:'Separate whole bricks from broken pieces',dest:'Brick recycler / C&D facility',rec:90,problem:'Mortar is stuck to the bricks, and whole bricks are mixed with broken pieces.',st:['Chip off the big lumps of mortar with a hammer.','Keep whole bricks separate from broken pieces. Whole bricks can be reused as they are.','Break the brick pieces into small stones (1\u20132 cm) for aggregate.','Sift out the fine dust. Use it as bedding or in a new mortar mix.','Store clean bricks on a pallet and cover them to keep them dry.'],tp:'Clean whole bricks can sell for 30\u201350% of the new brick price.',guide:'Whole bricks have the highest value. Clean off mortar carefully to avoid damaging them. Broken bricks make excellent aggregate for pathways.'},
@@ -1051,7 +1342,7 @@
 
     // Voice
     let rec=null;
-    function startVoiceInput() { if(!('webkitSpeechRecognition' in window)&&!('SpeechRecognition' in window)){alert('Voice needs Chrome or Edge.');return;} stopCamera(); const SR=window.SpeechRecognition||window.webkitSpeechRecognition; rec=new SR(); rec.continuous=false; rec.interimResults=true; rec.lang=L==='hi'?'hi-IN':L==='es'?'es-ES':'en-US'; const t=document.getElementById('voice-transcript'); t.style.display='none'; t.textContent=''; goToScreen('voice'); rec.onresult=function(e){let f='';for(let i=e.resultIndex;i<e.results.length;i++){if(e.results[i].isFinal)f+=e.results[i][0].transcript;} if(f){t.textContent=f;t.style.display='block';document.getElementById('ui-voice-listening').textContent='Got it!';setTimeout(()=>{stopVoice();document.getElementById('waste-input').value=f;segText=f;runAutoSegregate(findAllWaste(f),null);},700);}else{t.textContent=e.results[e.results.length-1][0].transcript;t.style.display='block';}}; rec.onerror=function(){stopVoice();goToScreen('home');}; rec.start(); }
+    function startVoiceInput() { if(!('webkitSpeechRecognition' in window)&&!('SpeechRecognition' in window)){const tip=document.getElementById('ui-input-tip');if(tip)tip.textContent='Voice isn\u2019t supported in this browser \u2014 type your waste below.';goToScreen('input');return;} stopCamera(); const SR=window.SpeechRecognition||window.webkitSpeechRecognition; rec=new SR(); rec.continuous=false; rec.interimResults=true; rec.lang=L==='hi'?'hi-IN':L==='es'?'es-ES':'en-US'; const t=document.getElementById('voice-transcript'); t.style.display='none'; t.textContent=''; goToScreen('voice'); rec.onresult=function(e){let f='';for(let i=e.resultIndex;i<e.results.length;i++){if(e.results[i].isFinal)f+=e.results[i][0].transcript;} if(f){t.textContent=f;t.style.display='block';document.getElementById('ui-voice-listening').textContent='Got it!';setTimeout(()=>{stopVoice();document.getElementById('waste-input').value=f;segText=f;runAutoSegregate(findAllWaste(f),null);},700);}else{t.textContent=e.results[e.results.length-1][0].transcript;t.style.display='block';}}; rec.onerror=function(){stopVoice();goToScreen('home');}; rec.start(); }
     function stopVoice(){if(rec){try{rec.stop();}catch(e){}rec=null;}}
 
     // Scan
@@ -1065,7 +1356,8 @@
     const uK=['dog','cat','bird','fish','horse','cow','sheep','flower','plant','tree','leaf','grass','person','man','woman','child','baby','car','truck','bus','bicycle','airplane','boat','food','pizza','burger','phone','laptop','computer','tv','shirt','shoe','hat','book','bed','chair','sofa','table','ocean','sea','lake','river','mountain','sky','cloud','ball','cup','plate','bowl','drink','coffee','tea'];
     function isUnrelated(p){if(!p||!p.length)return false;let c=0,u=0;for(const r of p){const n=r.className.toLowerCase();for(const m of aM){for(const k of m.kw){if(n.includes(k))c+=r.probability;}}for(const k of uK){if(n.includes(k))u+=r.probability;}} return u>c;}
     function clsByColor(ca){const ctx=ca.getContext('2d'),w=Math.min(ca.width,200),h=Math.min(ca.height,150),d=ctx.getImageData(0,0,w,h).data;let tR=0,tG=0,tB=0,ct=0,r2=0,g2=0,b2=0,gray=0,warm=0,bright=0,dark=0;for(let i=0;i<d.length;i+=4){const r=d[i],g=d[i+1],b=d[i+2];tR+=r;tG+=g;tB+=b;r2+=r*r;g2+=g*g;b2+=b*b;ct++;const mx=Math.max(r,g,b),mn=Math.min(r,g,b),sat=mx===0?0:(mx-mn)/mx,l=mx/255;if(sat<0.2)gray++;else if(r>g*1.3&&r>b*1.3)warm++;if(l>0.75)bright++;else if(l<0.3)dark++;}const aR=tR/ct,aG=tG/ct,aB=tB/ct,aS=(Math.max(aR,aG,aB)-Math.min(aR,aG,aB))/(Math.max(aR,aG,aB)||1),l=(aR+aG+aB)/(3*255),gr=gray/ct,wr=warm/ct,v=(r2/ct-aR*aR+g2/ct-aG*aG+b2/ct-aB*aB)/3;if(l>0.85&&aS<0.1&&gr>0.5)return DB[7];if(l>0.65&&aS<0.15&&gr>0.6)return DB[0];if(wr>0.3&&aR>140&&aG<110&&aB<90)return DB[1];if(aG>aR*1.2&&aG>aB*1.2&&aS<0.25&&dark/ct<0.3)return DB[4];if(dark/ct>0.4&&aS<0.2&&v>3000)return DB[5];if(bright/ct>0.5&&aS>0.2&&v<2000)return DB[2];if(v>4000)return DB[3];if(l>0.7&&aS<0.1)return DB[6];if(aR>150&&aG>130&&aB<100)return DB[4];if(aR>150&&aG>150&&aB>150&&gr>0.5)return DB[0];if(wr>0.2)return DB[1];return DB[3];}
-    async function ensureModel(){if(model)return model;if(modelLoading){while(modelLoading)await new Promise(r=>setTimeout(r,200));return model;}modelLoading=true;const s=document.getElementById('scan-status'),t=document.getElementById('scan-status-text');s.style.display='flex';t.textContent='Loading AI...';try{model=await mobilenet.load({version:2,alpha:1.0});}catch(e){model=null;}modelLoading=false;s.style.display='none';return model;}
+    function loadScript(src){return new Promise(function(res,rej){const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=function(){rej(new Error('Failed to load '+src));};document.head.appendChild(s);});}
+    async function ensureModel(){if(model)return model;if(modelLoading){while(modelLoading)await new Promise(r=>setTimeout(r,200));return model;}modelLoading=true;const s=document.getElementById('scan-status'),t=document.getElementById('scan-status-text');s.style.display='flex';t.textContent='Loading AI (first scan only)...';try{if(typeof tf==='undefined')await loadScript('https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.21.0/dist/tf.min.js');if(typeof mobilenet==='undefined')await loadScript('https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.1/dist/mobilenet.min.js');model=await mobilenet.load({version:2,alpha:1.0});}catch(e){model=null;}modelLoading=false;s.style.display='none';return model;}
     async function analyzeImage(ca){const s=document.getElementById('scan-status'),t=document.getElementById('scan-status-text');s.style.display='flex';const pu=ca.toDataURL('image/jpeg',0.8);const ai=await ensureModel();if(ai){t.textContent='AI analyzing...';try{const p=await ai.classify(ca,10);if(p&&p.length>0){if(isUnrelated(p)){s.style.display='none';showResult(null,pu,true);return;}const scores={};const topProb=p[0]?p[0].probability:0;for(const pr of p){const n=pr.className.toLowerCase();for(const m of aM){let sc=0;for(const k of m.kw){if(n.includes(k))sc++;}if(sc>0)scores[m.w]=(scores[m.w]||0)+pr.probability*sc;}}const ranked=Object.keys(scores).map(k=>({id:+k,s:scores[k]})).sort((a,b)=>b.s-a.s);if(ranked.length){const total=ranked.reduce((a,b)=>a+b.s,0);const mats=ranked.slice(0,3).map((r,i)=>({item:DB[r.id],pct:Math.max(8,Math.round((r.s/total)*100)),conf:i===0?topProb:0.5}));s.style.display='none';showResult(mats,pu);return;}}}catch(e){}}t.textContent='Analyzing...';await new Promise(r=>setTimeout(r,300));const r=clsByColor(ca);const ctx=ca.getContext('2d'),w=Math.min(ca.width,200),h=Math.min(ca.height,150),d=ctx.getImageData(0,0,w,h).data;let g=0,bl=0,vb=0,tt=0;for(let i=0;i<d.length;i+=4){const r_=d[i],g_=d[i+1],b_=d[i+2];tt++;const mx=Math.max(r_,g_,b_),mn=Math.min(r_,g_,b_),sat=mx===0?0:(mx-mn)/mx;if(g_>r_*1.4&&g_>b_*1.4&&sat>0.15)g++;if(b_>r_*1.3&&b_>g_*1.3&&sat>0.15)bl++;if(sat>0.6)vb++;}if(g/tt>0.3||bl/tt>0.25||vb/tt>0.4){s.style.display='none';showResult(null,pu,true);return;}s.style.display='none';showResult([{item:r,pct:100,conf:0}],pu);}
 
     function showResult(mats,photoUrl,unrelated) {
@@ -1078,7 +1370,12 @@
       const dl=document.getElementById('result-detected-list');
       dl.innerHTML=currentMats.map(m=>'<span class="ai-chip"><span style="width:7px;height:7px;border-radius:50%;background:'+BIN_COLORS[m.item.id]+';flex-shrink:0;"></span>'+m.item.type+' '+m.pct+'%</span>').join('');
       const ce=document.getElementById('result-confidence');
-      if(top.conf){ce.textContent='AI: '+Math.round(top.conf*100)+'% confidence';ce.style.display='block';}else{ce.style.display='none';}
+      if(top.conf){ce.textContent='AI: '+Math.round(top.conf*100)+'% confidence';ce.style.display='block';}else{ce.textContent='Estimate';ce.style.display='block';}
+      const binDot=document.getElementById('result-bin-dot');binDot.style.background=BIN_COLORS[top.item.id];
+      const binName=document.getElementById('result-bin');binName.textContent=BIN_NAMES[top.item.id];
+      const rb=document.getElementById('result-rec-badge');
+      if(top.item.rec>=90){rb.textContent=top.item.rec+'% recoverable \u00b7 high recovery';}else if(top.item.rec>=70){rb.textContent=top.item.rec+'% recoverable \u00b7 good recovery';}else{rb.textContent=top.item.rec+'% recoverable \u00b7 sort carefully';}
+      rb.style.display='inline-block';
       const issues=detectProblems(segText);
       const findings=issues.map(p=>p.found);
       const dests=[...new Set(currentMats.map(m=>m.item.dest))];
@@ -1124,14 +1421,78 @@
     function toggleTTS(){if(!currentTTS)return;if(isTTS){window.speechSynthesis.cancel();isTTS=false;return;}const u=new SpeechSynthesisUtterance(currentTTS);u.lang=L==='hi'?'hi-IN':L==='es'?'es-ES':'en-US';u.rate=0.9;u.onend=function(){isTTS=false;};isTTS=true;window.speechSynthesis.speak(u);}
 
     // ===== GUIDE =====
+    const GUIDE_REUSE=[
+      'Crushed concrete: road base, backfill, new concrete.',
+      'Whole clean bricks: reuse as-is; broken brick: aggregate and pathways.',
+      'Crushed ceramic: terrazzo floors; porcelain powder: new bricks and cement substitute.',
+      'Recycled as Type-1 sub-base for roads and foundations.',
+      'Untreated wood: mulch, animal bedding, particleboard; treated wood: licensed facility only.',
+      'Metal scrap: 100% recyclable \u2014 sell to a scrap yard.',
+      'Glass cullet: new glass, fiberglass, aggregate substitute.',
+      'Gypsum powder: new drywall or farm soil conditioner.'
+    ];
+    function toggleGuideDetails(i){const d=document.getElementById('guide-detail-'+i);if(d)d.style.display=d.style.display==='none'?'block':'none';}
     function buildGuide() {
       const c=document.getElementById('guide-list');c.innerHTML='';
       DB.forEach((m,i)=>{
         const el=document.createElement('div');el.className='material-card stagger';
         el.style.animationDelay=(i*0.06)+'s';
-        el.innerHTML='<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;"><div style="width:8px;height:8px;border-radius:50%;background:'+['#059669','#D97706','#7C3AED','#64748B','#92400E','#94A3B8','#0EA5E9','#F5F5DC'][i]+';flex-shrink:0;"></div><p style="font-family:\'Space Grotesk\',sans-serif;font-weight:600;font-size:0.85rem;">'+m.type+'</p></div><p style="font-size:0.72rem;color:#94A3B8;line-height:1.4;">'+m.guide+'</p><button class="btn-outline" onclick="document.getElementById(\'waste-input\').value=\''+m.type+'\';goToScreen(\'input\');" style="font-size:0.65rem;padding:3px 10px;margin-top:6px;">Sort this</button>';
+        el.innerHTML='<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;"><div style="width:8px;height:8px;border-radius:50%;background:'+BIN_COLORS[i]+';flex-shrink:0;"></div><p style="font-family:\'Space Grotesk\',sans-serif;font-weight:600;font-size:0.85rem;">'+m.type+'</p></div>'+
+          '<p style="font-size:0.72rem;color:#94A3B8;line-height:1.4;">'+m.guide+'</p>'+
+          '<div id="guide-detail-'+i+'" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(148,163,184,0.15);font-size:0.72rem;line-height:1.55;color:#64748B;">'+
+          '<p><strong style="color:#059669;">Segregate \u00b7 </strong>'+m.action+' <span style="color:#94A3B8;">('+m.dest+')</span></p>'+
+          '<p style="margin-top:4px;"><strong style="color:#D97706;">Reuse \u00b7 </strong>'+GUIDE_REUSE[i]+'</p>'+
+          '<p style="margin-top:4px;"><strong style="color:#7C3AED;">Recycles into \u00b7 </strong>'+m.clean+'</p>'+
+          '<p style="margin-top:4px;"><strong style="color:#DC2626;">Don\u2019t mix \u00b7 </strong>'+m.problem+'</p>'+
+          '</div>'+
+          '<div style="display:flex;gap:8px;margin-top:6px;"><button class="btn-outline" onclick="toggleGuideDetails('+i+')" style="font-size:0.65rem;padding:3px 10px;">Details</button><button class="btn-outline" onclick="document.getElementById(\'waste-input\').value=\''+m.type+'\';goToScreen(\'input\');" style="font-size:0.65rem;padding:3px 10px;">Sort this</button></div>';
         c.appendChild(el);
       });
+    }
+
+    // ===== TRACK =====
+    let trackRecs = JSON.parse(localStorage.getItem('w2w-track')||'[]');
+    function saveTrack(){localStorage.setItem('w2w-track',JSON.stringify(trackRecs));}
+    function trackTotals(){
+      let total=0,recovered=0,disposed=0;
+      trackRecs.forEach(r=>{const w=parseFloat(r.qty)||0;total+=w;if(r.dest==='disposal')disposed+=w;else recovered+=w;});
+      return {total:total,recovered:recovered,disposed:disposed,rate:total>0?Math.round((recovered/total)*1000)/10:0};
+    }
+    function addTrackRecord(){
+      const matSel=document.getElementById('track-material');
+      const qty=parseFloat(document.getElementById('track-qty').value)||0;
+      const date=document.getElementById('track-date').value||new Date().toISOString().slice(0,10);
+      const source=(document.getElementById('track-source').value||'Site 1').trim();
+      const dest=document.getElementById('track-dest').value;
+      if(qty<=0){alert('Enter a quantity greater than 0.');return;}
+      trackRecs.push({id:Date.now(),mat:+matSel.value,type:DB[+matSel.value].type,qty:qty,date:date,source:source,dest:dest});
+      if(trackRecs.length>200)trackRecs=trackRecs.slice(-200);
+      saveTrack();renderTrack();
+    }
+    function delTrackRecord(id){trackRecs=trackRecs.filter(r=>r.id!==id);saveTrack();renderTrack();}
+    function renderTrack(){
+      const sel=document.getElementById('track-material');
+      if(sel&&!sel.options.length){DB.forEach(m=>{const o=document.createElement('option');o.value=m.id;o.textContent=m.type;sel.appendChild(o);});}
+      const dt=document.getElementById('track-date');
+      if(dt&&!dt.value)dt.value=new Date().toISOString().slice(0,10);
+      const s=trackTotals();
+      document.getElementById('track-total').textContent=Math.round(s.total*10)/10;
+      document.getElementById('track-recovered').textContent=Math.round(s.recovered*10)/10;
+      document.getElementById('track-disposed').textContent=Math.round(s.disposed*10)/10;
+      document.getElementById('track-rate').textContent=s.rate;
+      const c=document.getElementById('track-list');c.innerHTML='';
+      if(!trackRecs.length){c.innerHTML='<p style="font-size:0.72rem;color:#94A3B8;">'+(U[L]['ui-track-empty']||'No batches yet \u2014 record your first one above.')+'</p>';}
+      else{
+        const dl=U[L]||U.en;
+        const destNames={reuse:(dl['ui-track-d-reuse']||'Reuse'),recycle:(dl['ui-track-d-recycle']||'Recycle'),recovery:(dl['ui-track-d-recovery']||'Recovery / energy')||'Recovery / energy',disposal:(dl['ui-track-d-disposal']||'Disposal')};
+        const destColors={reuse:'#D97706',recycle:'#059669',recovery:'#7C3AED',disposal:'#DC2626'};
+        trackRecs.slice().reverse().forEach(r=>{
+          const el=document.createElement('div');el.className='bin-card visible';el.style.opacity='1';el.style.transform='none';
+          el.innerHTML='<span class="bin-dot" style="background:'+destColors[r.dest]+';"></span><div style="flex:1;min-width:0;"><p style="font-size:0.78rem;font-weight:700;">'+r.type+'</p><p style="font-size:0.62rem;color:#94A3B8;">'+r.source+' \u00b7 '+r.date+'</p></div><div style="text-align:right;flex-shrink:0;"><p style="font-size:0.78rem;font-weight:700;">'+r.qty+' t</p><p style="font-size:0.62rem;color:#94A3B8;">'+destNames[r.dest]+'</p></div><button onclick="delTrackRecord('+r.id+')" title="Delete" style="background:none;border:none;cursor:pointer;color:#DC2626;padding:4px;flex-shrink:0;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>';
+          c.appendChild(el);
+        });
+      }
+      updateImpact();
     }
 
     // ===== IMPACT =====
@@ -1142,30 +1503,30 @@
       localStorage.setItem('w2w-log',JSON.stringify(sortLog));
     }
     function updateImpact() {
-      const total=sortLog.length;
-      const co2=total*900; // kg CO2 saved per sort
-      const tons=(total*0.5).toFixed(1); // ~0.5 tons per sort
-      const trucks=Math.round(total*0.5/5); // 5 tons per truck
-      const energy=total*500; // kWh
-      const days=Math.round(energy/30); // avg home uses 30 kWh/day
-      document.getElementById('impact-co2').textContent=co2.toLocaleString();
-      document.getElementById('impact-trees').textContent=Math.round(co2/25);
-      document.getElementById('impact-tons').textContent=tons;
+      const st=trackTotals();
+      const divT=st.recovered;
+      const co2=Math.round(divT*900);
+      const tons=Math.round(divT*10)/10;
+      const trucks=Math.round(divT/5);
+      const energy=Math.round(divT*85);
+      const days=Math.round(energy/30);
+      document.getElementById('impact-co2').textContent=(co2||0).toLocaleString();
+      document.getElementById('impact-trees').textContent=Math.round((co2||0)/25);
+      document.getElementById('impact-tons').textContent=String(tons);
       document.getElementById('impact-trucks').textContent=trucks;
-      document.getElementById('impact-energy').textContent=energy.toLocaleString();
+      document.getElementById('impact-energy').textContent=(energy||0).toLocaleString();
       document.getElementById('impact-days').textContent=days;
     }
 
-    // ===== VALUE CALCULATOR =====
-    const VAL_RATES=[1500,2500,1000,800,1200,35000,3000,2000]; // INR per tonne, matches DB id order
-    const LANDFILL_FEE=2500; // INR per tonne avoided
-    let cur='inr';
-    function fmtMoney(v){const s=cur==='usd'?Math.round(v/85).toLocaleString():Math.round(v).toLocaleString();return (cur==='inr'?'₹':'$')+s;}
+// ===== VALUE CALCULATOR =====
+    const RECOVERY_POTENTIAL=['High','High','Medium','Medium','Medium','High','High','Medium'];
+    const POT_TEXT={'High':'High \u2014 strong local demand for these streams','Medium':'Medium \u2014 value varies by local buyers','Low':'Low \u2014 value is mostly in avoided disposal'};
+    function potLabel(v){return v>0.66?'High':v>0.33?'Medium':'Low';}
     function buildValueInputs(){
       const c=document.getElementById('value-materials');c.innerHTML='';
       DB.forEach((m,i)=>{
         const row=document.createElement('div');row.style.display='flex';row.style.alignItems='center';row.style.gap='8px';
-        row.innerHTML='<span class="bin-dot" style="background:'+BIN_COLORS[i]+';"></span><div style="flex:1;min-width:0;"><p style="font-size:0.78rem;font-weight:600;">'+m.type+'</p><p style="font-size:0.62rem;color:#94A3B8;">'+fmtMoney(VAL_RATES[i])+'/t · '+m.rec+'% rec.</p></div><input class="val-input" type="number" min="0" step="1" data-id="'+i+'" value="0" aria-label="'+m.type+' tonnes">';
+        row.innerHTML='<span class="bin-dot" style="background:'+BIN_COLORS[i]+';"></span><div style="flex:1;min-width:0;"><p style="font-size:0.78rem;font-weight:600;">'+m.type+'</p><p style="font-size:0.62rem;color:#94A3B8;">Recovery potential: '+RECOVERY_POTENTIAL[i]+' \u00b7 '+m.rec+'% recyclable</p></div><input class="val-input" type="number" min="0" step="0.1" data-id="'+i+'" value="0" aria-label="'+m.type+' tonnes">';
         row.querySelector('input').addEventListener('input',function(){updateWasteTotal();});
         c.appendChild(row);
       });
@@ -1181,42 +1542,36 @@
       updateWasteTotal();calcValue();
     }
     function calcValue(){
-      let totalW=0,recyclable=0,matval=0,savings=0,co2=0;const parts=[];
+      let totalW=0,recyclable=0,co2=0,potSum=0,potW=0;const parts=[];
       document.querySelectorAll('#value-materials input').forEach(inp=>{
         const id=+inp.getAttribute('data-id'),w=parseFloat(inp.value)||0;
         if(w<=0)return;
         totalW+=w;
         const rw=w*(DB[id].rec/100);
-        recyclable+=rw;matval+=rw*VAL_RATES[id];savings+=rw*LANDFILL_FEE;co2+=rw*900;
-        parts.push({item:DB[id],w,rw,val:rw*VAL_RATES[id]});
+        recyclable+=rw;co2+=rw*900;
+        const pv=RECOVERY_POTENTIAL[id]==='High'?1:RECOVERY_POTENTIAL[id]==='Medium'?0.5:0.2;
+        potSum+=pv*w;potW+=w;
+        parts.push({item:DB[id],w,rw,pot:RECOVERY_POTENTIAL[id]});
       });
       const res=document.getElementById('value-results');res.style.display='block';
       document.getElementById('value-total').textContent=Math.round(totalW*10)/10;
       document.getElementById('value-recyclable').textContent=Math.round(recyclable*10)/10;
       document.getElementById('value-waste-total').textContent=Math.round(totalW*10)/10;
-      document.getElementById('value-matval').textContent=fmtMoney(matval);
-      document.getElementById('value-savings').textContent=fmtMoney(savings);
+      const overall=potW>0?potLabel(potSum/potW):'\u2014';
+      document.getElementById('value-matval').textContent=overall+' potential';
+      document.getElementById('value-savings').textContent=overall;
       document.getElementById('value-co2').textContent=Math.round(co2).toLocaleString();
       syncDashFromValue(totalW,recyclable);
       recordDashTrend();
       const bd=document.getElementById('value-breakdown');bd.innerHTML='';
-      parts.sort((a,b)=>b.val-a.val);
-      const maxVal=Math.max(matval,1);
+      parts.sort((a,b)=>b.rw-a.rw);
+      const maxVal=(parts.length?Math.max.apply(null,parts.map(p=>p.rw)):0)||1;
       parts.forEach((p,i)=>{
         const el=document.createElement('div');el.className='clean-output';el.style.animationDelay=(i*0.08)+'s';
-        el.innerHTML='<div style="display:flex;align-items:center;gap:8px;"><span class="bin-dot" style="background:'+BIN_COLORS[p.item.id]+';"></span><div style="flex:1;"><p style="font-size:0.8rem;font-weight:700;">'+p.item.type+'</p><div class="bin-bar"><div class="bin-bar-fill" style="width:'+Math.max(4,Math.round((p.val/maxVal)*100))+'%;background:'+BIN_COLORS[p.item.id]+';"></div></div></div><div style="text-align:right;flex-shrink:0;"><p style="font-size:0.8rem;font-weight:700;">'+fmtMoney(p.val)+'</p><p style="font-size:0.62rem;color:#94A3B8;">'+Math.round(p.rw*10)/10+' t</p></div></div>';
+        el.innerHTML='<div style="display:flex;align-items:center;gap:8px;"><span class="bin-dot" style="background:'+BIN_COLORS[p.item.id]+';"></span><div style="flex:1;"><p style="font-size:0.8rem;font-weight:700;">'+p.item.type+'</p><div class="bin-bar"><div class="bin-bar-fill" style="width:'+Math.max(4,Math.round((p.rw/maxVal)*100))+'%;background:'+BIN_COLORS[p.item.id]+';"></div></div></div><div style="text-align:right;flex-shrink:0;"><p style="font-size:0.8rem;font-weight:700;">'+p.pot+'</p><p style="font-size:0.62rem;color:#94A3B8;">'+Math.round(p.rw*10)/10+' t recovered</p></div></div>';
         bd.appendChild(el);
       });
       if(!parts.length)bd.innerHTML='<p style="font-size:0.72rem;color:#94A3B8;">'+(U[L]['ui-value-empty']||'Enter at least one material above.')+'</p>';
-    }
-    function setCur(c){
-      cur=c;
-      document.getElementById('cur-inr').classList.toggle('active',c==='inr');
-      document.getElementById('cur-usd').classList.toggle('active',c==='usd');
-      const vals={};document.querySelectorAll('#value-materials input').forEach(i=>{vals[i.getAttribute('data-id')]=i.value;});
-      buildValueInputs();
-      Object.keys(vals).forEach(k=>{const el=document.querySelector('#value-materials input[data-id="'+k+'"]');if(el)el.value=vals[k];});
-      updateWasteTotal();
     }
 
     // ===== SUSTAINABILITY DASHBOARD (Multi-branch) =====
@@ -1415,6 +1770,55 @@
       aiSendFrom(inp.value.trim());
     }
 
+    function aiAnswer(text) {
+      const l = ' ' + text.toLowerCase() + ' ';
+      const dl = U[L] || U.en;
+      const wastes = findAllWaste(text);
+      const primary = (wastes && wastes[0]) ? wastes[0] : DB[3];
+      if (l.includes('reduce') || l.includes('less waste') || l.includes('fewer') || l.includes('avoid') || l.includes('minimize') || l.includes('minimise') || l.includes('cut waste')) {
+        return '<p class="ai-find">Ways to reduce C&amp;D waste on site</p>' +
+          '<ol class="ai-steps">' +
+          '<li>Order materials in exact sizes \u2014 off-cuts are the biggest source of masonry, tile and metal waste.</li>' +
+          '<li>Store materials covered and off the ground \u2014 rain damage turns them into waste.</li>' +
+          '<li>Reuse off-cuts on site: broken brick for pathways, concrete off-cuts as fill.</li>' +
+          '<li>Plan demolition as disassembly \u2014 recover doors, frames, fittings and whole bricks first.</li>' +
+          '<li>Track what you discard in the Track tab \u2014 waste you measure drops fastest.</li></ol>' +
+          '<p class="ai-tip">Tip: most C&amp;D waste is rejected materials \u2014 protect stored stock and cut precisely.</p>';
+      }
+      if (l.includes('reuse') || l.includes('reusable') || l.includes('use again') || l.includes('can i use') || l.includes('can it be')) {
+        return '<p class="ai-find">Reuse ideas for ' + primary.type + '</p>' +
+          '<p class="ai-problem">' + GUIDE_REUSE[primary.id] + '</p>' +
+          (primary.id === 1 ? '<p class="ai-tip">Whole bricks can sell for 30\u201350% of the new-brick price \u2014 clean them carefully.</p>' : (primary.id === 5 ? '<p class="ai-tip">Scrap metal keeps its value \u2014 keep it clean and dry for a better price.</p>' : '<p class="ai-tip">' + primary.tp + '</p>')) +
+          '<button class="btn-primary ripple-btn" style="font-size:0.75rem;padding:7px 16px;margin-top:6px;" onclick="aiFullSteps(\'' + aiEsc(text) + '\')">' + (dl['ui-ai-full'] || 'Full instructions') + '</button>';
+      }
+      if (l.includes('environment') || l.includes('benefit') || l.includes('impact') || l.includes('co2') || l.includes('co\u2082') || l.includes('planet') || l.includes('climate')) {
+        return '<p class="ai-find">Environmental value of ' + primary.type + '</p>' +
+          '<p class="ai-problem">' + primary.tp + '</p>' +
+          '<p class="ai-tip">Sorting keeps these resources in the building loop instead of landfill. The Impact tab tracks your estimated CO\u2082 savings.</p>';
+      }
+      if (l.includes('where') || l.includes('destination') || l.includes('send') || l.includes('take it') || l.includes('drop it') || l.includes('deliver')) {
+        return '<p class="ai-find">Where ' + primary.type + ' should go</p>' +
+          '<p class="ai-problem">Destination: ' + primary.dest + '</p>' +
+          '<p class="ai-tip">Recovered output: ' + primary.clean + '</p>';
+      }
+      if (l.includes('recycled into') || l.includes('become') || l.includes('made into') || l.includes('turned into') || l.includes('turns into') || l.includes('what can')) {
+        return '<p class="ai-find">What ' + primary.type + ' can become</p>' +
+          '<p class="ai-problem">' + primary.clean + '</p>' +
+          '<p class="ai-tip">' + primary.tp + '</p>';
+      }
+      if (l.includes('separate') || l.includes('sort') || l.includes('segregat') || l.includes('split') || l.includes('divide')) {
+        return '<p class="ai-find">How to segregate ' + primary.type + '</p>' +
+          '<ol class="ai-steps">' + primary.st.map(function (s) { return '<li>' + s + '</li>'; }).join('') + '</ol>' +
+          '<p class="ai-tip">' + primary.tp + '</p>';
+      }
+      if (l.includes('hazard') || l.includes('danger') || l.includes('asbestos') || l.includes('safe')) {
+        return '<p class="ai-find">Safety check for ' + primary.type + '</p>' +
+          '<p class="ai-problem">Do not break or cut anything you suspect is hazardous \u2014 keep it damp, wrap it, and call a licensed removal team.</p>' +
+          '<p class="ai-tip">Asbestos dust can cause permanent lung disease. When in doubt, treat it as hazardous.</p>';
+      }
+      return null;
+    }
+
     function aiSendFrom(text) {
       if (!text) return;
       const inp = document.getElementById('ai-input');
@@ -1422,6 +1826,12 @@
       aiAppendUser(text);
       aiTyping(true);
       setTimeout(function () {
+        const answer = aiAnswer(text);
+        if (answer) {
+          aiTyping(false);
+          aiAppendBot(answer);
+          return;
+        }
         const mats = findAllWaste(text);
         const primary = (mats && mats[0]) ? mats[0] : DB[3];
         const extra = (mats && mats.length > 1)
@@ -1465,7 +1875,167 @@
       if (e.key === 'Enter') { e.preventDefault(); aiSend(); }
     });
 
-    window.addEventListener('load',function(){setTimeout(ensureModel,1500);buildValueInputs();renderDash();});
+    function buildLearn() {
+      const dl = U[L] || U.en;
+      document.getElementById('ui-learn-title').textContent = dl['ui-learn-title'] || 'Learning Hub';
+      document.getElementById('ui-learn-subtitle').textContent = dl['ui-learn-subtitle'] || 'Recycling & Sustainability';
+      document.getElementById('ui-learn-desc').textContent = dl['ui-learn-desc'] || 'Learn best practices for waste management';
+      const articles = [
+        { title: 'C&D Waste Segregation', desc: 'How to properly separate concrete, wood, and metal', icon: '🏗️', color: '#059669' },
+        { title: 'Recycling Concrete', desc: 'Transform rubble into reusable aggregate', icon: '♻️', color: '#7C3AED' },
+        { title: 'Wood Recovery', desc: 'Salvage timber for reuse or composting', icon: '🪵', color: '#D97706' },
+        { title: 'Metal Recycling Guide', desc: 'Identify and sort metals for maximum value', icon: '🔧', color: '#0D9488' },
+        { title: 'Site Waste Audit', desc: 'Track and reduce waste at your construction site', icon: '📊', color: '#2563EB' },
+        { title: 'Zero Waste Goals', desc: 'Set targets and measure progress', icon: '🎯', color: '#DC2626' },
+        { title: 'Hazardous Materials', desc: 'Identify and handle dangerous waste safely', icon: '⚠️', color: '#F59E0B' },
+        { title: 'Circular Economy', desc: 'Turn waste into resources for the community', icon: '🔄', color: '#059669' }
+      ];
+      const list = document.getElementById('learn-list');
+      list.innerHTML = '';
+      articles.forEach(function (a) {
+        const el = document.createElement('div');
+        el.className = 'glass';
+        el.style.cssText = 'padding:12px 14px;cursor:pointer;border-left:3px solid ' + a.color + ';';
+        el.innerHTML = '<div style="display:flex;align-items:center;gap:10px;"><span style="font-size:1.4rem;">' + a.icon + '</span><div style="flex:1;"><p style="font-size:0.8rem;font-weight:700;">' + a.title + '</p><p style="font-size:0.68rem;color:#94A3B8;">' + a.desc + '</p></div><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>';
+        el.addEventListener('click', function () {
+          showLearnArticle(a);
+        });
+        list.appendChild(el);
+      });
+    }
+
+    function showLearnArticle(article) {
+      const dl = U[L] || U.en;
+      const list = document.getElementById('learn-list');
+      list.innerHTML = '<div class="glass" style="padding:14px 16px;border-left:3px solid ' + article.color + ';">' +
+        '<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">' +
+        '<button onclick="buildLearn()" style="background:none;border:none;cursor:pointer;padding:4px;color:#059669;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg></button>' +
+        '<span style="font-size:1.4rem;">' + article.icon + '</span>' +
+        '<p style="font-size:0.82rem;font-weight:700;flex:1;">' + article.title + '</p></div>' +
+        '<p style="font-size:0.75rem;color:#CBD5E1;line-height:1.6;">' + article.desc + '. Proper waste segregation is essential for effective recycling. ' +
+        'At construction sites, always separate concrete, wood, metal, and plastics into designated bins. ' +
+        'This reduces contamination and increases the value of recycled materials. ' +
+        'Remember: clean materials fetch higher prices and divert more waste from landfills.</p>' +
+        '<div style="margin-top:10px;padding:10px;border-radius:10px;background:rgba(5,150,105,0.06);border:1px solid rgba(5,150,105,0.15);">' +
+        '<p style="font-size:0.72rem;font-weight:600;color:#059669;">Key Takeaway</p>' +
+        '<p style="font-size:0.7rem;color:#94A3B8;margin-top:2px;">Segregation at source is the single most impactful step in waste management.</p></div></div>';
+    }
+
+    function buildCommunity() {
+      const dl = U[L] || U.en;
+      document.getElementById('ui-community-title').textContent = dl['ui-community-title'] || 'Community';
+      document.getElementById('ui-community-desc').textContent = dl['ui-community-desc'] || 'Share ideas & recycling initiatives';
+      const posts = [
+        { user: 'Ravi K.', avatar: 'RK', text: 'Just recycled 2 tonnes of concrete rubble at my site. Feeling great!', time: '2h ago', color: '#059669', likes: 12 },
+        { user: 'Priya S.', avatar: 'PS', text: 'Pro tip: Separate rebar from concrete before dumping. Saves time at the recycling center.', time: '5h ago', color: '#7C3AED', likes: 8 },
+        { user: 'Amit T.', avatar: 'AT', text: 'Anyone know a good wood recycler in Chennai? I have old formwork timber.', time: '1d ago', color: '#D97706', likes: 3 },
+        { user: 'Lakshmi R.', avatar: 'LR', text: 'Our team diverted 10 tonnes from landfill this month. New record!', time: '2d ago', color: '#0D9488', likes: 24 }
+      ];
+      const list = document.getElementById('community-posts');
+      list.innerHTML = '';
+      posts.forEach(function (p) {
+        const el = document.createElement('div');
+        el.className = 'glass';
+        el.style.cssText = 'padding:12px 14px;';
+        el.innerHTML = '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">' +
+          '<div style="width:32px;height:32px;border-radius:50%;background:' + p.color + ';display:flex;align-items:center;justify-content:center;color:white;font-size:0.65rem;font-weight:700;">' + p.avatar + '</div>' +
+          '<div style="flex:1;"><p style="font-size:0.78rem;font-weight:600;">' + p.user + '</p><p style="font-size:0.65rem;color:#94A3B8;">' + p.time + '</p></div></div>' +
+          '<p style="font-size:0.75rem;color:#CBD5E1;line-height:1.5;">' + p.text + '</p>' +
+          '<div style="display:flex;gap:12px;margin-top:8px;">' +
+          '<button style="background:none;border:none;cursor:pointer;font-size:0.7rem;color:#059669;display:flex;align-items:center;gap:4px;">❤️ ' + p.likes + '</button>' +
+          '<button style="background:none;border:none;cursor:pointer;font-size:0.7rem;color:#94A3B8;">💬 Reply</button></div>';
+        list.appendChild(el);
+      });
+    }
+
+    function buildNews() {
+      const dl = U[L] || U.en;
+      document.getElementById('ui-news-title').textContent = dl['ui-news-title'] || 'News & Updates';
+      const news = [
+        { title: 'New Recycling Targets 2025', desc: 'Government announces stricter C&D waste recycling mandates.', date: 'Aug 25, 2025', tag: 'Policy', tagColor: '#2563EB' },
+        { title: 'Waste2Wealth Reaches 10K Users', desc: 'Our community has diverted 500 tonnes from landfills!', date: 'Aug 20, 2025', tag: 'Milestone', tagColor: '#059669' },
+        { title: 'AI Scan Accuracy Update', desc: 'Improved detection for mixed materials and painted surfaces.', date: 'Aug 15, 2025', tag: 'Feature', tagColor: '#7C3AED' },
+        { title: 'Concrete Recycling Plant Opens', desc: 'New facility in Pune can process 200 tonnes daily.', date: 'Aug 10, 2025', tag: 'Industry', tagColor: '#D97706' },
+        { title: 'Wood Recovery Guide Published', desc: 'Step-by-step guide for salvaging formwork timber.', date: 'Aug 5, 2025', tag: 'Guide', tagColor: '#0D9488' }
+      ];
+      const list = document.getElementById('news-list');
+      list.innerHTML = '';
+      news.forEach(function (n) {
+        const el = document.createElement('div');
+        el.className = 'glass';
+        el.style.cssText = 'padding:12px 14px;';
+        el.innerHTML = '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">' +
+          '<span style="font-size:0.6rem;padding:3px 8px;border-radius:6px;background:' + n.tagColor + '20;color:' + n.tagColor + ';font-weight:600;">' + n.tag + '</span>' +
+          '<span style="font-size:0.65rem;color:#94A3B8;">' + n.date + '</span></div>' +
+          '<p style="font-size:0.82rem;font-weight:700;margin-bottom:4px;">' + n.title + '</p>' +
+          '<p style="font-size:0.72rem;color:#94A3B8;line-height:1.4;">' + n.desc + '</p>';
+        list.appendChild(el);
+      });
+    }
+
+    function buildAlerts() {
+      const dl = U[L] || U.en;
+      document.getElementById('ui-alerts-title').textContent = dl['ui-alerts-title'] || 'Alerts';
+      document.getElementById('ui-alerts-desc').textContent = dl['ui-alerts-desc'] || 'Get notified when bins are full or pickup is due';
+      const alerts = [
+        { type: 'warning', title: 'Bin A1 Almost Full', desc: 'Concrete waste — 85% capacity', time: '10 min ago', icon: '⚠️' },
+        { type: 'success', title: 'Pickup Completed', desc: 'Batch #127 collected by GreenRecycle', time: '1 hour ago', icon: '✅' },
+        { type: 'info', title: 'New Recycler Available', desc: 'MetalWorks Pvt Ltd now accepts scrap metal in your area', time: '3 hours ago', icon: 'ℹ️' },
+        { type: 'warning', title: 'Bin B2 Full', desc: 'Wood waste — needs emptying', time: '5 hours ago', icon: '🔴' },
+        { type: 'success', title: 'Weekly Report Ready', desc: 'Your sustainability report is available', time: '1 day ago', icon: '📊' }
+      ];
+      const list = document.getElementById('alerts-list');
+      list.innerHTML = '';
+      alerts.forEach(function (a) {
+        const borderColor = a.type === 'warning' ? '#D97706' : a.type === 'success' ? '#059669' : '#2563EB';
+        const bgColor = a.type === 'warning' ? 'rgba(217,119,6,0.05)' : a.type === 'success' ? 'rgba(5,150,105,0.05)' : 'rgba(37,99,235,0.05)';
+        const el = document.createElement('div');
+        el.className = 'glass';
+        el.style.cssText = 'padding:12px 14px;border-left:3px solid ' + borderColor + ';background:' + bgColor + ';';
+        el.innerHTML = '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">' +
+          '<span style="font-size:1.1rem;">' + a.icon + '</span>' +
+          '<div style="flex:1;"><p style="font-size:0.8rem;font-weight:700;">' + a.title + '</p></div>' +
+          '<span style="font-size:0.65rem;color:#94A3B8;">' + a.time + '</span></div>' +
+          '<p style="font-size:0.72rem;color:#CBD5E1;margin-left:30px;">' + a.desc + '</p>';
+        list.appendChild(el);
+      });
+    }
+
+    function buildRecyclers() {
+      const dl = U[L] || U.en;
+      document.getElementById('ui-recyclers-title').textContent = dl['ui-recyclers-title'] || 'Nearby Recyclers';
+      document.getElementById('ui-recyclers-desc').textContent = dl['ui-recyclers-desc'] || 'Connect with verified recycling partners';
+      const recyclers = [
+        { name: 'City Recyclers', material: 'Concrete aggregate', dist: '12 km', phone: '+919876543210', email: 'contact@cityrecyclers.in', color: '#059669', demand: 'High' },
+        { name: 'GreenBuild Materials', material: 'Metal scrap', dist: '18 km', phone: '+919123456789', email: 'info@greenbuild.in', color: '#7C3AED', demand: 'Very High' },
+        { name: 'EcoMason Works', material: 'Whole bricks', dist: '7 km', phone: '+919988776655', email: 'hello@ecomason.in', color: '#D97706', demand: 'Moderate' },
+        { name: 'WoodCycle India', material: 'Timber & wood', dist: '15 km', phone: '+919871234567', email: 'info@woodcycle.in', color: '#0D9488', demand: 'High' },
+        { name: 'PlastiRecycle Corp', material: 'Plastic waste', dist: '22 km', phone: '+919765432109', email: 'sales@plastirecycle.in', color: '#DC2626', demand: 'Very High' }
+      ];
+      const list = document.getElementById('recyclers-list');
+      list.innerHTML = '';
+      recyclers.forEach(function (r) {
+        const el = document.createElement('div');
+        el.className = 'glass';
+        el.style.cssText = 'padding:12px 14px;';
+        el.innerHTML = '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">' +
+          '<div style="width:36px;height:36px;border-radius:10px;background:' + r.color + ';display:flex;align-items:center;justify-content:center;flex-shrink:0;">' +
+          '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>' +
+          '<div style="flex:1;"><p style="font-size:0.8rem;font-weight:700;">' + r.name + '</p>' +
+          '<p style="font-size:0.68rem;color:#94A3B8;">' + r.material + ' · ' + r.dist + '</p></div>' +
+          '<span style="font-size:0.6rem;padding:3px 8px;border-radius:6px;background:' + r.color + '20;color:' + r.color + ';font-weight:600;">' + r.demand + '</span></div>' +
+          '<div style="display:flex;gap:8px;">' +
+          '<a href="tel:' + r.phone + '" style="flex:1;display:flex;align-items:center;justify-content:center;gap:4px;padding:8px;border-radius:8px;text-decoration:none;font-size:0.72rem;font-weight:600;background:rgba(5,150,105,0.1);color:#059669;border:1px solid rgba(5,150,105,0.2);">' +
+          '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>Call</a>' +
+          '<a href="https://wa.me/' + r.phone.replace(/[^0-9]/g, '') + '" target="_blank" style="flex:1;display:flex;align-items:center;justify-content:center;gap:4px;padding:8px;border-radius:8px;text-decoration:none;font-size:0.72rem;font-weight:600;background:rgba(37,211,102,0.1);color:#25D366;border:1px solid rgba(37,211,102,0.2);">' +
+          '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>WhatsApp</a>' +
+          '<a href="mailto:' + r.email + '" style="flex:1;display:flex;align-items:center;justify-content:center;gap:4px;padding:8px;border-radius:8px;text-decoration:none;font-size:0.72rem;font-weight:600;background:rgba(37,99,235,0.1);color:#2563EB;border:1px solid rgba(37,99,235,0.2);">' +
+          '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>Email</a></div>';
+        list.appendChild(el);
+      });
+    }
+
+    window.addEventListener('load',function(){buildValueInputs();renderDash();renderTrack();});
   </script>
 </body>
 </html>
